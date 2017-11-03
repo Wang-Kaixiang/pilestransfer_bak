@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,8 @@ public class SocketServer implements InitializingBean, DisposableBean {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	private EventLoopGroup bossGroup = null;
 	private EventLoopGroup workerGroup = null;
+	@Value( "${server.port}" )
+	private int port;
 
 	@Autowired
 	private ServerChannelInitializer serverChannelInitializer;
@@ -39,7 +42,7 @@ public class SocketServer implements InitializingBean, DisposableBean {
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		start(7777);
+		start(port);
 	}
 	@Override
 	public void destroy() throws Exception {
