@@ -1,13 +1,14 @@
 package com.piles.common.business.impl;
 
 import com.piles.common.business.IBusiness;
+import com.piles.common.business.IBusinessFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
 
 @Component
-public class RecordBusinessFactory {
+public class RecordBusinessFactory implements IBusinessFactory {
 
     @Resource
     private IBusiness loginService;
@@ -16,6 +17,7 @@ public class RecordBusinessFactory {
     @Resource
     private IBusiness remoteCloseService;
 
+    @Override
     public IBusiness getByOrder(byte order){
 
         switch (order){
