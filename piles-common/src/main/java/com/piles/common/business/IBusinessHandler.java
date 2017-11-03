@@ -5,5 +5,6 @@ import io.netty.channel.Channel;
 
 public interface IBusinessHandler {
 
-	SocketBaseDTO process(String json, Channel incoming);
+	SocketBaseDTO process(Byte[] msg, Channel incoming);
+
 }
