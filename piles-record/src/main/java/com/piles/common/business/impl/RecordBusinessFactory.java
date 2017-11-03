@@ -1,22 +1,22 @@
 package com.piles.common.business.impl;
 
-import com.piles.common.business.IService;
+import com.piles.common.business.IBusiness;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
 
 @Component
-public class ServiceFactory {
+public class RecordBusinessFactory {
 
     @Resource
-    private IService loginService;
+    private IBusiness loginService;
     @Resource
-    private IService remoteStartService;
+    private IBusiness remoteStartService;
     @Resource
-    private IService remoteCloseService;
+    private IBusiness remoteCloseService;
 
-    public IService getByOrder(byte order){
+    public IBusiness getByOrder(byte order){
 
         switch (order){
             case 0x01:
