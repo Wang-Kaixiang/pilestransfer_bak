@@ -7,6 +7,6 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface IService {
 
-	SocketBaseDTO process(JSONObject jsonObject, Channel incoming);
+	SocketBaseDTO process(byte[] msg);
 	
 }

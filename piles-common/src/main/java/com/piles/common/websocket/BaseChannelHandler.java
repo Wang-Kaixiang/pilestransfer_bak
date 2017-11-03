@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Sharable
-public class BaseChannelHandler extends SimpleChannelInboundHandler<Byte[]> {
+public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private IBusinessHandler businessHandler;
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, Byte[] msg) throws Exception {
+	protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
 		Channel incoming = ctx.channel();
 		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
 		businessHandler.process(msg, incoming);
