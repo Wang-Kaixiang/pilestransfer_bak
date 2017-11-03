@@ -10,11 +10,10 @@
 	<context:annotation-config/>
 	<context:component-scan base-package="com.piles" />
 
-	<bean class="com.ly.ie.inb.util.SpringContextHolder" />
 	<bean id="propInfo" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>classpath:/conf/piles-record-config.propertis</value>
+				<value>classpath:/conf/piles-record-config.properties</value>
 			</list>
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
