@@ -11,25 +11,30 @@ import javax.annotation.Resource;
 public class SettingBusinessFactory implements IBusinessFactory{
 
     @Resource
-    private IBusiness loginService;
+    private IBusiness uploadRecordBusiness;
     @Resource
-    private IBusiness remoteStartService;
+    private IBusiness uploadChargeRateBusiness;
     @Resource
-    private IBusiness remoteCloseService;
+    private IBusiness uploadChargeMonitorBusiness;
+    @Resource
+    private IBusiness heartBeatBusiness;
 
     @Override
     public IBusiness getByOrder(byte order){
 
         switch (order){
-            case 0x01:
-                //登陆
-                return loginService;
-            case 0x06:
-                //远程启动充电
-                return remoteStartService;
-            case 0x07:
-                //远程结束充电
-                return remoteCloseService;
+            case 0x08:
+                //上传充电记录
+                return uploadRecordBusiness;
+            case 0x09:
+                //上传充电进度
+                return uploadChargeRateBusiness;
+            case 0x0A:
+                //上传充电过程监测数据
+                return uploadChargeMonitorBusiness;
+            case 0x0C:
+                //心跳
+                return heartBeatBusiness;
             default:
                 return null;
         }

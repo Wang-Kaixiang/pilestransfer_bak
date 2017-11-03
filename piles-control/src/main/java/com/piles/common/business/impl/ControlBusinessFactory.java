@@ -11,11 +11,11 @@ import javax.annotation.Resource;
 public class ControlBusinessFactory implements IBusinessFactory {
 
     @Resource
-    private IBusiness loginService;
+    private IBusiness loginBusiness;
     @Resource
-    private IBusiness remoteStartService;
+    private IBusiness remoteStartBusiness;
     @Resource
-    private IBusiness remoteCloseService;
+    private IBusiness remoteCloseBusiness;
 
     @Override
     public IBusiness getByOrder(byte order){
@@ -23,13 +23,13 @@ public class ControlBusinessFactory implements IBusinessFactory {
         switch (order){
             case 0x01:
                 //登陆
-                return loginService;
+                return loginBusiness;
             case 0x06:
                 //远程启动充电
-                return remoteStartService;
+                return remoteStartBusiness;
             case 0x07:
                 //远程结束充电
-                return remoteCloseService;
+                return remoteCloseBusiness;
             default:
                 return null;
         }

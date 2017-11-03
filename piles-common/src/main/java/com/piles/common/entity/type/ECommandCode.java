@@ -3,7 +3,7 @@ package com.piles.common.entity.type;
 /**
  * 命令码
  */
-public enum ECommonCode {
+public enum ECommandCode {
 
     LOGIN_CODE(0x01, "登录"),
     LOGIN_ANSWER_CODE(0x81, "登录回复"),
@@ -39,11 +39,11 @@ public enum ECommonCode {
     QR_SET_ANSWER_CODE(0x9C, "二维码设置回复"),
     REBOOT_CODE(0x1D, "重启"),
     REBOOT_ANSWER_CODE(0x9D, "重启回复"),
-    remote_UPDATE_CODE(0x1E, "远程升级"),
-    remote_UPDATE_ANSWER_CODE(0x9E, "远程升级回复");
+    REMOTE_UPDATE_CODE(0x1E, "远程升级"),
+    REMOTE_UPDATE_ANSWER_CODE(0x9E, "远程升级回复");
 
 
-    private ECommonCode(int code, String value) {
+    private ECommandCode(int code, String value) {
         this.code = code;
         this.value = value;
     }
@@ -59,8 +59,8 @@ public enum ECommonCode {
         return value;
     }
 
-    public static ECommonCode fromCode(int code) {
-        for (ECommonCode item : ECommonCode.values()) {
+    public static ECommandCode fromCode(int code) {
+        for (ECommandCode item : ECommandCode.values()) {
             if (item.getCode() == code) {
                 return item;
             }

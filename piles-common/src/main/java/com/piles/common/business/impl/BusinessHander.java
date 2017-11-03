@@ -9,9 +9,7 @@ import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * Created by lgc48027 on 2017/11/3.
- */
+
 @Component
 public  class BusinessHander implements IBusinessHandler {
     @Autowired
