@@ -3,6 +3,7 @@ package socket.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -21,6 +22,10 @@ public class HelloServer {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup);
             b.channel(NioServerSocketChannel.class);
+            b.option(ChannelOption.SO_BACKLOG, 128);
+            b.option(ChannelOption.TCP_NODELAY, true);
+            b.childOption(ChannelOption.SO_KEEPALIVE, true);
+
             b.childHandler(new HelloServerInitializer());
 
             // 服务器绑定端口监听

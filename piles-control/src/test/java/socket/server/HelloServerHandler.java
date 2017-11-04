@@ -2,18 +2,26 @@ package socket.server;
 
 import java.net.InetAddress;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-public class HelloServerHandler extends SimpleChannelInboundHandler<byte[]> {
+public class HelloServerHandler extends SimpleChannelInboundHandler<Object> {
     
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+        ByteBuf result = (ByteBuf) msg;
+        byte[] result1 = new byte[result.readableBytes()];
+        // msg中存储的是ByteBuf类型的数据，把数据读取到byte[]中
+        result.readBytes(result1);
+        String resultStr = new String(result1);
         // 收到消息直接打印输出
         System.out.println(ctx.channel().remoteAddress() + " Say : " + msg);
         
         // 返回客户端消息 - 我已经接收到了你的消息
-        ctx.writeAndFlush("Received your message !\n");
+        byte[] bytes = {0x22, 0x12, 0x30};
+        ctx.writeAndFlush(bytes);
     }
     
     /*
