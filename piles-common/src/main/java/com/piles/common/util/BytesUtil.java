@@ -1,12 +1,15 @@
 package com.piles.common.util;
 
 import org.apache.commons.lang3.StringUtils;
+import sun.jvm.hotspot.runtime.Bytes;
+
+import java.math.BigInteger;
 
 public class BytesUtil {
     /**
-     * 将int数值转换为占四个字节的byte数组，本方法适用于(高位在前，低位在后)的顺序。
+     * 将int数值转换为占两个字节的byte数组，本方法适用于(高位在前，低位在后)的顺序。
      */
-    public static byte[] intToBytes(int value,int limit)
+    public static byte[] intToBytes(int value)
     {
         //limit 传入2
         byte[] src = new byte[2];
@@ -17,6 +20,22 @@ public class BytesUtil {
 //        src[1] = (byte) ((value>>16)& 0xFF);
 //        src[2] = (byte) ((value>>8)&0xFF);
 //        src[3] = (byte) (value & 0xFF);
+        return src;
+    }
+    /**
+     * 将int数值转换为占四个字节的byte数组，本方法适用于(高位在前，低位在后)的顺序。
+     */
+    public static byte[] intToBytes4(int value)
+    {
+        //limit 传入2
+//        byte[] src = new byte[2];
+//        src[0] = (byte) ((value>>8)&0xFF);
+//        src[1] = (byte) (value & 0xFF);
+        byte[] src = new byte[4];
+        src[0] = (byte) ((value>>24) & 0xFF);
+        src[1] = (byte) ((value>>16)& 0xFF);
+        src[2] = (byte) ((value>>8)&0xFF);
+        src[3] = (byte) (value & 0xFF);
         return src;
     }
 
@@ -60,44 +79,115 @@ public class BytesUtil {
     }
 
 
+//    /**
+//     * int压缩为bdc
+//     * @param val
+//     * @return
+//     */
+//    public static String int2bcd(int val){
+//
+//        StringBuilder sb = new StringBuilder();
+//        do{
+//
+//            int x = val%10;
+//            String s = Integer.toBinaryString(x);
+//            String w = StringUtils.leftPad(s, 4, "0");
+//            sb.insert(0, w);
+//            sb.insert(0, " ");
+////            System.out.println(s);
+//        }while((val = val/10)>0);
+//        sb.delete(0,1);
+//
+//        return sb.toString();
+//    }
+//
+//    /**
+//     * bcd to int
+//     * @param bcd
+//     * @return
+//     */
+//    public static int bcd2int(String[] bcd){
+//        if(bcd==null||bcd.length==0){
+//            return 0;
+//        }
+//        int s = 0;
+//        int len = bcd.length;
+//        for(int i =0;i<len;i++){
+//            int x = Integer.parseInt(bcd[i], 2);
+//            s+=(x)*Math.pow(10, (len-i-1));
+//        }
+//        return s;
+//    }
+
     /**
-     * int压缩为mdc
-     * @param val
-     * @return
+     * 将byte[]转为各种进制的字符串
+     * @param bytes byte[]
+     * @param radix 基数可以转换进制的范围，从Character.MIN_RADIX到Character.MAX_RADIX，超出范围后变为10进制
+     * @return 转换后的字符串
      */
-    public static String int2bcd(int val){
+    public static String binary(byte[] bytes, int radix){
+        return new BigInteger(1, bytes).toString(radix);// 这里的1代表正数
+    }
+    /** *//**
+     * @函数功能: BCD码转为10进制串(阿拉伯数据)
+     * @输入参数: BCD码
+     * @输出结果: 10进制串
+     */
+    public static String bcd2Str(byte[] bytes){
+        StringBuffer temp=new StringBuffer(bytes.length*2);
 
-        StringBuilder sb = new StringBuilder();
-        do{
-
-            int x = val%10;
-            String s = Integer.toBinaryString(x);
-            String w = StringUtils.leftPad(s, 4, "0");
-            sb.insert(0, w);
-            sb.insert(0, " ");
-            System.out.println(s);
-        }while((val = val/10)>0);
-        sb.delete(0,1);
-
-        return sb.toString();
+        for(int i=0;i<bytes.length;i++){
+            temp.append((byte)((bytes[i]& 0xf0)>>>4));
+            temp.append((byte)(bytes[i]& 0x0f));
+        }
+        return temp.toString();
     }
 
     /**
-     * mdc转为int
-     * @param bcd
-     * @return
+     * @函数功能: 10进制串转为BCD码
+     * @输入参数: 10进制串
+     * @输出结果: BCD码
      */
-    public static int bcd2int(String[] bcd){
-        if(bcd==null||bcd.length==0){
-            return 0;
+    public static byte[] str2Bcd(String asc) {
+        int len = asc.length();
+        int mod = len % 2;
+
+        if (mod != 0) {
+            asc = "0" + asc;
+            len = asc.length();
         }
-        int s = 0;
-        int len = bcd.length;
-        for(int i =0;i<len;i++){
-            int x = Integer.parseInt(bcd[i], 2);
-            s+=(x)*Math.pow(10, (len-i-1));
+
+        byte abt[] = new byte[len];
+        if (len >= 2) {
+            len = len / 2;
         }
-        return s;
+
+        byte bbt[] = new byte[len];
+        abt = asc.getBytes();
+        int j, k;
+
+        for (int p = 0; p < asc.length()/2; p++) {
+            if ( (abt[2 * p] >= '0') && (abt[2 * p] <= '9')) {
+                j = abt[2 * p] - '0';
+            } else if ( (abt[2 * p] >= 'a') && (abt[2 * p] <= 'z')) {
+                j = abt[2 * p] - 'a' + 0x0a;
+            } else {
+                j = abt[2 * p] - 'A' + 0x0a;
+            }
+
+            if ( (abt[2 * p + 1] >= '0') && (abt[2 * p + 1] <= '9')) {
+                k = abt[2 * p + 1] - '0';
+            } else if ( (abt[2 * p + 1] >= 'a') && (abt[2 * p + 1] <= 'z')) {
+                k = abt[2 * p + 1] - 'a' + 0x0a;
+            }else {
+                k = abt[2 * p + 1] - 'A' + 0x0a;
+            }
+
+            int a = (j << 4) + k;
+            byte b = (byte) a;
+            bbt[p] = b;
+        }
+        return bbt;
     }
 
     public static void main(String[] args) {
@@ -105,9 +195,11 @@ public class BytesUtil {
 ////        byte[] bytes = intToBytes(0x12345678,2);
 //        int i = bytesToInt(bytes,0);
 //        System.out.println(i);
-        String s = int2bcd(96);
-        int i = bcd2int(StringUtils.split(s, " "));
-        System.out.println(i);
-        System.out.println(s);
+
+//        System.out.println(i);
+//        System.out.println(s);
+        byte[] temp=str2Bcd("1000025484561835");
+        System.out.println(bcd2Str(new byte[]{temp[7]}));
+//        System.out.println(Integer.toHexString(Byte.toUnsignedInt(temp[1])).toUpperCase());
     }
 }

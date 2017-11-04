@@ -4,6 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.entity.SocketBaseDTO;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.CRC16Util;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -45,7 +46,7 @@ public abstract class BaseBusiness implements IBusiness{
 
         byte[] bodyBytes = BytesUtil.copyBytes(msg, 8, len);
         byte[] responseBody = processBody(bodyBytes);
-        byte[] responseMsg = postProcess(msg, orderBytes);
+        byte[] responseMsg = postProcess(responseBody, orderBytes);
         //TODO 修改返回值
         return null;
     }
@@ -56,13 +57,13 @@ public abstract class BaseBusiness implements IBusiness{
     public byte[] postProcess(byte[] body,byte[] orderBytes){
         //concat head
         byte[] first = new byte[]{0x68};
-        byte[] command = BytesUtil.intToBytes(this.responseCode.getCode(), 2);
-        byte[] len = BytesUtil.intToBytes(body.length, 2);
+        byte[] command = BytesUtil.intToBytes(this.responseCode.getCode());
+        byte[] len = BytesUtil.intToBytes(body.length);
 
         byte[] head = Bytes.concat(first, command, orderBytes, len);
         //concat crc校验
-        //TODO 添加校验码???
-        byte[] crc = new byte[2];
+        int crcInt = CRC16Util.getCRC(Bytes.concat(command,orderBytes,len));
+        byte[] crc=BytesUtil.intToBytes(crcInt);
         byte[] responseMsg = Bytes.concat(head, body, crc);
         return responseMsg;
     }
