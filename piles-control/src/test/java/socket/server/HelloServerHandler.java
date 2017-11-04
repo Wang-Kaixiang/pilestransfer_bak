@@ -20,8 +20,11 @@ public class HelloServerHandler extends SimpleChannelInboundHandler<Object> {
         System.out.println(ctx.channel().remoteAddress() + " Say : " + msg);
         
         // 返回客户端消息 - 我已经接收到了你的消息
-        byte[] bytes = {0x22, 0x12, 0x30};
-        ctx.writeAndFlush(bytes);
+        byte[] bytes= new byte[]{0x1C,0x00,0x02,0x54,0x00,0x17,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
+
+        ByteBuf encoded = ctx.alloc().buffer(result1.length);
+        encoded.writeBytes(result1);
+        ctx.writeAndFlush(encoded);
     }
     
     /*

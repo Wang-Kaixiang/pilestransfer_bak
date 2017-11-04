@@ -2,6 +2,7 @@ package com.piles.common.websocket.server;
 
 import com.piles.common.business.IBusinessHandler;
 import com.piles.common.util.ChannelMap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,6 +26,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
 		byte[] response = businessHandler.process(msg, incoming);
 		logger.info("返回信息:" + response);
+		//包装
+		ByteBuf encoded = ctx.alloc().buffer(response.length);
+		encoded.writeBytes(response);
 		ctx.writeAndFlush(response);
 	}
 

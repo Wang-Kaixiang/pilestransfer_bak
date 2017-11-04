@@ -25,7 +25,7 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 //		pipeline.addLast("encoder", new ObjectEncoder());
 		//根据报文解决粘包和半包问题  1位首字码  一位命令码 2位流水号 2位长度
 		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 2, -4, 0));
-		pipeline.addLast("frameEncoder", new LengthFieldPrepender(2));
+		pipeline.addLast("encoder", new ObjectEncoder());
 		pipeline.addLast("handler", baseChannelHandler);
 	}
 }
