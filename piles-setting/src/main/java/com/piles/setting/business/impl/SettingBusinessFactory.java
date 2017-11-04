@@ -1,4 +1,4 @@
-package com.piles.record.business.impl;
+package com.piles.setting.business.impl;
 
 import com.piles.common.business.IBusiness;
 import com.piles.common.business.IBusinessFactory;
