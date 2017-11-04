@@ -79,45 +79,7 @@ public class BytesUtil {
     }
 
 
-//    /**
-//     * int压缩为bdc
-//     * @param val
-//     * @return
-//     */
-//    public static String int2bcd(int val){
-//
-//        StringBuilder sb = new StringBuilder();
-//        do{
-//
-//            int x = val%10;
-//            String s = Integer.toBinaryString(x);
-//            String w = StringUtils.leftPad(s, 4, "0");
-//            sb.insert(0, w);
-//            sb.insert(0, " ");
-////            System.out.println(s);
-//        }while((val = val/10)>0);
-//        sb.delete(0,1);
-//
-//        return sb.toString();
-//    }
-//
-//    /**
-//     * bcd to int
-//     * @param bcd
-//     * @return
-//     */
-//    public static int bcd2int(String[] bcd){
-//        if(bcd==null||bcd.length==0){
-//            return 0;
-//        }
-//        int s = 0;
-//        int len = bcd.length;
-//        for(int i =0;i<len;i++){
-//            int x = Integer.parseInt(bcd[i], 2);
-//            s+=(x)*Math.pow(10, (len-i-1));
-//        }
-//        return s;
-//    }
+
 
     /**
      * 将byte[]转为各种进制的字符串

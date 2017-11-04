@@ -3,7 +3,6 @@ package com.piles.common.business.impl;
 import com.piles.common.business.IBusiness;
 import com.piles.common.business.IBusinessFactory;
 import com.piles.common.business.IBusinessHandler;
-import com.piles.common.entity.SocketBaseDTO;
 import com.piles.common.util.CRC16Util;
 import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ public  class BusinessHander implements IBusinessHandler {
     IBusinessFactory businessFactory;
 
     @Override
-    public SocketBaseDTO process(byte[] msg, Channel incoming) {
+    public byte[] process(byte[] msg, Channel incoming) {
         //报文校验不通过则抛弃
         if (CRC16Util.checkMsg( msg )){
             return processService( msg,incoming );
@@ -26,7 +25,7 @@ public  class BusinessHander implements IBusinessHandler {
 
 
 
-    public SocketBaseDTO processService(byte[] msg, Channel incoming) {
+    public byte[] processService(byte[] msg, Channel incoming) {
         IBusiness iBusiness = null;
         iBusiness = businessFactory.getByOrder( msg[1] );
         if (null != iBusiness) {

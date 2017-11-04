@@ -21,7 +21,7 @@ public class LoginBusinessImpl extends BaseBusiness{
     //设置返回报文头命令
     ECommandCode responseCode = ECommandCode.LOGIN_ANSWER_CODE;
 
-//    @Resource
+    @Resource
     private ILoginService loginService;
 
 //    @Override
@@ -33,12 +33,11 @@ public class LoginBusinessImpl extends BaseBusiness{
     @Override
     protected byte[] processBody(byte[] bodyBytes) {
         //依照报文体规则解析报文
-        LoginRequest loginRequest = new LoginRequest();
-        //TODO 解析报文
+        LoginRequest loginRequest = LoginRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = loginService.login(loginRequest);
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag==true?new byte[]{1}:new byte[]{0};
+        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;

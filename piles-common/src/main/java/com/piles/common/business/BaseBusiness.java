@@ -1,7 +1,6 @@
 package com.piles.common.business;
 
 import com.google.common.primitives.Bytes;
-import com.piles.common.entity.SocketBaseDTO;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
@@ -22,7 +21,7 @@ public abstract class BaseBusiness implements IBusiness{
     }
 
     @Override
-    public SocketBaseDTO process(byte[] msg) {
+    public byte[] process(byte[] msg) {
         log.info("接收到请求,请求体为:"+msg);
         //消息头6个，校验2个
         if(msg.length<=8){
@@ -46,9 +45,7 @@ public abstract class BaseBusiness implements IBusiness{
 
         byte[] bodyBytes = BytesUtil.copyBytes(msg, 8, len);
         byte[] responseBody = processBody(bodyBytes);
-        byte[] responseMsg = postProcess(responseBody, orderBytes);
-        //TODO 修改返回值
-        return null;
+        return postProcess(responseBody, orderBytes);
     }
 
     protected abstract byte[] processBody(byte[] bodyBytes);
