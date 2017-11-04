@@ -7,6 +7,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -15,10 +16,11 @@ import java.util.Date;
 /**
  * 心跳接口实现
  */
+@Service("heartBeatBusiness")
 public class HeartBeatBusinessImpl extends BaseBusiness {
 
     //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.HEART_BEAT_CODE;
+    ECommandCode responseCode = ECommandCode.HEART_BEAT_ANSWER_CODE;
 
     @Resource
     private IHeartBeatService heartBeatService;

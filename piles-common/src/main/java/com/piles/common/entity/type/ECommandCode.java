@@ -26,7 +26,7 @@ public enum ECommandCode {
     BILL_RULE_SET_CODE(0x0B, "计费规则设置"),
     BILL_RULE_SET_ANSWER_CODE(0x8B, "计费规则设置回复"),
     HEART_BEAT_CODE(0x0C, "心跳"),
-    HEART_BEAT_ANSWER_CODE_CODE(0x8C, "心跳回复"),
+    HEART_BEAT_ANSWER_CODE(0x8C, "心跳回复"),
     WARN_CODE(0x0D, "告警"),
     WARN_ANSWER_CODE(0x8D, "告警回复"),
     VERIFY_TIME_CODE(0x0E, "校时"),

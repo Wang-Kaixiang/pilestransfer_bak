@@ -45,7 +45,13 @@ public abstract class BaseBusiness implements IBusiness{
 
         byte[] bodyBytes = BytesUtil.copyBytes(msg, 8, len);
         byte[] responseBody = processBody(bodyBytes);
-        return postProcess(responseBody, orderBytes);
+
+        //返回结果为空则不返回
+        if (null!=responseBody) {
+            return postProcess(responseBody, orderBytes);
+        }else {
+            return null;
+        }
     }
 
     protected abstract byte[] processBody(byte[] bodyBytes);
