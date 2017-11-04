@@ -29,7 +29,7 @@ public  class BusinessHander implements IBusinessHandler {
         IBusiness iBusiness = null;
         iBusiness = businessFactory.getByOrder( msg[1] );
         if (null != iBusiness) {
-            return iBusiness.process( msg );
+            return iBusiness.process( msg ,incoming);
         }
         return null;
     }

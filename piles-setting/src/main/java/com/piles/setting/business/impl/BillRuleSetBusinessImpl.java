@@ -6,6 +6,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.setting.entity.BillRuleSetRequest;
 import com.piles.setting.service.IBillRuleSetService;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class BillRuleSetBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         BillRuleSetRequest billRuleSetRequest = BillRuleSetRequest.packEntity(bodyBytes);
         //调用底层接口

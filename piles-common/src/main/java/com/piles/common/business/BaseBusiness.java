@@ -4,6 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,7 +22,7 @@ public abstract class BaseBusiness implements IBusiness{
     }
 
     @Override
-    public byte[] process(byte[] msg) {
+    public byte[] process(byte[] msg,Channel incoming) {
         log.info("接收到请求,请求体为:"+msg);
         //消息头6个，校验2个
         if(msg.length<=8){
@@ -44,7 +45,7 @@ public abstract class BaseBusiness implements IBusiness{
         log.info("消息流水号为:{}",order);
 
         byte[] bodyBytes = BytesUtil.copyBytes(msg, 8, len);
-        byte[] responseBody = processBody(bodyBytes);
+        byte[] responseBody = processBody(bodyBytes,incoming);
 
         //返回结果为空则不返回
         if (null!=responseBody) {
@@ -54,7 +55,7 @@ public abstract class BaseBusiness implements IBusiness{
         }
     }
 
-    protected abstract byte[] processBody(byte[] bodyBytes);
+    protected abstract byte[] processBody(byte[] bodyBytes,Channel incoming);
 
     //返回结果处理
     public byte[] postProcess(byte[] body,byte[] orderBytes){

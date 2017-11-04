@@ -6,6 +6,7 @@ import com.piles.record.entity.UploadChargeMonitorRequest;
 import com.piles.record.entity.UploadChargeRateRequest;
 import com.piles.record.entity.UploadRecordRequest;
 import com.piles.record.service.IUploadChargeRateService;
+import io.netty.channel.Channel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ public class UploadChargeRateBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         UploadChargeRateRequest uploadChargeRateRequest = UploadChargeRateRequest.packEntity(bodyBytes);
         //调用底层接口

@@ -6,6 +6,7 @@ import com.piles.common.util.BytesUtil;
 import com.piles.control.entity.LoginRequest;
 import com.piles.control.entity.RemoteCloseRequest;
 import com.piles.control.service.IRemoteCloseService;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class RemoteCloseBusinessImpl extends BaseBusiness{
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntity(bodyBytes);
         //调用底层接口

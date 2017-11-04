@@ -7,6 +7,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
+import io.netty.channel.Channel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,7 +30,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity(bodyBytes);
         //调用底层接口

@@ -4,6 +4,7 @@ package com.piles.record.business.impl;
 import com.piles.common.business.BaseBusiness;
 import com.piles.record.entity.UploadChargeMonitorRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
+import io.netty.channel.Channel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +20,7 @@ public class UploadChargeMonitorBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         UploadChargeMonitorRequest uploadChargeMonitorRequest = UploadChargeMonitorRequest.packEntity(bodyBytes);
         //调用底层接口

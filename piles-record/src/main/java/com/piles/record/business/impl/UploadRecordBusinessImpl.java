@@ -9,6 +9,7 @@ import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.entity.UploadRecordRequest;
 import com.piles.record.service.IHeartBeatService;
 import com.piles.record.service.IUploadRecordService;
+import io.netty.channel.Channel;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,7 +32,7 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         UploadRecordRequest uploadRecordRequest = UploadRecordRequest.packEntity(bodyBytes);
         //调用底层接口

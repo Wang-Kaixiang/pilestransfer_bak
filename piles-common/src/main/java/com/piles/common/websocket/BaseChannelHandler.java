@@ -1,6 +1,7 @@
 package com.piles.common.websocket;
 
 import com.piles.common.business.IBusinessHandler;
+import com.piles.common.util.ChannelMap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,7 +36,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	public void handlerRemoved(ChannelHandlerContext ctx) throws Exception { // (3)
 		Channel incoming = ctx.channel();
 		logger.info("remove connect:" + incoming.remoteAddress());
-//		ChannelMap.removeChannel(incoming);
+		ChannelMap.removeChannel(incoming);
 	}
 
 	/**

@@ -4,8 +4,10 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.ChannelMap;
 import com.piles.control.entity.LoginRequest;
 import com.piles.control.service.ILoginService;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +33,15 @@ public class LoginBusinessImpl extends BaseBusiness{
 //    }
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         LoginRequest loginRequest = LoginRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = loginService.login(loginRequest);
+        if (flag){
+            ChannelMap.addChannel(loginRequest.getPileNo(),incoming);
+            ChannelMap.addChannel(incoming,loginRequest.getPileNo());
+        }
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
         byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
         byte[] responseBody = Bytes.concat(pileNo,result);
