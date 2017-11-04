@@ -11,36 +11,30 @@ import javax.annotation.Resource;
 public class RecordBusinessFactory implements IBusinessFactory {
 
     @Resource
-    private IBusiness verifyTimeBusiness;
+    private IBusiness uploadRecordBusiness;
     @Resource
-    private IBusiness qrSetBusiness;
+    private IBusiness uploadChargeRateBusiness;
     @Resource
-    private IBusiness rebootBusiness;
+    private IBusiness uploadChargeMonitorBusiness;
     @Resource
-    private IBusiness remoteUpdateBusiness;
-    @Resource
-    private IBusiness billRuleSetBusiness;
-    @Resource
+    private IBusiness heartBeatBusiness;
 
     @Override
-    public IBusiness getByOrder(byte order){
+    public IBusiness getByOrder(byte order) {
 
-        switch (order){
-            case 0x0E:
-                //校时
-                return verifyTimeBusiness;
-            case 0x1C:
-                //二维码设置
-                return qrSetBusiness;
-            case 0x1D:
-                //重启
-                return rebootBusiness;
-            case 0x1E:
-                //远程升级
-                return remoteUpdateBusiness;
-            case 0x0B:
-                //计费规则设置
-                return billRuleSetBusiness;
+        switch (order) {
+            case 0x08:
+                //上传充电记录
+                return uploadRecordBusiness;
+            case 0x09:
+                //上传充电进度
+                return uploadChargeRateBusiness;
+            case 0x0A:
+                //上传充电过程监测数据
+                return uploadChargeMonitorBusiness;
+            case 0x0C:
+                //心跳
+                return heartBeatBusiness;
             default:
                 return null;
         }
