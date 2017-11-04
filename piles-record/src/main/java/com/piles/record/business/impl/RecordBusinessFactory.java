@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 
+/**
+ * 电桩记录business的工厂类
+ */
 @Component
 public class RecordBusinessFactory implements IBusinessFactory {
 
