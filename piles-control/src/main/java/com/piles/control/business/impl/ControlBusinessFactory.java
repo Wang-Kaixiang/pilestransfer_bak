@@ -10,11 +10,11 @@ import javax.annotation.Resource;
 @Component
 public class ControlBusinessFactory implements IBusinessFactory {
 
-    @Resource
+    @Resource(name="loginBusiness")
     private IBusiness loginBusiness;
-    @Resource
+    @Resource(name="remoteStartBusiness")
     private IBusiness remoteStartBusiness;
-    @Resource
+    @Resource(name="remoteCloseBusiness")
     private IBusiness remoteCloseBusiness;
 
     @Override

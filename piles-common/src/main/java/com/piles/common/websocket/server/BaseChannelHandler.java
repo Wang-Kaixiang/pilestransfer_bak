@@ -1,4 +1,4 @@
-package com.piles.common.websocket;
+package com.piles.common.websocket.server;
 
 import com.piles.common.business.IBusinessHandler;
 import com.piles.common.util.ChannelMap;
@@ -23,7 +23,9 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
 		Channel incoming = ctx.channel();
 		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
-		businessHandler.process(msg, incoming);
+		byte[] response = businessHandler.process(msg, incoming);
+		logger.info("返回信息:" + response);
+		ctx.writeAndFlush(response);
 	}
 
 	@Override
@@ -54,6 +56,7 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		Channel incoming = ctx.channel();
 		logger.info("channelActive:" + incoming.remoteAddress() + "在线");
+		super.channelActive(ctx);
 	}
 
 	/**

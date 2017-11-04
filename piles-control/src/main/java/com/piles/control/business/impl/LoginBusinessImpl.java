@@ -17,7 +17,7 @@ import javax.annotation.Resource;
  * 登录接口逻辑
  */
 @Slf4j
-@Component
+@Component("loginBusiness")
 public class LoginBusinessImpl extends BaseBusiness{
 
     //设置返回报文头命令

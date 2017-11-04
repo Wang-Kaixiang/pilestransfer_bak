@@ -1,4 +1,4 @@
-package com.piles.common.websocket;
+package com.piles.common.websocket.server;
 
 import java.nio.charset.Charset;
 

@@ -1,4 +1,4 @@
-package com.piles.common.websocket;
+package com.piles.common.websocket.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
