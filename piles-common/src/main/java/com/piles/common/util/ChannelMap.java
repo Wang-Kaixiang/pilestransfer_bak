@@ -54,6 +54,10 @@ public class ChannelMap {
     public static Channel getChannel(String pileNo) {
         return channelMap2.get(pileNo);
     }
+    public static String getChannel(Channel channel) {
+        return channelMap3.get(channel);
+    }
+
 
     public static void removeChannel(Channel channel) {
         String pileNo = channelMap3.get(channel);
