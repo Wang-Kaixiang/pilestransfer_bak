@@ -22,10 +22,10 @@ public class BusinessFactory implements IBusinessFactory {
             case 0x01:
                 //登陆
                 return SpringContextUtil.getBean("loginBusiness");
-            case 0x06:
+            case (byte) 0x86:
                 //远程启动充电
                 return SpringContextUtil.getBean("remoteStartBusiness");
-            case 0x07:
+            case (byte) 0x87:
                 //远程结束充电
                 return SpringContextUtil.getBean("remoteCloseBusiness");
             //record

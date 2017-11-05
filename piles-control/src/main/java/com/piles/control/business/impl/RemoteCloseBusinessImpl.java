@@ -33,11 +33,9 @@ public class RemoteCloseBusinessImpl extends BaseBusiness{
         RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = remoteCloseService.remoteClose(remoteCloseRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo,result);
+        log.info("远程结束充电调用结果"+flag+" "+remoteCloseRequest.toString());
         //组装返回报文体
-        return responseBody;
+        return null;
     }
 
     @Override

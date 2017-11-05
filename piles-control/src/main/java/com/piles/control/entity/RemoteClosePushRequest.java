@@ -1,6 +1,7 @@
 package com.piles.control.entity;
 
 import com.google.common.primitives.Bytes;
+import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * 远程结束充电
  */
 @Data
-public class RemoteCloseResponse implements Serializable
+public class RemoteClosePushRequest extends BasePushRequest implements Serializable
 {
 
 
@@ -28,7 +29,7 @@ public class RemoteCloseResponse implements Serializable
      * @param request
      * @return
      */
-    public static byte[] packBytes(RemoteCloseResponse request){
+    public static byte[] packBytes(RemoteClosePushRequest request){
         int gunNo = request.getGunNo();
         long orderNo = request.getOrderNo();
         byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
@@ -39,10 +40,10 @@ public class RemoteCloseResponse implements Serializable
 
 
     public static void main(String[] args) {
-        RemoteCloseResponse remoteCloseResponse = new RemoteCloseResponse();
+        RemoteClosePushRequest remoteCloseResponse = new RemoteClosePushRequest();
         remoteCloseResponse.setGunNo(1);
-        remoteCloseResponse.setOrderNo(4545454l);
-        byte[] bytes = RemoteCloseResponse.packBytes(remoteCloseResponse);
+        remoteCloseResponse.setOrderNo(4545454L);
+        byte[] bytes = RemoteClosePushRequest.packBytes(remoteCloseResponse);
         System.out.println(BytesUtil.byte2Long(BytesUtil.copyBytes(bytes,1,bytes.length-1)));
 //        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
 //        packEntity(msg);

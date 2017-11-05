@@ -44,7 +44,6 @@ public class LoginBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
 
-        super.responseCode=this.responseCode;
         return responseBody;
     }
 

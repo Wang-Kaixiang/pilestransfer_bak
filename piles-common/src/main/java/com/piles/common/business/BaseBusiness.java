@@ -5,12 +5,14 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
 import io.netty.channel.Channel;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+@Data
 @Slf4j
 public abstract class BaseBusiness implements IBusiness{
     //返回编码
-     public ECommandCode responseCode;
+    ECommandCode responseCode;
 
 //    public BaseBusiness(ECommandCode responseCode) {
 //        this.responseCode = responseCode;

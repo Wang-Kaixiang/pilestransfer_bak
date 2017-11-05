@@ -1,6 +1,7 @@
 package com.piles.control.entity;
 
 import com.google.common.primitives.Bytes;
+import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * 远程开始充电
  */
 @Data
-public class RemoteStartResponse implements Serializable
+public class RemoteStartPushRequest extends BasePushRequest implements Serializable
 {
     /**
      * 抢号 1 位  BIN 1: A枪 2: B枪
@@ -49,8 +50,8 @@ public class RemoteStartResponse implements Serializable
      * @param msg
      * @return
      */
-    public static RemoteStartResponse packEntity(byte[] msg){
-        RemoteStartResponse request=new RemoteStartResponse();
+    public static RemoteStartPushRequest packEntity(byte[] msg){
+        RemoteStartPushRequest request=new RemoteStartPushRequest();
 
 //        request.setGunNo(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,0,1),10)));
 //        request.setChargeModel(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,1,1),10)));
@@ -65,7 +66,7 @@ public class RemoteStartResponse implements Serializable
      * @param request
      * @return
      */
-    public static byte[] packBytes(RemoteStartResponse request){
+    public static byte[] packBytes(RemoteStartPushRequest request){
         int gunNo = request.getGunNo();
         int chargeModel = request.getChargeModel();
         BigDecimal chargeData = request.getChargeData();

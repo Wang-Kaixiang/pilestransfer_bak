@@ -32,11 +32,9 @@ public class RemoteStartBusinessImpl extends BaseBusiness{
         RemoteStartRequest remoteStartRequest = RemoteStartRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = remoteStartService.remoteStart(remoteStartRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo,result);
+        log.info("远程启动充电调用结果"+flag+" "+remoteStartRequest.toString());
         //组装返回报文体
-        return responseBody;
+        return null;
     }
 
     @Override
