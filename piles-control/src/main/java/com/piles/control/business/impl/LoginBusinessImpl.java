@@ -20,10 +20,6 @@ import javax.annotation.Resource;
 @Component("loginBusiness")
 public class LoginBusinessImpl extends BaseBusiness{
 
-    //设置返回报文头命令
-    ECommandCode responseCode=ECommandCode.LOGIN_ANSWER_CODE;
-
-
     @Resource
     private ILoginService loginService;
 
@@ -50,5 +46,10 @@ public class LoginBusinessImpl extends BaseBusiness{
 
         super.responseCode=this.responseCode;
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.LOGIN_ANSWER_CODE;
     }
 }

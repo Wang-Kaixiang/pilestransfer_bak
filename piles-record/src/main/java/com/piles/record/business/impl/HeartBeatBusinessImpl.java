@@ -20,9 +20,6 @@ import java.util.Date;
 @Service("heartBeatBusiness")
 public class HeartBeatBusinessImpl extends BaseBusiness {
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.HEART_BEAT_ANSWER_CODE;
-
     @Resource
     private IHeartBeatService heartBeatService;
 
@@ -40,5 +37,10 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.HEART_BEAT_ANSWER_CODE;
     }
 }

@@ -61,7 +61,7 @@ public abstract class BaseBusiness implements IBusiness{
     public byte[] postProcess(byte[] body,byte[] orderBytes){
         //concat head
         byte[] first = new byte[]{0x68};
-        byte[] command = new byte[]{(byte)this.responseCode.getCode()};
+        byte[] command = new byte[]{(byte)getReponseCode().getCode()};
         byte[] len = BytesUtil.intToBytes(body.length);
 
         byte[] head = Bytes.concat(first, command, orderBytes, len);
@@ -72,4 +72,7 @@ public abstract class BaseBusiness implements IBusiness{
 
         return responseMsg;
     }
+
+    //子类需要继承传入返回报文的命令码
+    public abstract ECommandCode getReponseCode();
 }

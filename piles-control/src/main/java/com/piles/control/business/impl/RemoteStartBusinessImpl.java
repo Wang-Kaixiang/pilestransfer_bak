@@ -2,6 +2,7 @@ package com.piles.control.business.impl;
 
 import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.control.entity.RemoteStartRequest;
 import com.piles.control.service.IRemoteStartService;
@@ -36,5 +37,11 @@ public class RemoteStartBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        //TODO 设置返回码
+        return null;
     }
 }

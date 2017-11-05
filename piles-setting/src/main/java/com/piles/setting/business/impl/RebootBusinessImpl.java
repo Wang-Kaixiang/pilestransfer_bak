@@ -19,8 +19,6 @@ import javax.annotation.Resource;
 @Service("rebootBusiness")
 public class RebootBusinessImpl extends BaseBusiness{
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.REBOOT_ANSWER_CODE;
 
     @Resource
     private IRebootService rebootService;
@@ -38,5 +36,10 @@ public class RebootBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.REBOOT_ANSWER_CODE;
     }
 }

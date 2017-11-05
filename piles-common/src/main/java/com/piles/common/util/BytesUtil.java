@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import sun.jvm.hotspot.runtime.Bytes;
 
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
 
 public class BytesUtil {
     /**
@@ -44,13 +45,57 @@ public class BytesUtil {
     }
 
     /**
-     * 从一个byte数组中拷贝一部分出来
-     *
-     * @param oriBytes
-     * @param startIndex
-     * @param length
+     * long转字节，大端模式
+     * @param number
      * @return
      */
+    public static byte[] long2Byte(long number){
+        long temp = number;
+        byte[] b =new byte[8];
+        for(int i =(b.length-1); i >=0; i--){
+            b[i]=new Long(temp &0xff).byteValue();//
+            //将最低位保存在最低位
+            temp = temp >>8;// 向右移8位
+        }
+        return b;
+    }
+
+    /**
+     * 字节转long 大端模式
+     * @param b
+     * @return
+     */
+    public static long byte2Long(byte[] b){
+        long s =0;
+        long s0 = b[7]&0xff;
+        long s1 = b[6]&0xff;
+        long s2 = b[5]&0xff;
+        long s3 = b[4]&0xff;
+        long s4 = b[3]&0xff;
+        long s5 = b[2]&0xff;
+        long s6 = b[1]&0xff;
+        long s7 = b[0]&0xff;
+
+        // s0不变
+        s1 <<=8;
+        s2 <<=16;
+        s3 <<=24;
+        s4 <<=8*4;
+        s5 <<=8*5;
+        s6 <<=8*6;
+        s7 <<=8*7;
+        s = s0 | s1 | s2 | s3 | s4 | s5 | s6 | s7;
+        return s;
+    }
+
+    /**
+         * 从一个byte数组中拷贝一部分出来
+         *
+         * @param oriBytes
+         * @param startIndex
+         * @param length
+         * @return
+         */
     public static byte[] copyBytes(byte[] oriBytes, int startIndex, int length) {
         int endIndex = startIndex + length;
 
@@ -152,8 +197,12 @@ public class BytesUtil {
 //        byte[] temp=str2Bcd("1000025484561835");
 //        System.out.println(bcd2Str(new byte[]{temp[7]}));
 //        System.out.println(Integer.toHexString(Byte.toUnsignedInt(temp[1])).toUpperCase());
-        byte[] bytes = intToBytes(123);
-        int i = bytesToInt(bytes, 0);
+//        byte[] bytes = intToBytes(123);
+//        int i = bytesToInt(bytes, 0);
+        long i = 1l;
+        byte[] bytes = long2Byte(i);
+        System.out.println(byte2Long(bytes));
+
         System.out.println(i);
     }
 }
