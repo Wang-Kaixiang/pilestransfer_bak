@@ -25,10 +25,14 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 		Channel incoming = ctx.channel();
 		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
 		byte[] response = businessHandler.process(msg, incoming);
+		if(response == null){
+
+		}
 		logger.info("返回信息:" + response);
 		//包装
-		ByteBuf encoded = ctx.alloc().buffer(response.length);
-		encoded.writeBytes(response);
+//		ByteBuf encoded = ctx.alloc().buffer(response.length);
+//		encoded.writeBytes(response);
+		response = new byte[]{0x12,0x13,0x14};
 		ctx.writeAndFlush(response);
 	}
 

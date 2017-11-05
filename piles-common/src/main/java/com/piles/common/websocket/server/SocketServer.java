@@ -1,6 +1,7 @@
 package com.piles.common.websocket.server;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 @Service
 public class SocketServer implements InitializingBean, DisposableBean {
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -21,6 +24,9 @@ public class SocketServer implements InitializingBean, DisposableBean {
 	private EventLoopGroup workerGroup = null;
 	@Value( "${server.port}" )
 	private int port;
+
+	//存放桩编号和ip
+	public static ConcurrentHashMap<Integer,Channel> clientMap = new ConcurrentHashMap<>();
 
 	@Autowired
 	private ServerChannelInitializer serverChannelInitializer;
@@ -55,4 +61,5 @@ public class SocketServer implements InitializingBean, DisposableBean {
 			workerGroup.shutdownGracefully();
 		}
 	}
+
 }

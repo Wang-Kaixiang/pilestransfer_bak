@@ -20,8 +20,8 @@ public class HelloServerInitializer extends ChannelInitializer<SocketChannel> {
 //        pipeline.addLast("decoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 0, 4, 0, 4));
 
         pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 2, -4, 0));
-        pipeline.addLast("encoder", new ObjectEncoder());
-//        pipeline.addLast("frameEncoder", new LengthFieldPrepender(2));
+//        pipeline.addLast("encoder", new ObjectEncoder());
+        pipeline.addLast("frameEncoder", new LengthFieldPrepender(2));
         // 字符串解码 和 编码
 //        pipeline.addLast("decoder", new StringDecoder());
 //        pipeline.addLast("encoder", new StringEncoder());

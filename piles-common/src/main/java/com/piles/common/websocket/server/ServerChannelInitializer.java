@@ -2,6 +2,8 @@ package com.piles.common.websocket.server;
 
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.LengthFieldPrepender;
+import io.netty.handler.codec.bytes.ByteArrayDecoder;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
@@ -24,8 +26,14 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 //		pipeline.addLast("decoder", new ObjectDecoder(1024*1024, ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
 //		pipeline.addLast("encoder", new ObjectEncoder());
 		//根据报文解决粘包和半包问题  1位首字码  一位命令码 2位流水号 2位长度
-		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 2, -4, 0));
-		pipeline.addLast("encoder", new ObjectEncoder());
+//		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 2, -4, 0));
+//		pipeline.addLast("encoder", new ObjectEncoder());
+//		pipeline.addLast("decoder", new ObjectDecoder(1024*1024, ClassResolvers.cacheDisabled(null)));
+//		pipeline.addLast("encoder", new ObjectEncoder());
+
+		pipeline.addLast("decoder", new ByteArrayDecoder());
+		pipeline.addLast("encoder", new ByteArrayEncoder());
+
 		pipeline.addLast("handler", baseChannelHandler);
 	}
 }

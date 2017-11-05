@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-@Service
+//@Service
 public class SocketClient implements InitializingBean, DisposableBean {
 
     public static String host = "127.0.0.1";
