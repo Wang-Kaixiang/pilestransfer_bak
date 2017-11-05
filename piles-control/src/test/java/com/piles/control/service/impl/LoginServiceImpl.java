@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements ILoginService{
     @Override
     public boolean login(LoginRequest loginRequest) {
-        return false;
+        return true;
     }
 }
