@@ -12,30 +12,19 @@ public class BytesUtil {
     public static byte[] intToBytes(int value)
     {
         //limit 传入2
-        byte[] src = new byte[2];
-        src[0] = (byte) ((value>>8)&0xFF);
-        src[1] = (byte) (value & 0xFF);
-//        byte[] src = new byte[4];
-//        src[0] = (byte) ((value>>24) & 0xFF);
-//        src[1] = (byte) ((value>>16)& 0xFF);
-//        src[2] = (byte) ((value>>8)&0xFF);
-//        src[3] = (byte) (value & 0xFF);
-        return src;
+        return intToBytes(value,2);
     }
-    /**
-     * 将int数值转换为占四个字节的byte数组，本方法适用于(高位在前，低位在后)的顺序。
-     */
-    public static byte[] intToBytes4(int value)
+    public static byte[] intToBytes(int value,int limit)
     {
-        //limit 传入2
-//        byte[] src = new byte[2];
-//        src[0] = (byte) ((value>>8)&0xFF);
-//        src[1] = (byte) (value & 0xFF);
-        byte[] src = new byte[4];
-        src[0] = (byte) ((value>>24) & 0xFF);
-        src[1] = (byte) ((value>>16)& 0xFF);
-        src[2] = (byte) ((value>>8)&0xFF);
-        src[3] = (byte) (value & 0xFF);
+        byte[] src = new byte[limit];
+        for(int i =0;i<limit;i++){
+            int x = 8 * (limit - i - 1);
+            if(x == 0){
+                src[i] = (byte) (value & 0xFF);
+            }else {
+                src[i] = (byte) ((value >> x) & 0xFF);
+            }
+        }
         return src;
     }
 
