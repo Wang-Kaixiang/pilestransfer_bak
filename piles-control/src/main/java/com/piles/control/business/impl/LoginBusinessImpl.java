@@ -21,7 +21,8 @@ import javax.annotation.Resource;
 public class LoginBusinessImpl extends BaseBusiness{
 
     //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.LOGIN_ANSWER_CODE;
+    ECommandCode responseCode=ECommandCode.LOGIN_ANSWER_CODE;
+
 
     @Resource
     private ILoginService loginService;
@@ -46,6 +47,8 @@ public class LoginBusinessImpl extends BaseBusiness{
         byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
+
+        super.responseCode=this.responseCode;
         return responseBody;
     }
 }

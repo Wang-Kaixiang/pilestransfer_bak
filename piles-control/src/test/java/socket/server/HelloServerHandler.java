@@ -43,7 +43,7 @@ public class HelloServerHandler extends SimpleChannelInboundHandler<byte[]> {
 //        ctx.writeAndFlush( "Welcome to " + InetAddress.getLocalHost().getHostName() + " service!\n");
         Channel channel = ctx.channel();
         ChannelFuture future = channel.closeFuture().await();
-        future.
+//        future.
 
         super.channelActive(ctx);
     }

@@ -9,6 +9,9 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) throws Exception {
         System.out.println("Server say : " + bytes);
+        for (byte b:bytes){
+            System.out.print(Integer.toHexString(Byte.toUnsignedInt(b)));
+        }
         channelHandlerContext.writeAndFlush(new byte[]{0x12,0x13,0x14});
         //TODO 获取到server端返回值
 
