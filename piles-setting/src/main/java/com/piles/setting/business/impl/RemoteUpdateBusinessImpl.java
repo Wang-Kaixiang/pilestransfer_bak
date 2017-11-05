@@ -19,9 +19,6 @@ import javax.annotation.Resource;
 @Service("remoteUpdateBusiness")
 public class RemoteUpdateBusinessImpl extends BaseBusiness{
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.REMOTE_UPDATE_ANSWER_CODE;
-
     @Resource
     private IRemoteUpdateService remoteUpdateService;
 
@@ -38,5 +35,10 @@ public class RemoteUpdateBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.REMOTE_UPDATE_ANSWER_CODE;
     }
 }

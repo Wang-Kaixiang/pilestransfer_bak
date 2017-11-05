@@ -19,8 +19,6 @@ import javax.annotation.Resource;
 @Service("verifyTimeBusiness")
 public class VerifyTimeBusinessImpl extends BaseBusiness{
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.VERIFY_TIME_ANSWER_CODE;
 
     @Resource
     private IVerifyTimeService verifyTimeService;
@@ -37,5 +35,10 @@ public class VerifyTimeBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.VERIFY_TIME_ANSWER_CODE;
     }
 }

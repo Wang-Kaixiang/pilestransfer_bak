@@ -19,8 +19,6 @@ import javax.annotation.Resource;
 @Service("qrSetBusiness")
 public class QrSetBusinessImpl extends BaseBusiness{
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.QR_SET_ANSWER_CODE;
 
     @Resource
     private IQrSetService qrSetService;
@@ -37,5 +35,10 @@ public class QrSetBusinessImpl extends BaseBusiness{
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.QR_SET_ANSWER_CODE;
     }
 }

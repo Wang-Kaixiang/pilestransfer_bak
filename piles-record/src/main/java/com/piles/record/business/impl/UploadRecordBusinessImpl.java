@@ -22,9 +22,6 @@ import java.util.Date;
 @Service("uploadRecordBusiness")
 public class UploadRecordBusinessImpl extends BaseBusiness {
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.UPLOAD_RECORD_ANSWER_CODE;
-
     @Resource
     private IUploadRecordService uploadRecordService;
 
@@ -42,5 +39,10 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
         byte[] responseBody = Bytes.concat(pileNo,result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.UPLOAD_RECORD_ANSWER_CODE;
     }
 }

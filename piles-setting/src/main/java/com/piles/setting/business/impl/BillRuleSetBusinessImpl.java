@@ -19,8 +19,6 @@ import javax.annotation.Resource;
 @Service("billRuleSetBusiness")
 public class BillRuleSetBusinessImpl extends BaseBusiness {
 
-    //设置返回报文头命令
-    ECommandCode responseCode = ECommandCode.BILL_RULE_SET_ANSWER_CODE;
 
     @Resource
     private IBillRuleSetService billRuleSetService;
@@ -37,5 +35,10 @@ public class BillRuleSetBusinessImpl extends BaseBusiness {
         byte[] responseBody = Bytes.concat(pileNo, result);
         //组装返回报文体
         return responseBody;
+    }
+
+    @Override
+    public ECommandCode getReponseCode() {
+        return ECommandCode.BILL_RULE_SET_ANSWER_CODE;
     }
 }
