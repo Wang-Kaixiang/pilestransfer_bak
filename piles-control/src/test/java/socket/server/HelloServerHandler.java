@@ -3,6 +3,8 @@ package socket.server;
 import java.net.InetAddress;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -39,7 +41,10 @@ public class HelloServerHandler extends SimpleChannelInboundHandler<byte[]> {
         System.out.println("RamoteAddress : " + ctx.channel().remoteAddress() + " active !");
         
 //        ctx.writeAndFlush( "Welcome to " + InetAddress.getLocalHost().getHostName() + " service!\n");
-        
+        Channel channel = ctx.channel();
+        ChannelFuture future = channel.closeFuture().await();
+        future.
+
         super.channelActive(ctx);
     }
 }

@@ -160,8 +160,11 @@ public class BytesUtil {
 
 //        System.out.println(i);
 //        System.out.println(s);
-        byte[] temp=str2Bcd("1000025484561835");
-        System.out.println(bcd2Str(new byte[]{temp[7]}));
+//        byte[] temp=str2Bcd("1000025484561835");
+//        System.out.println(bcd2Str(new byte[]{temp[7]}));
 //        System.out.println(Integer.toHexString(Byte.toUnsignedInt(temp[1])).toUpperCase());
+        byte[] bytes = intToBytes(123);
+        int i = bytesToInt(bytes, 0);
+        System.out.println(i);
     }
 }

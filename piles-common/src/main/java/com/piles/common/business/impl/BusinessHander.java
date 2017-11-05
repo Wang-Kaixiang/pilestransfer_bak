@@ -8,10 +8,13 @@ import io.netty.channel.Channel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
+
 
 @Component
 public  class BusinessHander implements IBusinessHandler {
-    @Autowired
+
+    @Resource(name="businessFactory")
     IBusinessFactory businessFactory;
 
     @Override
