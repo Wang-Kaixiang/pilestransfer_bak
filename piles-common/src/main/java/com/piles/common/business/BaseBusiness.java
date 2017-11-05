@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseBusiness implements IBusiness{
     //返回编码
-    ECommandCode responseCode;
+     public ECommandCode responseCode;
 
 //    public BaseBusiness(ECommandCode responseCode) {
 //        this.responseCode = responseCode;
@@ -44,7 +44,7 @@ public abstract class BaseBusiness implements IBusiness{
         int order = BytesUtil.bytesToInt(orderBytes, 0);
         log.info("消息流水号为:{}",order);
 
-        byte[] bodyBytes = BytesUtil.copyBytes(msg, 8, len);
+        byte[] bodyBytes = BytesUtil.copyBytes(msg, 6, len);
         byte[] responseBody = processBody(bodyBytes,incoming);
 
         //返回结果为空则不返回
@@ -61,7 +61,7 @@ public abstract class BaseBusiness implements IBusiness{
     public byte[] postProcess(byte[] body,byte[] orderBytes){
         //concat head
         byte[] first = new byte[]{0x68};
-        byte[] command = BytesUtil.intToBytes(this.responseCode.getCode());
+        byte[] command = new byte[]{(byte)this.responseCode.getCode()};
         byte[] len = BytesUtil.intToBytes(body.length);
 
         byte[] head = Bytes.concat(first, command, orderBytes, len);
@@ -69,6 +69,7 @@ public abstract class BaseBusiness implements IBusiness{
         int crcInt = CRC16Util.getCRC(Bytes.concat(command,orderBytes,len));
         byte[] crc=BytesUtil.intToBytes(crcInt);
         byte[] responseMsg = Bytes.concat(head, body, crc);
+
         return responseMsg;
     }
 }
