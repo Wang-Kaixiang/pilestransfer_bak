@@ -32,9 +32,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity(bodyBytes);
         //调用底层接口
         Date date= heartBeatService.heartBeat(heartBeatRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = BytesUtil.str2Bcd(sdf.format(date));
-        byte[] responseBody = Bytes.concat(pileNo,result);
+        byte[] responseBody = BytesUtil.str2Bcd(sdf.format(date));
         //组装返回报文体
         return responseBody;
     }

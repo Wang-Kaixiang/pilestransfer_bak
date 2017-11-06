@@ -29,10 +29,13 @@ public class QrSetBusinessImpl extends BaseBusiness{
         //依照报文体规则解析报文
         QrSetRequest qrSetRequest = QrSetRequest.packEntity(bodyBytes,incoming);
         //调用底层接口
-        boolean flag = qrSetService.qrSet(qrSetRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo,result);
+        String qrContent = qrSetService.qrSet(qrSetRequest);
+        if(qrContent == null){
+            qrContent = "";
+        }
+        byte[] lenBytes = BytesUtil.intToBytes(qrContent.length(), 2);
+        // 枪号+二维码长度+二维码内容
+        byte[] responseBody = Bytes.concat(bodyBytes,lenBytes,qrContent.getBytes());
         //组装返回报文体
         return responseBody;
     }
@@ -40,5 +43,14 @@ public class QrSetBusinessImpl extends BaseBusiness{
     @Override
     public ECommandCode getReponseCode() {
         return ECommandCode.QR_SET_ANSWER_CODE;
+    }
+
+    public static void main(String[] args) {
+        byte[] bytes = new byte[]{0x22,0x33};
+        String qrContent = "";
+        byte[] lenBytes = BytesUtil.intToBytes(qrContent.length(), 2);
+        // 枪号+二维码长度+二维码内容
+        byte[] responseBody = Bytes.concat(bytes,lenBytes,qrContent.getBytes());
+        System.out.println(responseBody);
     }
 }

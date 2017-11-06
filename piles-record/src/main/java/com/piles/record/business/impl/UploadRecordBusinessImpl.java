@@ -34,9 +34,9 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
         UploadRecordRequest uploadRecordRequest = UploadRecordRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag= uploadRecordService.uploadRecord(uploadRecordRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
+        byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);
         byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo,result);
+        byte[] responseBody = Bytes.concat(orderNo,result);
         //组装返回报文体
         return responseBody;
     }

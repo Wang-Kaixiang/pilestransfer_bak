@@ -9,7 +9,7 @@ public interface IQrSetService {
     /**
      * 二维码设置
      * @param qrSetRequest 请求体
-     * @return 验证成功返回true，失败返回false
+     * @return 二维码链接地址
      */
-    boolean qrSet(QrSetRequest qrSetRequest);
+    String qrSet(QrSetRequest qrSetRequest);
 }

@@ -11,5 +11,5 @@ public interface IUploadChargeRateService {
      *
      * @param uploadChargeRateRequest 请求体
      */
-    void uploadChargeRate(UploadChargeRateRequest uploadChargeRateRequest);
+    boolean uploadChargeRate(UploadChargeRateRequest uploadChargeRateRequest);
 }
