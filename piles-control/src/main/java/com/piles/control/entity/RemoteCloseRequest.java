@@ -28,9 +28,7 @@ public class RemoteCloseRequest implements Serializable {
      */
     public static RemoteCloseRequest packEntity(byte[] msg) {
         RemoteCloseRequest request = new RemoteCloseRequest();
-        //TODO 确定orderNo是否是long型
         request.setOrderNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,0,8)));
-//        request.setOrderNo(BytesUtil.binary(BytesUtil.copyBytes(msg, 0, 8), 10));
         request.setResult(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 8, 1), 10)));
         return request;
     }

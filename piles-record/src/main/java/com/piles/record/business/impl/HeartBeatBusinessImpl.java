@@ -30,8 +30,9 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
     protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity(bodyBytes);
-        //调用底层接口
-        Date date= heartBeatService.heartBeat(heartBeatRequest);
+        //TODO 不需要接调用底层接口
+//        Date date= heartBeatService.heartBeat(heartBeatRequest);
+        Date date = new Date();
         byte[] responseBody = BytesUtil.str2Bcd(sdf.format(date));
         //组装返回报文体
         return responseBody;

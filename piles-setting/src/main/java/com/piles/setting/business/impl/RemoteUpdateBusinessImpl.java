@@ -4,7 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
-import com.piles.setting.entity.RemoteUpdateRequest;
+import com.piles.setting.entity.RemoteUpdatePushRequest;
 import com.piles.setting.service.IRemoteUpdateService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class RemoteUpdateBusinessImpl extends BaseBusiness{
     @Override
     protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
-        RemoteUpdateRequest remoteUpdateRequest = RemoteUpdateRequest.packEntity(bodyBytes);
+        RemoteUpdatePushRequest remoteUpdateRequest = RemoteUpdatePushRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = remoteUpdateService.remoteUpdate(remoteUpdateRequest);
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);

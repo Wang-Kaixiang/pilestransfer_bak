@@ -32,7 +32,6 @@ public class UploadChargeMonitorBusinessImpl extends BaseBusiness {
 
     @Override
     public ECommandCode getReponseCode() {
-        //TODO 设置返回编码
         return null;
     }
 }

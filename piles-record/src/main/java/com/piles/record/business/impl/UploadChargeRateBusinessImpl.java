@@ -30,16 +30,15 @@ public class UploadChargeRateBusinessImpl extends BaseBusiness {
         UploadChargeRateRequest uploadChargeRateRequest = UploadChargeRateRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = uploadChargeRateService.uploadChargeRate(uploadChargeRateRequest);
-        byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);
-        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(orderNo,result);
+//        byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);
+//        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
+//        byte[] responseBody = Bytes.concat(orderNo,result);
         //组装返回报文体
-        return responseBody;
+        return null;
     }
 
     @Override
     public ECommandCode getReponseCode() {
-        //TODO 设置返回编码
         return null;
     }
 }

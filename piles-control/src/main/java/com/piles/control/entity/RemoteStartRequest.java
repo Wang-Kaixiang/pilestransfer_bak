@@ -16,7 +16,7 @@ public class RemoteStartRequest implements Serializable
     /**
      * 订单号 8位 BIN
      */
-    private String orderNo;
+    private long orderNo;
     /**
      * 结果 1位 BIN    0: 启动成功 1: 枪被预约 2: 其他原因失败
      */
@@ -29,7 +29,7 @@ public class RemoteStartRequest implements Serializable
      */
     public static RemoteStartRequest packEntity(byte[] msg){
         RemoteStartRequest request=new RemoteStartRequest();
-        request.setOrderNo(BytesUtil.binary(BytesUtil.copyBytes(msg,0,8),10));
+        request.setOrderNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,0,8)));
         request.setResult(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,8,1),10)));
         return request;
     }

@@ -13,8 +13,6 @@ import java.io.Serializable;
 @Data
 public class RemoteClosePushRequest extends BasePushRequest implements Serializable
 {
-
-
     /**
      * 抢号 1 位  BIN 1: A枪 2: B枪
      */
@@ -33,7 +31,6 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
         int gunNo = request.getGunNo();
         long orderNo = request.getOrderNo();
         byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
-        //TODO 确定orderNo是否是long型
         byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
         return Bytes.concat(gunNoBytes,orderNoBytes);
     }
@@ -45,8 +42,6 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
         remoteCloseResponse.setOrderNo(4545454L);
         byte[] bytes = RemoteClosePushRequest.packBytes(remoteCloseResponse);
         System.out.println(BytesUtil.byte2Long(BytesUtil.copyBytes(bytes,1,bytes.length-1)));
-//        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
-//        packEntity(msg);
 
     }
 
