@@ -9,7 +9,6 @@
     <version>1.0.0</version>
     <modules>
 		<module>piles-common</module>
-		<module>piles-sdk</module>
 		<module>piles-control</module>
 		<module>piles-setting</module>
 		<module>piles-record</module>

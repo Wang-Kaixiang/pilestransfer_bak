@@ -18,5 +18,5 @@
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
-	<import resource="classpath*:application-common.xml"/>
+	<import resource="classpath*:application.xml"/>
 </beans>

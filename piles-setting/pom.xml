@@ -12,9 +12,10 @@
     <artifactId>piles-setting</artifactId>
 
     <dependencies>
+
         <dependency>
             <groupId>com.piles</groupId>
-            <artifactId>piles-common</artifactId>
+            <artifactId>piles-control</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
