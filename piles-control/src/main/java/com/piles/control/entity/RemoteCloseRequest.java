@@ -1,5 +1,6 @@
 package com.piles.control.entity;
 
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.io.Serializable;
  * 远程结束充电
  */
 @Data
-public class RemoteCloseRequest implements Serializable {
+public class RemoteCloseRequest extends BasePushResponse implements Serializable {
 
     /**
      * 订单号 8位 BIN
@@ -28,8 +29,8 @@ public class RemoteCloseRequest implements Serializable {
      */
     public static RemoteCloseRequest packEntity(byte[] msg) {
         RemoteCloseRequest request = new RemoteCloseRequest();
-        request.setOrderNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,0,8)));
-        request.setResult(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 8, 1), 10)));
+        request.setOrderNo( BytesUtil.byte2Long( BytesUtil.copyBytes( msg, 0, 8 ) ) );
+        request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 8, 1 ), 10 ) ) );
         return request;
     }
 

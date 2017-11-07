@@ -1,6 +1,7 @@
 package com.piles.control.entity;
 
 import com.google.common.primitives.Bytes;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
  * 远程开始充电
  */
 @Data
-public class RemoteStartRequest implements Serializable
+public class RemoteStartRequest extends BasePushResponse implements Serializable
 {
     /**
      * 订单号 8位 BIN

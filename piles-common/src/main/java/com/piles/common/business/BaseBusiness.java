@@ -47,7 +47,7 @@ public abstract class BaseBusiness implements IBusiness{
         log.info("消息流水号为:{}",order);
 
         byte[] bodyBytes = BytesUtil.copyBytes(msg, 6, len);
-        byte[] responseBody = processBody(bodyBytes,incoming);
+        byte[] responseBody = processBody(bodyBytes,incoming,order);
 
         //返回结果为空则不返回
         if (null!=responseBody) {
@@ -57,7 +57,7 @@ public abstract class BaseBusiness implements IBusiness{
         }
     }
 
-    protected abstract byte[] processBody(byte[] bodyBytes,Channel incoming);
+    protected abstract byte[] processBody(byte[] bodyBytes,Channel incoming,int order);
 
     //返回结果处理
     public byte[] postProcess(byte[] body,byte[] orderBytes){

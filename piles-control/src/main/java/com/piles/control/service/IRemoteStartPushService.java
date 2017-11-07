@@ -1,7 +1,9 @@
 package com.piles.control.service;
 
+import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
+import com.piles.control.entity.RemoteStartRequest;
 
 /**
  * 远程启动充电 运营中心主动调用服务
@@ -12,5 +14,5 @@ public interface IRemoteStartPushService {
      * @param remoteStartPushRequest
      * @return
      */
-    boolean doPush(RemoteStartPushRequest remoteStartPushRequest);
+    BasePushCallBackResponse<RemoteStartRequest> doPush(RemoteStartPushRequest remoteStartPushRequest);
 }

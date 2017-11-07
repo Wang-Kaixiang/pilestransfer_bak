@@ -1,5 +1,7 @@
 package com.piles.common.business;
 
+import com.piles.common.entity.BasePushCallBackResponse;
+
 /**
  * 推送消息业务
  */
@@ -10,5 +12,5 @@ public interface IPushBusiness {
      * @param pileNo 桩编号
      * @return
      */
-    boolean push(byte[] msg,String pileNo);
+    boolean push(byte[] msg, String pileNo, BasePushCallBackResponse basePushCallBackResponse);
 }
