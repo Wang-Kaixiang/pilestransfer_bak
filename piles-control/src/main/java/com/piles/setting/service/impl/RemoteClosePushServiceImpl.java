@@ -1,15 +1,13 @@
-package com.piles.control.service.impl;
+package com.piles.setting.service.impl;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteCloseRequest;
-import com.piles.control.entity.RemoteStartPushRequest;
-import com.piles.control.entity.RemoteStartRequest;
 import com.piles.control.service.IRemoteClosePushService;
-import com.piles.control.service.IRemoteStartPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,21 +15,21 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 远程开始充电给充电桩发送消息实现类
+ * 远程关闭充电给充电桩发送消息实现类
  */
 @Slf4j
 @Service
-public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
+public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
+
     @Autowired
     IPushBusiness pushBusiness;
-
-
     @Override
-    public BasePushCallBackResponse<RemoteStartRequest> doPush(RemoteStartPushRequest remoteStartPushRequest) {
-        byte[] pushMsg=RemoteStartPushRequest.packBytes(remoteStartPushRequest);
-        BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse=new BasePushCallBackResponse();
-        basePushCallBackResponse.setSerial( remoteStartPushRequest.getSerial() );
-        boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
+    public BasePushCallBackResponse<RemoteCloseRequest>  doPush(RemoteClosePushRequest remoteClosePushRequest) {
+
+        byte[] pushMsg=RemoteClosePushRequest.packBytes(remoteClosePushRequest);
+        BasePushCallBackResponse<RemoteCloseRequest> basePushCallBackResponse=new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( remoteClosePushRequest.getSerial() );
+        boolean flag= pushBusiness.push(pushMsg,remoteClosePushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_OVER_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
