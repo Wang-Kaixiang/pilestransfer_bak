@@ -2,6 +2,7 @@ package com.piles.control.service.impl;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteCloseRequest;
@@ -30,7 +31,7 @@ public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
         byte[] pushMsg=RemoteStartPushRequest.packBytes(remoteStartPushRequest);
         BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse=new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteStartPushRequest.getSerial() );
-        boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getPileNo(),basePushCallBackResponse);
+        boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;

@@ -2,6 +2,7 @@ package com.piles.setting.service.impl;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.setting.entity.RemoteUpdatePushRequest;
 import com.piles.setting.entity.RemoteUpdateRequest;
@@ -33,7 +34,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService {
         byte[] pushMsg = RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
         BasePushCallBackResponse<RemoteUpdateRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteUpdatePushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse );
+        boolean flag = pushBusiness.push( pushMsg, remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REMOTE_UPDATE_CODE );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;

@@ -24,7 +24,7 @@ public class PushBusinessImpl implements IPushBusiness {
         Channel channel=ChannelMap.getChannel(pileNo);
 
         if (null!=channel){
-            ChannelResponseCallBackMap.add(channel,basePushRequest.getSerial(),basePushRequest);
+            ChannelResponseCallBackMap.add(channel,Integer.parseInt(  basePushRequest.getSerial()),basePushRequest);
             //拼接报文
             byte[] start=new byte[]{0x68};
             byte[] command=new byte[]{(byte)commandCode.getCode()};

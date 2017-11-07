@@ -2,6 +2,7 @@ package com.piles.setting.service.impl;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.setting.entity.BillRuleSetPushRequest;
 import com.piles.setting.entity.BillRuleSetRequest;
@@ -37,7 +38,7 @@ public class RebootPushServiceImpl implements IRebootPushService {
         byte[] pushMsg = RebootPushRequest.packBytes( rebootPushRequest );
         BasePushCallBackResponse<RebootRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( rebootPushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, rebootPushRequest.getPileNo(), basePushCallBackResponse );
+        boolean flag = pushBusiness.push( pushMsg, rebootPushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REBOOT_CODE );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;

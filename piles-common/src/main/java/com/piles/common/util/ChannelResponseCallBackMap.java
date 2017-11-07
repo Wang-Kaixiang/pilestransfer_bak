@@ -14,7 +14,7 @@ public class ChannelResponseCallBackMap  {
     /**
      * channel:流水号:BasePushCallBackResponse
      */
-    private static ConcurrentHashMap<Channel,ConcurrentHashMap<String,BasePushCallBackResponse>> map=new ConcurrentHashMap<>(  );
+    private static ConcurrentHashMap<Channel,ConcurrentHashMap<Integer,BasePushCallBackResponse>> map=new ConcurrentHashMap<>(  );
 
     /**
      *
@@ -22,8 +22,8 @@ public class ChannelResponseCallBackMap  {
      * @param serial
      * @return
      */
-    private static BasePushCallBackResponse getObject(Channel channel, String serial){
-        ConcurrentHashMap<String,BasePushCallBackResponse> temp=map.get( channel );
+    private static BasePushCallBackResponse getObject(Channel channel, Integer serial){
+        ConcurrentHashMap<Integer,BasePushCallBackResponse> temp=map.get( channel );
         if (null==temp){
             return null;
         }
@@ -37,7 +37,7 @@ public class ChannelResponseCallBackMap  {
      * @param obj
      */
     public static   void callBack(Channel channel, String serial, BasePushResponse obj){
-        BasePushCallBackResponse basePushCallBackResponse =getObject(channel,serial);
+        BasePushCallBackResponse basePushCallBackResponse =getObject(channel,Integer.parseInt(  serial));
         if (null== basePushCallBackResponse) {
             log.warn( channel.toString() + "流水号" + serial + "response为空,可能server端方法超时返回了" );
             return;
@@ -48,8 +48,8 @@ public class ChannelResponseCallBackMap  {
 
     }
 
-    public  static void add(Channel channel, String serial, BasePushCallBackResponse obj){
-        ConcurrentHashMap<String,BasePushCallBackResponse> temp=map.get( channel );
+    public  static void add(Channel channel, Integer serial, BasePushCallBackResponse obj){
+        ConcurrentHashMap<Integer,BasePushCallBackResponse> temp=map.get( channel );
         if (null==temp){
             temp=new ConcurrentHashMap<>(  );
             map.put( channel,temp );

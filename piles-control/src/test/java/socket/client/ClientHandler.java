@@ -8,16 +8,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, byte[] bytes) throws Exception {
-        System.out.println("Server say : " + bytes);
-        if (bytes[0]==49){
-            channelHandlerContext.writeAndFlush("1".getBytes());
-        }
+        String temp="";
         for (byte b:bytes){
-            System.out.print(Integer.toHexString(Byte.toUnsignedInt(b)));
+           temp+=" "+ Integer.toHexString(Byte.toUnsignedInt(b));
         }
-//        byte[] msg= new byte[]{0x68,0x01,0x00,0x00,0x00,0x1D,0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-//                0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01,0x2B,(byte)0xD9};
-//        channelHandlerContext.writeAndFlush(msg);
+        System.out.println("Server say : " + temp);
+        switch (bytes[1]){
+            case 0x07 :
+                channelHandlerContext.writeAndFlush( new byte[]{0x68,(byte)0x87,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x02,0x76} );
+        }
         //TODO 获取到server端返回值
 
     }

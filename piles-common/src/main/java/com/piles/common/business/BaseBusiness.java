@@ -68,7 +68,7 @@ public abstract class BaseBusiness implements IBusiness{
 
         byte[] head = Bytes.concat(first, command, orderBytes, len);
         //concat crc校验
-        int crcInt = CRC16Util.getCRC(Bytes.concat(command,orderBytes,len));
+        int crcInt = CRC16Util.getCRC(Bytes.concat(command,orderBytes,len,body));
         byte[] crc=BytesUtil.intToBytes(crcInt);
         byte[] responseMsg = Bytes.concat(head, body, crc);
 

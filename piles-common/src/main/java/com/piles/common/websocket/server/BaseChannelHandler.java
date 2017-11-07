@@ -23,17 +23,18 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, byte[] msg) throws Exception {
 		Channel incoming = ctx.channel();
-		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + msg);
+		String temp="";
+		for (byte b:msg){
+			temp+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
+		}
+		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + temp);
 		byte[] response = businessHandler.process(msg, incoming);
-		if(response == null){
-
+		if(response != null){
+			ctx.writeAndFlush(response);
 		}
 		logger.info("返回信息:" + response);
 		//包装
-//		ByteBuf encoded = ctx.alloc().buffer(response.length);
-//		encoded.writeBytes(response);
-//		response = new byte[]{0x12,0x13,0x14};
-		ctx.writeAndFlush(response);
+
 	}
 
 	@Override

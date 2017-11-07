@@ -2,6 +2,7 @@ package com.piles.setting.service.impl;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.setting.entity.BillRuleSetPushRequest;
 import com.piles.setting.entity.BillRuleSetRequest;
@@ -32,7 +33,7 @@ public class BillRuleSetPushServiceImpl implements IBillRuleSetPushService {
         byte[] pushMsg = BillRuleSetPushRequest.packBytes( billRuleSetPushRequest );
         BasePushCallBackResponse<BillRuleSetRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( billRuleSetPushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, billRuleSetPushRequest.getPileNo(), basePushCallBackResponse );
+        boolean flag = pushBusiness.push( pushMsg, billRuleSetPushRequest.getPileNo(), basePushCallBackResponse , ECommandCode.BILL_RULE_SET_CODE);
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
