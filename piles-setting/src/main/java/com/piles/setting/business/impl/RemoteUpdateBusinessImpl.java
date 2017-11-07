@@ -25,16 +25,16 @@ public class RemoteUpdateBusinessImpl extends BaseBusiness{
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
         //依照报文体规则解析报文
-        RemoteUpdatePushRequest remoteUpdateRequest = RemoteUpdatePushRequest.packEntity(bodyBytes);
+//        RemoteUpdatePushRequest remoteUpdateRequest = RemoteUpdatePushRequest.packBytes(bodyBytes);
         //调用底层接口
-        boolean flag = remoteUpdateService.remoteUpdate(remoteUpdateRequest);
+//        boolean flag = remoteUpdateService.remoteUpdate(remoteUpdateRequest);
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo,result);
-        //组装返回报文体
-        return responseBody;
+//        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
+//        byte[] responseBody = Bytes.concat(pileNo,result);
+//        组装返回报文体
+        return null;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity(bodyBytes);
         //TODO 不需要接调用底层接口

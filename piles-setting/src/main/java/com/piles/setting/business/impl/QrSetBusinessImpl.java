@@ -25,7 +25,7 @@ public class QrSetBusinessImpl extends BaseBusiness{
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
         //依照报文体规则解析报文
         QrSetRequest qrSetRequest = QrSetRequest.packEntity(bodyBytes,incoming);
         //调用底层接口

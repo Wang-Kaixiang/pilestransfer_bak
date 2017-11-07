@@ -30,7 +30,7 @@ public class LoginBusinessImpl extends BaseBusiness{
 //    }
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
+    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
         //依照报文体规则解析报文
         LoginRequest loginRequest = LoginRequest.packEntity(bodyBytes);
         //调用底层接口
