@@ -9,7 +9,6 @@ import com.piles.control.entity.RemoteCloseRequest;
  */
 
 public interface IRemoteClosePushService {
-    long timeout=3000L;
     /**
      * 远程关闭充电 推送消息
      * @param remoteClosePushRequest
