@@ -1,39 +1,27 @@
 package com.piles.setting.business.impl;
 
-import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
-import com.piles.common.util.BytesUtil;
-import com.piles.setting.entity.RemoteUpdatePushRequest;
-import com.piles.setting.service.IRemoteUpdateService;
+import com.piles.common.util.ChannelResponseCallBackMap;
+import com.piles.setting.entity.RemoteUpdateRequest;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 远程升级
  */
 @Slf4j
 @Service("remoteUpdateBusiness")
-public class RemoteUpdateBusinessImpl extends BaseBusiness{
-
-    @Resource
-    private IRemoteUpdateService remoteUpdateService;
-
+public class RemoteUpdateBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
+    protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
         //依照报文体规则解析报文
-//        RemoteUpdatePushRequest remoteUpdateRequest = RemoteUpdatePushRequest.packBytes(bodyBytes);
-        //调用底层接口
-//        boolean flag = remoteUpdateService.remoteUpdate(remoteUpdateRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-//        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-//        byte[] responseBody = Bytes.concat(pileNo,result);
-//        组装返回报文体
+        //TODO 此处还没解析报文
+        RemoteUpdateRequest remoteUpdateRequest = new RemoteUpdateRequest();
+        ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), remoteUpdateRequest );
         return null;
     }
 

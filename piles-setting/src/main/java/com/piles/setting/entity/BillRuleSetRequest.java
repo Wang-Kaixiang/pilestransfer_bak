@@ -3,6 +3,7 @@ package com.piles.setting.entity;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * 计费规则设置 充电桩  运营管理系统
  */
 @Data
-public class BillRuleSetRequest extends BasePushRequest implements Serializable
+public class BillRuleSetRequest extends BasePushResponse implements Serializable
 {
     /**
      * 计费规则ID 4位 BIN 首次登录填0，后续登录填桩当前正在使用的计费规则ID

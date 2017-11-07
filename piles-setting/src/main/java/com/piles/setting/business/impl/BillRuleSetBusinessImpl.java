@@ -1,16 +1,12 @@
 package com.piles.setting.business.impl;
 
-import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
-import com.piles.common.util.BytesUtil;
-import com.piles.setting.entity.BillRuleSetPushRequest;
-import com.piles.setting.service.IBillRuleSetService;
+import com.piles.common.util.ChannelResponseCallBackMap;
+import com.piles.setting.entity.BillRuleSetRequest;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
 
 /**
  * 计费规则设置
@@ -20,21 +16,13 @@ import javax.annotation.Resource;
 public class BillRuleSetBusinessImpl extends BaseBusiness {
 
 
-    @Resource
-    private IBillRuleSetService billRuleSetService;
-
-
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
+    protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
         //依照报文体规则解析报文
-        BillRuleSetPushRequest billRuleSetRequest = BillRuleSetPushRequest.packEntity(bodyBytes);
+        BillRuleSetRequest ruleSetRequest = BillRuleSetRequest.packEntity( bodyBytes );
         //调用底层接口
-        boolean flag = billRuleSetService.billRuleSet(billRuleSetRequest);
-        byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
-        byte[] result = flag == true ? new byte[]{0x00} : new byte[]{0x01};
-        byte[] responseBody = Bytes.concat(pileNo, result);
-        //组装返回报文体
-        return responseBody;
+        ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), ruleSetRequest );
+        return null;
     }
 
     @Override

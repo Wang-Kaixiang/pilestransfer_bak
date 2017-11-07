@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * 远程升级 运营管理系统  充电桩
  */
 @Data
-public class RemoteUpdatePushRequest extends BasePushRequest implements Serializable
+public class RemoteUpdatePushRequest extends BasePushRequest  implements Serializable
 {
     //软件版本号	BIN	2	点号前后各占一个字节。如V1.0表示为0x01 0x00,V1.10表示为0x01 0x0A
     private String softVersion;
@@ -28,7 +28,6 @@ public class RemoteUpdatePushRequest extends BasePushRequest implements Serializ
 
     /**
      * 解析报文并封装request体
-     * @param msg
      * @return
      */
     public static byte[] packBytes(RemoteUpdatePushRequest request){
