@@ -53,7 +53,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         BigDecimal chargeData = request.getChargeData();
         String chargeStopCode = request.getChargeStopCode();
         long orderNo = request.getOrderNo();
-        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo);
+        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
         byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel);
         int chargeDataInt = 0;
         if(chargeModel==2 || chargeModel==4){

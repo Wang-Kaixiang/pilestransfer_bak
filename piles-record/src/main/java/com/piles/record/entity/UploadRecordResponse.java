@@ -33,7 +33,7 @@ public class UploadRecordResponse implements Serializable
         int result = reponse.getResult();
 
         byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
-        byte[] resultBytes = BytesUtil.intToBytes(result);
+        byte[] resultBytes = BytesUtil.intToBytes(result,1);
         return Bytes.concat(orderNoBytes,resultBytes);
     }
 

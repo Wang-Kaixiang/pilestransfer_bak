@@ -4,6 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -36,9 +37,30 @@ public class RemoteUpdatePushRequest extends BasePushRequest implements Serializ
         String md5 = request.getMd5();
         String url = request.getUrl();
 
-        //TODO 待处理
-        byte[] softVersionBytes = md5.getBytes();
-        byte[] protocolVersionBytes = md5.getBytes();
+        byte[] softVersionBytes = BytesUtil.intToBytes(0,4);
+        byte[] protocolVersionBytes = BytesUtil.intToBytes(0,4);
+        if(StringUtils.isNoneBlank(softVersion)){
+            softVersionBytes = new byte[]{};
+            //截取掉V
+            String version = softVersion.substring(1);
+            String[] split = version.split(".");
+
+            for (int i = 0;i<split.length;i++){
+                int x = Integer.parseInt(split[i]);
+                Bytes.concat(softVersionBytes,BytesUtil.intToBytes(x,2));
+            }
+        }
+        if(StringUtils.isNoneBlank(protocolVersion)){
+            protocolVersionBytes = new byte[]{};
+            //截取掉V
+            String version = protocolVersion.substring(1);
+            String[] split = version.split(".");
+
+            for (int i = 0;i<split.length;i++){
+                int x = Integer.parseInt(split[i]);
+                Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,2));
+            }
+        }
         byte[] md5Bytes = md5.getBytes();
         if(url!=null){
             url = "";

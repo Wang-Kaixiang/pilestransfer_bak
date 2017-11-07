@@ -4,7 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
-import com.piles.setting.entity.BillRuleSetRequest;
+import com.piles.setting.entity.BillRuleSetPushRequest;
 import com.piles.setting.service.IBillRuleSetService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +27,7 @@ public class BillRuleSetBusinessImpl extends BaseBusiness {
     @Override
     protected byte[] processBody(byte[] bodyBytes,Channel incoming) {
         //依照报文体规则解析报文
-        BillRuleSetRequest billRuleSetRequest = BillRuleSetRequest.packEntity(bodyBytes);
+        BillRuleSetPushRequest billRuleSetRequest = BillRuleSetPushRequest.packEntity(bodyBytes);
         //调用底层接口
         boolean flag = billRuleSetService.billRuleSet(billRuleSetRequest);
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
