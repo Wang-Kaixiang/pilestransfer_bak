@@ -28,10 +28,11 @@ public class BillRuleSetPushServiceImpl implements IBillRuleSetPushService {
     private long timeout = 3000L;
 
     @Override
-    public BasePushCallBackResponse<BillRuleSetRequest> doPush(BillRuleSetPushRequest remoteClosePushRequest) {
-        byte[] pushMsg = BillRuleSetPushRequest.packBytes( remoteClosePushRequest );
+    public BasePushCallBackResponse<BillRuleSetRequest> doPush(BillRuleSetPushRequest billRuleSetPushRequest) {
+        byte[] pushMsg = BillRuleSetPushRequest.packBytes( billRuleSetPushRequest );
         BasePushCallBackResponse<BillRuleSetRequest> basePushCallBackResponse = new BasePushCallBackResponse();
-        boolean flag = pushBusiness.push( pushMsg, remoteClosePushRequest.getPileNo(), basePushCallBackResponse );
+        basePushCallBackResponse.setSerial( billRuleSetPushRequest.getSerial() );
+        boolean flag = pushBusiness.push( pushMsg, billRuleSetPushRequest.getPileNo(), basePushCallBackResponse );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;

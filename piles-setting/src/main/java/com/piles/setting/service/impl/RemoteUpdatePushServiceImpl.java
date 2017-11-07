@@ -32,6 +32,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService {
     public BasePushCallBackResponse<RemoteUpdateRequest> doPush(RemoteUpdatePushRequest remoteUpdatePushRequest) {
         byte[] pushMsg = RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
         BasePushCallBackResponse<RemoteUpdateRequest> basePushCallBackResponse = new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( remoteUpdatePushRequest.getSerial() );
         boolean flag = pushBusiness.push( pushMsg, remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );

@@ -14,6 +14,11 @@ public class BasePushCallBackResponse<C extends BasePushResponse> {
     private EPushResponseCode code=EPushResponseCode.TIME_OUT;
 
     /**
+     * 流水号
+     */
+    private String serial;
+
+    /**
      * 默认两步 第一步发送成功  第二部是处理成功
      */
     private CountDownLatch countDownLatch=new CountDownLatch( 2 );

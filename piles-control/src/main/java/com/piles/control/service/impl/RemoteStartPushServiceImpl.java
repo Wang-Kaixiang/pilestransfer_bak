@@ -29,6 +29,7 @@ public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
     public BasePushCallBackResponse<RemoteStartRequest> doPush(RemoteStartPushRequest remoteStartPushRequest) {
         byte[] pushMsg=RemoteStartPushRequest.packBytes(remoteStartPushRequest);
         BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse=new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( remoteStartPushRequest.getSerial() );
         boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getPileNo(),basePushCallBackResponse);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );

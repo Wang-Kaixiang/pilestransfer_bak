@@ -4,6 +4,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -17,7 +18,9 @@ public class PushBusinessImpl implements IPushBusiness {
     public boolean push(byte[] msg, String pileNo, BasePushCallBackResponse basePushRequest) {
         //获取连接channel 获取不到无法推送
         Channel channel=ChannelMap.getChannel(pileNo);
+
         if (null!=channel){
+            ChannelResponseCallBackMap.add(channel,basePushRequest.getSerial(),basePushRequest);
             ChannelFuture channelFuture=channel.writeAndFlush(msg);
             channelFuture.addListener( new ChannelFutureListener() {
                 @Override

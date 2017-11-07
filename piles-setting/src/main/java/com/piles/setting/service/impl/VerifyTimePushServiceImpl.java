@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 远程升级 给充电桩发送消息实现类
+ * 校时 给充电桩发送消息实现类
  */
 @Slf4j
 @Service
@@ -32,6 +32,7 @@ public class VerifyTimePushServiceImpl implements IVerifyTimePushService {
     public BasePushCallBackResponse<VerifyTimeRequest> doPush(VerifyTimePushRequest verifyTimePushRequest) {
         byte[] pushMsg = VerifyTimePushRequest.packBytes( verifyTimePushRequest );
         BasePushCallBackResponse<VerifyTimeRequest> basePushCallBackResponse = new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( verifyTimePushRequest.getSerial() );
         boolean flag = pushBusiness.push( pushMsg, verifyTimePushRequest.getPileNo(), basePushCallBackResponse );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );

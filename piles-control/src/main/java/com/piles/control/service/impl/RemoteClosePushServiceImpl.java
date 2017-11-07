@@ -27,6 +27,7 @@ public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
 
         byte[] pushMsg=RemoteClosePushRequest.packBytes(remoteClosePushRequest);
         BasePushCallBackResponse<RemoteCloseRequest> basePushCallBackResponse=new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( remoteClosePushRequest.getSerial() );
         boolean flag= pushBusiness.push(pushMsg,remoteClosePushRequest.getPileNo(),basePushCallBackResponse);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );

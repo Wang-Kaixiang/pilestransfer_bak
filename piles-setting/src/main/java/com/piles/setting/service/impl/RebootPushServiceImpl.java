@@ -36,6 +36,7 @@ public class RebootPushServiceImpl implements IRebootPushService {
     public BasePushCallBackResponse<RebootRequest> doPush(RebootPushRequest rebootPushRequest) {
         byte[] pushMsg = RebootPushRequest.packBytes( rebootPushRequest );
         BasePushCallBackResponse<RebootRequest> basePushCallBackResponse = new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial( rebootPushRequest.getSerial() );
         boolean flag = pushBusiness.push( pushMsg, rebootPushRequest.getPileNo(), basePushCallBackResponse );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );

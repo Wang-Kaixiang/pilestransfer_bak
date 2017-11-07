@@ -11,4 +11,9 @@ public class BasePushRequest {
      * 默认必填充电桩编号
      */
     private String pileNo;
+
+    /**
+     * 默认必填流水号
+     */
+    private String serial;
 }
