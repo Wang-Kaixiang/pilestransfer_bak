@@ -20,7 +20,7 @@ public class RemoteUpdateBusinessImpl extends BaseBusiness {
     protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
         //依照报文体规则解析报文
         //TODO 此处还没解析报文
-        RemoteUpdateRequest remoteUpdateRequest = new RemoteUpdateRequest();
+        RemoteUpdateRequest remoteUpdateRequest = RemoteUpdateRequest.packEntity( bodyBytes );
         ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), remoteUpdateRequest );
         return null;
     }

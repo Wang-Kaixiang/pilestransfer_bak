@@ -56,7 +56,7 @@ public class CRC16Util {
 //        String s=Integer.toHexString( Byte.toUnsignedInt( (byte)0x2b ) );
 //        System.out.println(s);
         //68 01 00 00 00 1D 10 00 02 54 84 56 18 35 02 02 00 00 00 00 00 00 00 01 00 01 02 00 00 00 04 00 00 00 01 2B D9
-        byte[] temp=new byte[]{(byte)0x8E,0x00,0x00,0x00,0x01,0x01};
+        byte[] temp=new byte[]{(byte)0x8B,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01,0x00};
         int crc = CRC16Util.getCRC(temp );
         System.out.println( Integer.toHexString( crc ) );
 

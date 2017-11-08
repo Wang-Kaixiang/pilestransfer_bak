@@ -42,19 +42,19 @@ public class BusinessFactory implements IBusinessFactory {
                 //心跳
                 return SpringContextUtil.getBean("heartBeatBusiness");
             //setting
-            case 0x0E:
+            case (byte)0x8E:
                 //校时
                 return SpringContextUtil.getBean("verifyTimeBusiness");
             case 0x1C:
                 //二维码设置
                 return SpringContextUtil.getBean("qrSetBusiness");
-            case 0x1D:
+            case (byte)0x9D:
                 //重启
                 return SpringContextUtil.getBean("rebootBusiness");
-            case 0x1E:
+            case (byte)0x9E:
                 //远程升级
                 return SpringContextUtil.getBean("remoteUpdateBusiness");
-            case 0x0B:
+            case (byte)0x8B:
                 //计费规则设置
                 return SpringContextUtil.getBean("billRuleSetBusiness");
             default:
