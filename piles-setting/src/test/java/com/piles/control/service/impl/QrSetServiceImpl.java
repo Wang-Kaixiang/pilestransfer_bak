@@ -1,4 +1,4 @@
-package com.piles.setting.service.impl;
+package com.piles.control.service.impl;
 
 import com.piles.setting.entity.QrSetRequest;
 import com.piles.setting.service.IQrSetService;

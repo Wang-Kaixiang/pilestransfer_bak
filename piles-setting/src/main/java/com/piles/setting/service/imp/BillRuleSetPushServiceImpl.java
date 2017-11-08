@@ -1,4 +1,4 @@
-package com.piles.setting.service.impl;
+package com.piles.setting.service.imp;
 
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
