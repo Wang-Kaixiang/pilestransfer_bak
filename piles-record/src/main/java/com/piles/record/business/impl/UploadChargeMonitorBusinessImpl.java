@@ -26,6 +26,7 @@ public class UploadChargeMonitorBusinessImpl extends BaseBusiness {
         UploadChargeMonitorRequest uploadChargeMonitorRequest = UploadChargeMonitorRequest.packEntity(bodyBytes);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitorRequest);
+        System.out.println(uploadChargeMonitorRequest);
         //组装返回报文体
         return null;
     }

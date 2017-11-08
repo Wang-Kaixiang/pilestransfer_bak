@@ -1,9 +1,14 @@
 package com.piles.common.util;
 
+import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public class BytesUtil {
     /**
@@ -33,9 +38,27 @@ public class BytesUtil {
      * byte数组中取int数值，本方法适用于(低位在后，高位在前)的顺序。
      */
     public static int bytesToInt(byte[] src, int offset) {
-        int value;
-        value = (int) (  ((src[offset] & 0xFF)<<8)
-                |(src[offset+1] & 0xFF));
+
+
+        while(src[0]==0x00){
+            src = BytesUtil.copyBytes(src,1,src.length-1);
+        }
+        if(src.length==0){
+            return 0;
+        }
+        int len = src.length;
+        if (len==0){
+            return 0;
+        }
+        int value = 0;
+        for(int i = 0;i<len;i++){
+            if(i==(len-1)){
+                value = value | ((src[i] & 0xFF));
+            }
+            value = value | ((src[i] & 0xFF) << (8 * (len-i-1)));
+        }
+//        value = (int) (  ((src[offset] & 0xFF)<<8)
+//                |(src[offset+1] & 0xFF));
 //        value = (int) ( ((src[offset] & 0xFF)<<24)
 //                |((src[offset+1] & 0xFF)<<16)
 //                |((src[offset+2] & 0xFF)<<8)
@@ -186,10 +209,11 @@ public class BytesUtil {
     }
 
     public static void main(String[] args) {
-//        byte[] bytes = intToBytes(0x12,2);
-////        byte[] bytes = intToBytes(0x12345678,2);
-//        int i = bytesToInt(bytes,0);
-//        System.out.println(i);
+        byte[] bytes = intToBytes(65433,4);
+//        byte[] bytes = intToBytes(30000,2);
+        int i = bytesToInt(bytes,0);
+        System.out.println(i);
+        System.out.println(BigDecimal.valueOf(BytesUtil.bytesToInt(bytes, 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
 
 //        System.out.println(i);
 //        System.out.println(s);
@@ -198,10 +222,13 @@ public class BytesUtil {
 //        System.out.println(Integer.toHexString(Byte.toUnsignedInt(temp[1])).toUpperCase());
 //        byte[] bytes = intToBytes(123);
 //        int i = bytesToInt(bytes, 0);
-        long i = 1l;
-        byte[] bytes = long2Byte(i);
-        System.out.println(byte2Long(bytes));
+//        long i = 1l;
+//        byte[] bytes = long2Byte(i);
+//        System.out.println(byte2Long(bytes));
 
-        System.out.println(i);
+//        System.out.println(i);
+//        byte[] bytes = BytesUtil.str2Bcd("171108");
+//        String s = BytesUtil.bcd2Str(bytes);
+//        System.out.println(s);
     }
 }

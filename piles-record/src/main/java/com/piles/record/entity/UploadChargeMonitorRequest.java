@@ -1,11 +1,14 @@
 package com.piles.record.entity;
 
+import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 上传充电过程监测数据接口请求实体
@@ -164,6 +167,46 @@ public class UploadChargeMonitorRequest implements Serializable {
         return request;
     }
 
+    public static byte[] packBytes(UploadChargeMonitorRequest request) {
+        byte[] responseBytes = new byte[]{};
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getGunNo(),1));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.long2Byte(request.getOrderNo()));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBmsVersion(),3));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBmsType(),1));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryNominalEnergy().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryRatedEnergy().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryRatedVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryProducer(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getBatteryProduceTime()));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryCycleCount(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleAllowHighestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleHighestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleLowestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleHighestTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleLowestTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerGunTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportPower().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportPower().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getVoltageRequire().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getElectricityRequire().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getAxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getCxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getAxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getCxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        return responseBytes;
+    }
+
+
 
     public static void main(String[] args) {
         UploadChargeMonitorRequest bean = new UploadChargeMonitorRequest();
@@ -173,11 +216,49 @@ public class UploadChargeMonitorRequest implements Serializable {
             String methodName = methods[i].getName();
 
             if (methodName.indexOf("set") == 0) {
-                System.out.println(methods[i].getName());
+                System.out.println("request."+methods[i].getName()+"(new BigDecimal("+i+"));");
             }
         }
 
     }
 
-
+    @Override
+    public String toString() {
+        return "UploadChargeMonitorRequest{" +
+                "gunNo=" + gunNo +
+                ", orderNo=" + orderNo +
+                ", bmsVersion=" + bmsVersion +
+                ", bmsType=" + bmsType +
+                ", batteryNominalEnergy=" + batteryNominalEnergy +
+                ", batteryRatedEnergy=" + batteryRatedEnergy +
+                ", batteryRatedVoltage=" + batteryRatedVoltage +
+                ", batteryProducer=" + batteryProducer +
+                ", batteryProduceTime='" + batteryProduceTime + '\'' +
+                ", batteryCycleCount=" + batteryCycleCount +
+                ", highestAllowElectricity=" + highestAllowElectricity +
+                ", highestAllowVoltage=" + highestAllowVoltage +
+                ", highestAllowTemperature=" + highestAllowTemperature +
+                ", singleAllowHighestVoltage=" + singleAllowHighestVoltage +
+                ", singleHighestVoltage=" + singleHighestVoltage +
+                ", singleLowestVoltage=" + singleLowestVoltage +
+                ", singleHighestTemperature=" + singleHighestTemperature +
+                ", singleLowestTemperature=" + singleLowestTemperature +
+                ", chargerTemperature=" + chargerTemperature +
+                ", chargerGunTemperature=" + chargerGunTemperature +
+                ", chargerImportVoltage=" + chargerImportVoltage +
+                ", chargerImportElectricity=" + chargerImportElectricity +
+                ", chargerImportPower=" + chargerImportPower +
+                ", chargerExportVoltage=" + chargerExportVoltage +
+                ", chargerExportElectricity=" + chargerExportElectricity +
+                ", chargerExportPower=" + chargerExportPower +
+                ", voltageRequire=" + voltageRequire +
+                ", electricityRequire=" + electricityRequire +
+                ", axVoltage=" + axVoltage +
+                ", bxVoltage=" + bxVoltage +
+                ", cxVoltage=" + cxVoltage +
+                ", axElectricity=" + axElectricity +
+                ", bxElectricity=" + bxElectricity +
+                ", cxElectricity=" + cxElectricity +
+                '}';
+    }
 }

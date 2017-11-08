@@ -41,7 +41,8 @@ public class CRC16Util {
             byte[] temp = new byte[msg.length - 3];
             System.arraycopy( msg, 1, temp, 0, temp.length );
             int crc = getCRC( temp );
-            if (Integer.toHexString( crc ).equalsIgnoreCase( Integer.toHexString( Byte.toUnsignedInt( msg[msg.length-2] ) ) +Integer.toHexString( Byte.toUnsignedInt( msg[msg.length-1] ) ))) {
+            byte[] crcByte=new byte[]{msg[msg.length-2],msg[msg.length-1]};
+            if (Integer.toHexString( crc ).equalsIgnoreCase( Integer.toHexString( BytesUtil.bytesToInt(crcByte,0)) )) {
                 return true;
             }
         }
@@ -56,12 +57,13 @@ public class CRC16Util {
 //        String s=Integer.toHexString( Byte.toUnsignedInt( (byte)0x2b ) );
 //        System.out.println(s);
         //68 01 00 00 00 1D 10 00 02 54 84 56 18 35 02 02 00 00 00 00 00 00 00 01 00 01 02 00 00 00 04 00 00 00 01 2B D9
-        byte[] temp=new byte[]{(byte)0x8B,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01,0x00};
-        int crc = CRC16Util.getCRC(temp );
-        System.out.println( Integer.toHexString( crc ) );
-
-        System.out.println(checkMsg( temp ));
+//        byte[] temp=new byte[]{(byte)0x8B,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01,0x00};
+//        int crc = CRC16Util.getCRC(temp );
+//        System.out.println( Integer.toHexString( crc ) );
+//
+//        System.out.println(checkMsg( temp ));
 //        System.out.println();
-
+            String str = "0.0.5 -N- 172.18.66.43 iflight.java.dsf.itradecore 201711081638 BOOK_VALIDATE S1 check_cabin ERROR";
+            System.out.println(str.length());
     }
 }

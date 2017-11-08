@@ -5,12 +5,15 @@ import com.piles.common.business.IBusinessFactory;
 import com.piles.common.business.IBusinessHandler;
 import com.piles.common.util.CRC16Util;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
 
+@Slf4j
 @Component
 public  class BusinessHander implements IBusinessHandler {
 
@@ -23,6 +26,7 @@ public  class BusinessHander implements IBusinessHandler {
         if (CRC16Util.checkMsg( msg )){
             return processService( msg,incoming );
         }
+        log.error("CRC验证未通过");
         return null;
     }
 
