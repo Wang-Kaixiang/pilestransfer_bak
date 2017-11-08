@@ -25,7 +25,7 @@ public class UploadRecordResponse implements Serializable
 
     /**
      * 封装报文体
-     * @param request
+     * @param reponse
      * @return
      */
     public static byte[] packBytes(UploadRecordResponse reponse){

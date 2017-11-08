@@ -4,6 +4,8 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
 import com.piles.record.entity.UploadChargeMonitorRequest;
+import com.piles.record.entity.UploadChargeRateRequest;
+import com.piles.record.entity.UploadRecordRequest;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
@@ -37,13 +39,19 @@ public class SocketClient {
             /******************心跳*******************/
 //            request = Bytes.concat(request,new byte[]{0x0C});
 //            byte[] msg =packHeartBeatRequest();
-            //命令码
             /******************心跳*******************/
             /******************上传监控*******************/
-            request = Bytes.concat(request,new byte[]{0x0A});
-            byte[] msg =packUploadChargeMonitorRequest();
-            //命令码
+//            request = Bytes.concat(request,new byte[]{0x0A});
+//            byte[] msg =packUploadChargeMonitorRequest();
             /******************上传监控*******************/
+            /******************上传记录*******************/
+//            request = Bytes.concat(request,new byte[]{0x08});
+//            byte[] msg =packUploadRecordRequest();
+            /******************上传记录*******************/
+            /******************上传充电进度*******************/
+            request = Bytes.concat(request,new byte[]{0x09});
+            byte[] msg =packUploadChargeRateRequest();
+            /******************上传充电进度*******************/
             //流水号
             request = Bytes.concat(request,BytesUtil.intToBytes(1,2));
             //报文体长度
@@ -75,7 +83,7 @@ public class SocketClient {
 
         return msg;
     }
-    //心跳
+    //上传监控
     private static byte[] packUploadChargeMonitorRequest(){
         UploadChargeMonitorRequest request = new UploadChargeMonitorRequest();
         request.setBatteryNominalEnergy(new BigDecimal(30));
@@ -114,5 +122,68 @@ public class SocketClient {
         request.setElectricityRequire(new BigDecimal(74));
         System.out.println(request.toString());
         return UploadChargeMonitorRequest.packBytes(request);
+    }
+
+    //上传记录
+    public static byte[] packUploadRecordRequest(){
+        UploadRecordRequest request = new UploadRecordRequest();
+        request.setGunNo(1);
+        request.setOrderNo(3232323L);
+        request.setChargeModel(1);
+        request.setCardNo("3828348438283484");
+        request.setVin("12345123451234567");
+        request.setSoc(3);
+        request.setEndReason(1);
+        request.setStartTime("171101224021");
+        request.setEndTime("171101225021");
+        request.setStartAmmeterDegree(new BigDecimal(38));
+        request.setEndAmmeterDegree(new BigDecimal(39));
+        request.setTotalAmmeterDegree(new BigDecimal(40));
+        request.setPointElectricQuantity(new BigDecimal(41));
+        request.setPeakElectricQuantity(new BigDecimal(42));
+        request.setOrdinaryElectricQuantity(new BigDecimal(43));
+        request.setDipElectricQuantity(new BigDecimal(44));
+        request.setTotalElectricAmount(new BigDecimal(45));
+        request.setPointElectricAmount(new BigDecimal(46));
+        request.setPeakElectricAmount(new BigDecimal(47));
+        request.setOrdinaryElectricAmount(new BigDecimal(48));
+        request.setDipElectricAmount(new BigDecimal(49));
+        request.setSubscriptionAmount(new BigDecimal(50));
+        request.setServiceAmount(new BigDecimal(51));
+        request.setParkingAmount(new BigDecimal(52));
+        System.out.println(request.toString());
+
+        return UploadRecordRequest.packBytes(request);
+    }
+
+    //上传记录
+    public static byte[] packUploadChargeRateRequest(){
+        UploadChargeRateRequest request = new UploadChargeRateRequest();
+
+        request.setGunNo(1);
+        request.setOrderNo(34343434342L);
+        request.setChargeModel(1);
+        request.setCardNo("1234567812345678");
+        request.setVin("12345123451234567");//17位
+        request.setSoc(4);
+        request.setStartTime("171101224021");
+        request.setEndTime("171101225021");
+        request.setTotalAmmeterDegree(new BigDecimal(34));
+        request.setPointElectricQuantity(new BigDecimal(35));
+        request.setPeakElectricQuantity(new BigDecimal(36));
+        request.setOrdinaryElectricQuantity(new BigDecimal(37));
+        request.setDipElectricQuantity(new BigDecimal(38));
+        request.setTotalElectricAmount(new BigDecimal(39));
+        request.setPointElectricAmount(new BigDecimal(40));
+        request.setPeakElectricAmount(new BigDecimal(41));
+        request.setOrdinaryElectricAmount(new BigDecimal(42));
+        request.setDipElectricAmount(new BigDecimal(43));
+        request.setSubscriptionAmount(new BigDecimal(44));
+        request.setServiceAmount(new BigDecimal(45));
+        request.setParkingAmount(new BigDecimal(46));
+
+        System.out.println(request.toString());
+
+        return UploadChargeRateRequest.packBytes(request);
     }
 }

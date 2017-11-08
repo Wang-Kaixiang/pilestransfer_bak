@@ -39,8 +39,10 @@ public class BytesUtil {
      */
     public static int bytesToInt(byte[] src, int offset) {
 
-
-        while(src[0]==0x00){
+        if(src==null){
+            return 0;
+        }
+        while(src.length>0&&src[0]==0x00){
             src = BytesUtil.copyBytes(src,1,src.length-1);
         }
         if(src.length==0){
@@ -209,11 +211,16 @@ public class BytesUtil {
     }
 
     public static void main(String[] args) {
-        byte[] bytes = intToBytes(65433,4);
-//        byte[] bytes = intToBytes(30000,2);
-        int i = bytesToInt(bytes,0);
-        System.out.println(i);
-        System.out.println(BigDecimal.valueOf(BytesUtil.bytesToInt(bytes, 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
+//        byte[] bytes = intToBytes(65433,4);
+////        byte[] bytes = intToBytes(30000,2);
+//        int i = bytesToInt(bytes,0);
+//        System.out.println(i);
+//        System.out.println(BigDecimal.valueOf(BytesUtil.bytesToInt(bytes, 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
+
+        String xx = "ffdf";
+        byte[] bytes = xx.getBytes();
+        System.out.println(bytes);
+
 
 //        System.out.println(i);
 //        System.out.println(s);

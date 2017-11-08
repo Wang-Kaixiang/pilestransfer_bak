@@ -1,9 +1,11 @@
 package com.piles.record.entity;
 
+import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 /**
@@ -19,7 +21,7 @@ public class UploadChargeRateRequest implements Serializable {
     //充电方式	BIN	1	1: 刷卡充电 2: APP充电
     private int chargeModel;
     //卡号	BCD	8	非卡充电全部置0
-    private long cardNo;
+    private String cardNo;
     //车辆识别码(VIN)	ASCII	17
     private String vin;
     //SOC	BIN	1	数据范围0~100
@@ -69,7 +71,7 @@ public class UploadChargeRateRequest implements Serializable {
         cursor+=8;
         request.setChargeModel(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
         cursor+=1;
-        request.setCardNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,cursor,8)));
+        request.setCardNo(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,cursor,8)));
         cursor+=8;
         //TODO String 类型直接用new String
         request.setVin(new String(BytesUtil.copyBytes(msg,cursor,17)));
@@ -109,10 +111,70 @@ public class UploadChargeRateRequest implements Serializable {
         return request;
     }
 
+    public static byte[] packBytes(UploadChargeRateRequest request) {
+        byte[] responseBytes = new byte[]{};
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getGunNo(),1));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.long2Byte(request.getOrderNo()));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargeModel(),1));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getCardNo()));
+        responseBytes = Bytes.concat(responseBytes,request.getVin().getBytes());
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSoc(),1));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getStartTime()));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getEndTime()));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getTotalAmmeterDegree().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPointElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPeakElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getOrdinaryElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getDipElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getTotalElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPointElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPeakElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getOrdinaryElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getDipElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSubscriptionAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getServiceAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getParkingAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        return responseBytes;
+    }
+
+    @Override
+    public String toString() {
+        return "UploadChargeRateRequest{" +
+                "gunNo=" + gunNo +
+                ", orderNo=" + orderNo +
+                ", chargeModel=" + chargeModel +
+                ", cardNo='" + cardNo + '\'' +
+                ", vin='" + vin + '\'' +
+                ", soc=" + soc +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", totalAmmeterDegree=" + totalAmmeterDegree +
+                ", pointElectricQuantity=" + pointElectricQuantity +
+                ", peakElectricQuantity=" + peakElectricQuantity +
+                ", ordinaryElectricQuantity=" + ordinaryElectricQuantity +
+                ", dipElectricQuantity=" + dipElectricQuantity +
+                ", totalElectricAmount=" + totalElectricAmount +
+                ", pointElectricAmount=" + pointElectricAmount +
+                ", peakElectricAmount=" + peakElectricAmount +
+                ", ordinaryElectricAmount=" + ordinaryElectricAmount +
+                ", dipElectricAmount=" + dipElectricAmount +
+                ", subscriptionAmount=" + subscriptionAmount +
+                ", serviceAmount=" + serviceAmount +
+                ", parkingAmount=" + parkingAmount +
+                '}';
+    }
 
     public static void main(String[] args) {
-        byte[] msg = new byte[]{0x03, 0x00, 0x01, 0x02};
-        packEntity(msg);
+        UploadChargeRateRequest bean = new UploadChargeRateRequest();
+        Class clazz = UploadChargeRateRequest.class;
+        Method[] methods = clazz.getDeclaredMethods();
+        for (int i = 0; i < methods.length; i++) {
+            String methodName = methods[i].getName();
+
+            if (methodName.indexOf("set") == 0) {
+                System.out.println("request."+methods[i].getName()+"(new BigDecimal("+i+"));");
+            }
+        }
 
     }
 
