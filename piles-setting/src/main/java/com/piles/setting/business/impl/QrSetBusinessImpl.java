@@ -33,6 +33,7 @@ public class QrSetBusinessImpl extends BaseBusiness{
         if(qrContent == null){
             qrContent = "";
         }
+        log.info("获取后台返回二维码：{}",qrContent);
         byte[] lenBytes = BytesUtil.intToBytes(qrContent.length(), 2);
         // 枪号+二维码长度+二维码内容
         byte[] responseBody = Bytes.concat(bodyBytes,lenBytes,qrContent.getBytes());

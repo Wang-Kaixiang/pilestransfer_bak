@@ -2,7 +2,9 @@ package com.piles.common.business.impl;
 
 import com.piles.common.business.IBusiness;
 import com.piles.common.business.IBusinessFactory;
+import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.SpringContextUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -11,12 +13,16 @@ import javax.annotation.Resource;
 /**
  * 获取解析报文业务对象
  */
+@Slf4j
 @Component("businessFactory")
 public class BusinessFactory implements IBusinessFactory {
 
     @Override
     public IBusiness getByOrder(byte order){
-
+        ECommandCode commandCode = ECommandCode.fromCode(order);
+        if(commandCode!=null){
+            log.info("接收到报文，报文命令码:{},{}",commandCode.getCode(),commandCode.getValue());
+        }
         switch (order){
             //control
             case 0x01:
@@ -58,6 +64,7 @@ public class BusinessFactory implements IBusinessFactory {
                 //计费规则设置
                 return SpringContextUtil.getBean("billRuleSetBusiness");
             default:
+                log.error("未匹配到合适的命令码：{}",order);
                 return null;
         }
     }

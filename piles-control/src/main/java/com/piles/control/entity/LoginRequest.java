@@ -71,6 +71,20 @@ public class LoginRequest implements Serializable
         return request;
     }
 
+    @Override
+    public String toString() {
+        return "LoginRequest{" +
+                "pileNo='" + pileNo + '\'' +
+                ", pileType=" + pileType +
+                ", chargeGunCount=" + chargeGunCount +
+                ", operatorCode='" + operatorCode + '\'' +
+                ", password='" + password + '\'' +
+                ", pileSoftVersion='" + pileSoftVersion + '\'' +
+                ", protocolVersion='" + protocolVersion + '\'' +
+                ", billingRuleId=" + billingRuleId +
+                ", billingRuleVersion=" + billingRuleVersion +
+                '}';
+    }
 
     public static void main(String[] args) {
         byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};

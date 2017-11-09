@@ -32,10 +32,6 @@ public class UploadChargeRateBusinessImpl extends BaseBusiness {
         log.info( "接收到充电桩上传充电进度报文:{}", uploadChargeRateRequest.toString() );
         //调用底层接口
         boolean flag = uploadChargeRateService.uploadChargeRate( uploadChargeRateRequest );
-//        byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);
-//        byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};
-//        byte[] responseBody = Bytes.concat(orderNo,result);
-        //组装返回报文体
         return null;
     }
 

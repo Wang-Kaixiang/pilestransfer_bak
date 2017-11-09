@@ -9,6 +9,7 @@ import com.piles.record.entity.UploadChargeMonitorRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,7 +34,6 @@ public class UploadChargeMonitorBusinessImpl extends BaseBusiness {
         log.info("接收到充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitorRequest);
-        System.out.println(uploadChargeMonitorRequest);
         //组装返回报文体
         return null;
     }

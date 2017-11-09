@@ -237,5 +237,6 @@ public class BytesUtil {
 //        byte[] bytes = BytesUtil.str2Bcd("171108");
 //        String s = BytesUtil.bcd2Str(bytes);
 //        System.out.println(s);
+        System.out.println(String.valueOf(0x53));
     }
 }

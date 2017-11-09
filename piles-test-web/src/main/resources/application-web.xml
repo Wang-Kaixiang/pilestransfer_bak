@@ -9,6 +9,15 @@
 
 	<context:annotation-config/>
 	<context:component-scan base-package="com.piles" />
-	<import resource="classpath*:application-record.xml"/>
-	<bean class="com.piles.common.websocket.server.SocketServer"/>
+	<import resource="classpath*:application-common.xml"/>
+
+	<bean id="propInfo" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:/conf/piles-config.properties</value>
+			</list>
+		</property>
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+	<!--<bean class="com.piles.common.websocket.server.SocketServer"/>-->
 </beans>

@@ -13,7 +13,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class SocketClient {
 
     public static String host = "127.0.0.1";
-    public static int port = 9901;
+    public static int port = 10240;
     public static LinkedBlockingQueue queue = new LinkedBlockingQueue();
     public static void main(String[] args) throws InterruptedException, IOException {
         EventLoopGroup group = new NioEventLoopGroup();

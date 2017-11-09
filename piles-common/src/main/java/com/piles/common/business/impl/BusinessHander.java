@@ -24,6 +24,7 @@ public  class BusinessHander implements IBusinessHandler {
     public byte[] process(byte[] msg, Channel incoming) {
         //报文校验不通过则抛弃
         if (CRC16Util.checkMsg( msg )){
+            log.info("CRC校验通过");
             return processService( msg,incoming );
         }
         log.error("CRC验证未通过");
