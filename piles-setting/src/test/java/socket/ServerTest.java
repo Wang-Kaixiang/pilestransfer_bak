@@ -1,26 +1,10 @@
 package socket;
 
-import com.alibaba.fastjson.JSON;
 import com.piles.common.util.ChannelMap;
-import com.piles.control.entity.RemoteClosePushRequest;
-import com.piles.control.entity.RemoteStartPushRequest;
-import com.piles.control.service.IRemoteClosePushService;
-import com.piles.control.service.IRemoteStartPushService;
-import com.piles.setting.entity.BillRuleSetPushRequest;
-import com.piles.setting.entity.RebootPushRequest;
-import com.piles.setting.entity.RemoteUpdatePushRequest;
-import com.piles.setting.entity.VerifyTimePushRequest;
-import com.piles.setting.service.IBillRuleSetPushService;
-import com.piles.setting.service.IRebootPushService;
-import com.piles.setting.service.IRemoteUpdatePushService;
-import com.piles.setting.service.IVerifyTimePushService;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class ServerTest {
     private static final String SRPING_ROOT_XML = "classpath:application-setting.xml";
@@ -54,16 +38,16 @@ public class ServerTest {
 //                    remoteClosePushRequest.setSerial( "0000" );
 //                    System.out.println( "重启返回信息" + JSON.toJSONString( service.doPush( remoteClosePushRequest ) ) );
 
-                    IRemoteUpdatePushService service = context.getBean( IRemoteUpdatePushService.class );
-                    RemoteUpdatePushRequest remoteClosePushRequest = new RemoteUpdatePushRequest();
-                    remoteClosePushRequest.setPileNo( "1000025484561835" );
-                    remoteClosePushRequest.setSerial( "0000" );
-                    remoteClosePushRequest.setMd5( "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" );
-                    remoteClosePushRequest.setProtocolVersion( "V1.0" );
-                    remoteClosePushRequest.setSoftVersion( "V1.10" );
-                    remoteClosePushRequest.setUrl( "http://essrus" );
-                    remoteClosePushRequest.setUrlLen( 13 );
-                    System.out.println( "远程升级返回信息" + JSON.toJSONString( service.doPush( remoteClosePushRequest ) ) );
+//                    IRemoteUpdatePushService service = context.getBean( IRemoteUpdatePushService.class );
+//                    RemoteUpdatePushRequest remoteClosePushRequest = new RemoteUpdatePushRequest();
+//                    remoteClosePushRequest.setPileNo( "1000025484561835" );
+//                    remoteClosePushRequest.setSerial( "0000" );
+//                    remoteClosePushRequest.setMd5( "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" );
+//                    remoteClosePushRequest.setProtocolVersion( "V1.0" );
+//                    remoteClosePushRequest.setSoftVersion( "V1.10" );
+//                    remoteClosePushRequest.setUrl( "http://essrus" );
+//                    remoteClosePushRequest.setUrlLen( 13 );
+//                    System.out.println( "远程升级返回信息" + JSON.toJSONString( service.doPush( remoteClosePushRequest ) ) );
 
 
 //
