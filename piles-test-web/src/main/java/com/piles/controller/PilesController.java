@@ -37,60 +37,65 @@ public class PilesController {
     private IRebootPushService rebootPushService;
     @Resource
     private IBillRuleSetPushService billRuleSetPushService;
-    @RequestMapping("/test")
-    public void test(HttpServletRequest request){
-        String type = request.getParameter("type");
-        switch (type){
-            case "1":
-                RemoteStartPushRequest remoteStartPushRequest= new RemoteStartPushRequest();
-                remoteStartPushRequest.setGunNo( 1 );
-                remoteStartPushRequest.setOrderNo( 123456L );
-                remoteStartPushRequest.setPileNo( "1234567812345678" );
-                remoteStartPushRequest.setSerial( "0000" );
-                remoteStartPushRequest.setChargeData( new BigDecimal( 2 ) );
-                remoteStartPushRequest.setChargeModel( 4 );
-                remoteStartPushRequest.setChargeStopCode( "6464" );
-                log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
 
+    @RequestMapping("/test")
+    public void test(HttpServletRequest request) {
+        String type = request.getParameter("type");
+        switch (type) {
+            case "1":
+                RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
+                remoteStartPushRequest.setGunNo(1);
+                remoteStartPushRequest.setOrderNo(123456L);
+                remoteStartPushRequest.setPileNo("1000025484561835");
+                remoteStartPushRequest.setSerial("0000");
+                remoteStartPushRequest.setChargeData(new BigDecimal(2));
+                remoteStartPushRequest.setChargeModel(4);
+                remoteStartPushRequest.setChargeStopCode("6464");
+                log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
+                break;
             case "2":
                 RemoteClosePushRequest remoteClosePushRequest = new RemoteClosePushRequest();
-                remoteClosePushRequest.setGunNo( 1 );
-                remoteClosePushRequest.setOrderNo( 123456L );
-                remoteClosePushRequest.setPileNo( "1000025484561835" );
-                remoteClosePushRequest.setSerial( "0000" );
+                remoteClosePushRequest.setGunNo(1);
+                remoteClosePushRequest.setOrderNo(123456L);
+                remoteClosePushRequest.setPileNo("1000025484561835");
+                remoteClosePushRequest.setSerial("0000");
                 log.info("远程结束充电请求返回报文:{}", JSON.toJSONString(remoteClosePushService.doPush(remoteClosePushRequest)));
 
+                break;
             case "3":
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
-                remoteUpdatePushRequest.setPileNo( "8765432187654321" );
-                remoteUpdatePushRequest.setSerial( "0000" );
-                remoteUpdatePushRequest.setMd5( "asdfghjkasdfghjkasdfghjkasdfghjk" );
-                remoteUpdatePushRequest.setProtocolVersion( "V1.0" );
-                remoteUpdatePushRequest.setSoftVersion( "V1.23" );
+                remoteUpdatePushRequest.setPileNo("1000025484561835");
+                remoteUpdatePushRequest.setSerial("0000");
+                remoteUpdatePushRequest.setMd5("asdfghjkasdfghjkasdfghjkasdfghjk");
+                remoteUpdatePushRequest.setProtocolVersion("V1.0");
+                remoteUpdatePushRequest.setSoftVersion("V1.23");
                 String url = "http://essrus";
-                remoteUpdatePushRequest.setUrl( url );
-                remoteUpdatePushRequest.setUrlLen( url.length() );
+                remoteUpdatePushRequest.setUrl(url);
+                remoteUpdatePushRequest.setUrlLen(url.length());
                 log.info("远程升级请求返回报文:{}", JSON.toJSONString(remoteUpdatePushService.doPush(remoteUpdatePushRequest)));
 
+                break;
             case "4":
 
                 VerifyTimePushRequest verifyTimePushRequest = new VerifyTimePushRequest();
-                verifyTimePushRequest.setPileNo( "1111111111111111" );
-                verifyTimePushRequest.setSerial( "0000" );
-                verifyTimePushRequest.setServerTime( "20171107183025" );
+                verifyTimePushRequest.setPileNo("1000025484561835");
+                verifyTimePushRequest.setSerial("0000");
+                verifyTimePushRequest.setServerTime("20171107183025");
                 log.info("校时请求返回报文:{}", JSON.toJSONString(verifyTimePushService.doPush(verifyTimePushRequest)));
 
+                break;
             case "5":
                 RebootPushRequest rebootPushRequest = new RebootPushRequest();
-                rebootPushRequest.setPileNo( "1000025484561835" );
-                rebootPushRequest.setSerial( "0000" );
+                rebootPushRequest.setPileNo("1000025484561835");
+                rebootPushRequest.setSerial("0000");
 
                 log.info("重启请求返回报文:{}", JSON.toJSONString(rebootPushService.doPush(rebootPushRequest)));
 
+                break;
             case "6":
                 BillRuleSetPushRequest billRuleSetPushRequest = new BillRuleSetPushRequest();
-                billRuleSetPushRequest.setPileNo( "1111121131111111" );
-                billRuleSetPushRequest.setSerial( "0000" );
+                billRuleSetPushRequest.setPileNo("1000025484561835");
+                billRuleSetPushRequest.setSerial("0000");
                 billRuleSetPushRequest.setBillingRuleId(4);
                 billRuleSetPushRequest.setBillingRuleVersion(0);
                 billRuleSetPushRequest.setEffectiveTime("171109160712");
@@ -115,7 +120,8 @@ public class PilesController {
                 billRulePeriod2.setEndTime("2335");
                 billRulePeriod2.setPeriodType(2);
 
-                log.info("计费规则设置请求返回报文:{}", JSON.toJSONString( billRuleSetPushService.doPush(billRuleSetPushRequest)));
+                log.info("计费规则设置请求返回报文:{}", JSON.toJSONString(billRuleSetPushService.doPush(billRuleSetPushRequest)));
+                break;
         }
 
         System.out.println("gggg");

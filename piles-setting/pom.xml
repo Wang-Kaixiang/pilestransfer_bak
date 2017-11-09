@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>com.piles</groupId>
-            <artifactId>piles-control</artifactId>
+            <artifactId>piles-common</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
