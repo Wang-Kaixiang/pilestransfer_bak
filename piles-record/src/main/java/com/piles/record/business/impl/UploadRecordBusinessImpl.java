@@ -6,10 +6,12 @@ import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.record.entity.HeartBeatRequest;
+import com.piles.record.entity.UploadChargeRateRequest;
 import com.piles.record.entity.UploadRecordRequest;
 import com.piles.record.service.IHeartBeatService;
 import com.piles.record.service.IUploadRecordService;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,6 +21,7 @@ import java.util.Date;
 /**
  * 上传充电记录接口实现
  */
+@Slf4j
 @Service("uploadRecordBusiness")
 public class UploadRecordBusinessImpl extends BaseBusiness {
 
@@ -30,8 +33,10 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
 
     @Override
     protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
+        log.info("接收到充电桩上传充电记录报文");
         //依照报文体规则解析报文
         UploadRecordRequest uploadRecordRequest = UploadRecordRequest.packEntity(bodyBytes);
+        log.info("接收到充电桩上传充电记录报文:{}", uploadRecordRequest.toString());
         //调用底层接口
         boolean flag= uploadRecordService.uploadRecord(uploadRecordRequest);
         byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);

@@ -10,7 +10,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.math.BigDecimal;
 
 public class ServerTest {
-    private static final String SRPING_ROOT_XML = "classpath:application.xml";
+    private static final String SRPING_ROOT_XML = "classpath:application-record.xml";
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerTest.class);

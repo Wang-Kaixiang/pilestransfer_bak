@@ -5,7 +5,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
 
     @Override

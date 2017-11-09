@@ -10,6 +10,7 @@ import com.piles.record.entity.UploadChargeRateRequest;
 import com.piles.record.entity.UploadRecordRequest;
 import com.piles.record.service.IUploadChargeRateService;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 /**
  * 上传充电进度接口实现
  */
+@Slf4j
 @Service("uploadChargeRateBusiness")
 public class UploadChargeRateBusinessImpl extends BaseBusiness {
 
@@ -25,9 +27,11 @@ public class UploadChargeRateBusinessImpl extends BaseBusiness {
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
+    protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
+        log.info("接收到充电桩上传充电进度报文");
         //依照报文体规则解析报文
         UploadChargeRateRequest uploadChargeRateRequest = UploadChargeRateRequest.packEntity(bodyBytes);
+        log.info("接收到充电桩上传充电进度报文:{}", uploadChargeRateRequest.toString());
         //调用底层接口
         boolean flag = uploadChargeRateService.uploadChargeRate(uploadChargeRateRequest);
 //        byte[] orderNo = BytesUtil.copyBytes(bodyBytes, 1, 8);

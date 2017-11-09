@@ -12,6 +12,7 @@
 		<module>piles-control</module>
 		<module>piles-setting</module>
 		<module>piles-record</module>
+		<module>piles-test-web</module>
 	</modules>
     <packaging>pom</packaging>
 

@@ -8,6 +8,7 @@ import com.piles.common.util.BytesUtil;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
 import io.netty.channel.Channel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -17,19 +18,22 @@ import java.util.Date;
 /**
  * 心跳接口实现
  */
+@Slf4j
 @Service("heartBeatBusiness")
 public class HeartBeatBusinessImpl extends BaseBusiness {
 
     @Resource
     private IHeartBeatService heartBeatService;
 
-    private static SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
 
     @Override
-    protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
+    protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
+        log.info("接收到充电桩心跳报文");
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity(bodyBytes);
+        log.info("接收到充电桩心跳报文:{}", heartBeatRequest.toString());
         //TODO 不需要接调用底层接口
 //        Date date= heartBeatService.heartBeat(heartBeatRequest);
         Date date = new Date();

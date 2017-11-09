@@ -4,6 +4,7 @@ import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 心跳接口请求实体
@@ -47,6 +48,14 @@ public class HeartBeatRequest implements Serializable {
         return request;
     }
 
+
+    @Override
+    public String toString() {
+        return "HeartBeatRequest{" +
+                "gunCount=" + gunCount +
+                ", status=" + Arrays.toString(status) +
+                '}';
+    }
 
     public static void main(String[] args) {
         byte[] msg = new byte[]{0x03, 0x00, 0x01, 0x02};
