@@ -3,18 +3,21 @@ package com.piles.record.entity;
 import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * 上传充电过程监测数据接口请求实体
  */
 @Data
 public class UploadChargeMonitorRequest implements Serializable {
+
+    /**
+     * 桩编号 8位 BCD
+     */
+    private String pileNo;
 
     //枪号	BIN	1	1: A枪2: B枪
     private int gunNo;
@@ -95,117 +98,116 @@ public class UploadChargeMonitorRequest implements Serializable {
     public static UploadChargeMonitorRequest packEntity(byte[] msg) {
         UploadChargeMonitorRequest request = new UploadChargeMonitorRequest();
         int cursor = 0;
-        request.setGunNo(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setOrderNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,cursor,8)));
-        cursor+=8;
+        request.setGunNo( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setOrderNo( BytesUtil.byte2Long( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        cursor += 8;
         //TODO 按国际原样输出？？
-        request.setBmsVersion(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,3),10)));
-        cursor+=3;
-        request.setBmsType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setBatteryNominalEnergy(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setBatteryRatedEnergy(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setBatteryRatedVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setBatteryProducer(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,4),10)));
-        cursor+=4;
-        request.setBatteryProduceTime(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,cursor,3)));
-        cursor+=3;
-        request.setBatteryCycleCount(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,4),10)));
-        cursor+=4;
-        request.setHighestAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setHighestAllowTemperature(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSingleAllowHighestVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSingleHighestVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSingleLowestVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSingleHighestTemperature(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSingleLowestTemperature(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerTemperature(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerGunTemperature(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerImportVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerImportElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerImportPower(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerExportVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerExportElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setChargerExportPower(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setVoltageRequire(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setElectricityRequire(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setAxVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setBxVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setCxVoltage(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setAxElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setBxElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setCxElectricity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
+        request.setBmsVersion( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 3 ), 10 ) ) );
+        cursor += 3;
+        request.setBmsType( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setBatteryNominalEnergy( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setBatteryRatedEnergy( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setBatteryRatedVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setBatteryProducer( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 4 ), 10 ) ) );
+        cursor += 4;
+        request.setBatteryProduceTime( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 3 ) ) );
+        cursor += 3;
+        request.setBatteryCycleCount( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 4 ), 10 ) ) );
+        cursor += 4;
+        request.setHighestAllowElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setHighestAllowVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setHighestAllowTemperature( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSingleAllowHighestVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSingleHighestVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSingleLowestVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSingleHighestTemperature( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSingleLowestTemperature( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerTemperature( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerGunTemperature( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerImportVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerImportElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerImportPower( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerExportVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerExportElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setChargerExportPower( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setVoltageRequire( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setElectricityRequire( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setAxVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setBxVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setCxVoltage( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setAxElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setBxElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setCxElectricity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
 
         return request;
     }
 
     public static byte[] packBytes(UploadChargeMonitorRequest request) {
         byte[] responseBytes = new byte[]{};
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getGunNo(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.long2Byte(request.getOrderNo()));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBmsVersion(),3));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBmsType(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryNominalEnergy().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryRatedEnergy().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryRatedVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryProducer(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getBatteryProduceTime()));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBatteryCycleCount(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getHighestAllowTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleAllowHighestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleHighestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleLowestVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleHighestTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSingleLowestTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerGunTemperature().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerImportPower().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargerExportPower().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getVoltageRequire().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getElectricityRequire().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getAxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getCxVoltage().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getAxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getBxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getCxElectricity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getGunNo(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.long2Byte( request.getOrderNo() ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBmsVersion(), 3 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBmsType(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBatteryNominalEnergy().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBatteryRatedEnergy().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBatteryRatedVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBatteryProducer(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.str2Bcd( request.getBatteryProduceTime() ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBatteryCycleCount(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getHighestAllowElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getHighestAllowVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getHighestAllowTemperature().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSingleAllowHighestVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSingleHighestVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSingleLowestVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSingleHighestTemperature().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSingleLowestTemperature().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerTemperature().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerGunTemperature().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerImportVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerImportElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerImportPower().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerExportVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerExportElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargerExportPower().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getVoltageRequire().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getElectricityRequire().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getAxVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBxVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getCxVoltage().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getAxElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getBxElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getCxElectricity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
         return responseBytes;
     }
-
 
 
     public static void main(String[] args) {
@@ -215,8 +217,8 @@ public class UploadChargeMonitorRequest implements Serializable {
         for (int i = 0; i < methods.length; i++) {
             String methodName = methods[i].getName();
 
-            if (methodName.indexOf("set") == 0) {
-                System.out.println("request."+methods[i].getName()+"(new BigDecimal("+i+"));");
+            if (methodName.indexOf( "set" ) == 0) {
+                System.out.println( "request." + methods[i].getName() + "(new BigDecimal(" + i + "));" );
             }
         }
 

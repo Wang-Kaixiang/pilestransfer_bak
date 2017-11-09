@@ -3,6 +3,7 @@ package com.piles.record.business.impl;
 
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
+import com.piles.common.util.ChannelMap;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.entity.UploadChargeMonitorRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
@@ -28,6 +29,7 @@ public class UploadChargeMonitorBusinessImpl extends BaseBusiness {
         log.info("接收到充电桩上传充电过程监测数据报文");
         //依照报文体规则解析报文
         UploadChargeMonitorRequest uploadChargeMonitorRequest = UploadChargeMonitorRequest.packEntity(bodyBytes);
+        uploadChargeMonitorRequest.setPileNo( ChannelMap.getChannel( incoming ) );
         log.info("接收到充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitorRequest);

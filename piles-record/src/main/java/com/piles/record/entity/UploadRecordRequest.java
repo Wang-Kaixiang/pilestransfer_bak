@@ -1,6 +1,5 @@
 package com.piles.record.entity;
 
-import com.google.common.collect.Lists;
 import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
@@ -8,14 +7,17 @@ import lombok.Data;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 上传充电记录接口请求实体
  */
 @Data
 public class UploadRecordRequest implements Serializable {
+
+    /**
+     * 桩编号 8位 BCD
+     */
+    private String pileNo;
 
     //枪号	BIN	1	1: A枪 2: B枪
     private int gunNo;
@@ -75,85 +77,85 @@ public class UploadRecordRequest implements Serializable {
     public static UploadRecordRequest packEntity(byte[] msg) {
         UploadRecordRequest request = new UploadRecordRequest();
         int cursor = 0;
-        request.setGunNo(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setOrderNo(BytesUtil.byte2Long(BytesUtil.copyBytes(msg,cursor,8)));
-        cursor+=8;
-        request.setChargeModel(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setCardNo(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,cursor,8)));
-        cursor+=8;
+        request.setGunNo( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setOrderNo( BytesUtil.byte2Long( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        cursor += 8;
+        request.setChargeModel( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setCardNo( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        cursor += 8;
         //TODO String 类型直接用new String
-        request.setVin(new String(BytesUtil.copyBytes(msg,cursor,17)));
-        cursor+=17;
-        request.setSoc(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setEndReason(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,cursor,1),10)));
-        cursor+=1;
-        request.setStartTime(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,cursor,6)));
-        cursor+=6;
-        request.setEndTime(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,cursor,6)));
-        cursor+=6;
+        request.setVin( new String( BytesUtil.copyBytes( msg, cursor, 17 ) ) );
+        cursor += 17;
+        request.setSoc( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setEndReason( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, cursor, 1 ), 10 ) ) );
+        cursor += 1;
+        request.setStartTime( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 6 ) ) );
+        cursor += 6;
+        request.setEndTime( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 6 ) ) );
+        cursor += 6;
         //TODO 是否需要除以1000
-        request.setStartAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setEndAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setTotalAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setPointElectricQuantity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setPeakElectricQuantity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setOrdinaryElectricQuantity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setDipElectricQuantity(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setTotalElectricAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setPointElectricAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setPeakElectricAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setOrdinaryElectricAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setDipElectricAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setSubscriptionAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setServiceAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
-        cursor+=4;
-        request.setParkingAmount(BigDecimal.valueOf(BytesUtil.bytesToInt(BytesUtil.copyBytes(msg, cursor, 4), 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
+        request.setStartAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setEndAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setPointElectricQuantity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setPeakElectricQuantity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setOrdinaryElectricQuantity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setDipElectricQuantity( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setTotalElectricAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setPointElectricAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setPeakElectricAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setOrdinaryElectricAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setDipElectricAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setSubscriptionAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setServiceAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
+        cursor += 4;
+        request.setParkingAmount( BigDecimal.valueOf( BytesUtil.bytesToInt( BytesUtil.copyBytes( msg, cursor, 4 ), 0 ) ).divide( new BigDecimal( 1000 ), 3, BigDecimal.ROUND_HALF_UP ) );
         return request;
     }
 
 
     public static byte[] packBytes(UploadRecordRequest request) {
         byte[] responseBytes = new byte[]{};
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getGunNo(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.long2Byte(request.getOrderNo()));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getChargeModel(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getCardNo()));
-        responseBytes = Bytes.concat(responseBytes,request.getVin().getBytes());
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSoc(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getEndReason(),1));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getStartTime()));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.str2Bcd(request.getEndTime()));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getStartAmmeterDegree().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getEndAmmeterDegree().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getTotalAmmeterDegree().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPointElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPeakElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getOrdinaryElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getDipElectricQuantity().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getTotalElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPointElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getPeakElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getOrdinaryElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getDipElectricAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getSubscriptionAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getServiceAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
-        responseBytes = Bytes.concat(responseBytes,BytesUtil.intToBytes(request.getParkingAmount().multiply(BigDecimal.valueOf(1000)).intValue(),4));
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getGunNo(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.long2Byte( request.getOrderNo() ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargeModel(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.str2Bcd( request.getCardNo() ) );
+        responseBytes = Bytes.concat( responseBytes, request.getVin().getBytes() );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSoc(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getEndReason(), 1 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.str2Bcd( request.getStartTime() ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.str2Bcd( request.getEndTime() ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getStartAmmeterDegree().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getEndAmmeterDegree().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getTotalAmmeterDegree().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getPointElectricQuantity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getPeakElectricQuantity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getOrdinaryElectricQuantity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getDipElectricQuantity().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getTotalElectricAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getPointElectricAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getPeakElectricAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getOrdinaryElectricAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getDipElectricAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getSubscriptionAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getServiceAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
+        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getParkingAmount().multiply( BigDecimal.valueOf( 1000 ) ).intValue(), 4 ) );
 
         return responseBytes;
     }
@@ -195,8 +197,8 @@ public class UploadRecordRequest implements Serializable {
         for (int i = 0; i < methods.length; i++) {
             String methodName = methods[i].getName();
 
-            if (methodName.indexOf("set") == 0) {
-                System.out.println("request."+methods[i].getName()+"(new BigDecimal("+i+"));");
+            if (methodName.indexOf( "set" ) == 0) {
+                System.out.println( "request." + methods[i].getName() + "(new BigDecimal(" + i + "));" );
             }
         }
 

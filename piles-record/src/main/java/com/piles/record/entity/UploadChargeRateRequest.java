@@ -14,6 +14,11 @@ import java.math.BigDecimal;
 @Data
 public class UploadChargeRateRequest implements Serializable {
 
+    /**
+     * 桩编号 8位 BCD
+     */
+    private String pileNo;
+
     //枪号	BIN	1	1: A枪 2: B枪
     private int gunNo;
     //订单号	BIN	8

@@ -12,6 +12,10 @@ import java.util.Arrays;
 @Data
 public class HeartBeatRequest implements Serializable {
 
+    /**
+     * 桩编号 8位 BCD
+     */
+    private String pileNo;
 
     /**
      * 充电枪数量 1位 BIN
@@ -38,12 +42,12 @@ public class HeartBeatRequest implements Serializable {
     public static HeartBeatRequest packEntity(byte[] msg) {
         HeartBeatRequest request = new HeartBeatRequest();
 
-        request.setGunCount(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 0, 1), 10)));
+        request.setGunCount( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 0, 1 ), 10 ) ) );
         int[] tempStatus = new int[request.getGunCount()];
         for (int i = 1; i < (request.getGunCount() + 1); i++) {
-            tempStatus[i - 1] = Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, i, 1), 10));
+            tempStatus[i - 1] = Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, i, 1 ), 10 ) );
         }
-        request.setStatus(tempStatus);
+        request.setStatus( tempStatus );
 
         return request;
     }
@@ -53,13 +57,13 @@ public class HeartBeatRequest implements Serializable {
     public String toString() {
         return "HeartBeatRequest{" +
                 "gunCount=" + gunCount +
-                ", status=" + Arrays.toString(status) +
+                ", status=" + Arrays.toString( status ) +
                 '}';
     }
 
     public static void main(String[] args) {
         byte[] msg = new byte[]{0x03, 0x00, 0x01, 0x02};
-        packEntity(msg);
+        packEntity( msg );
 
     }
 
