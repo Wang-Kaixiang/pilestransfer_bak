@@ -27,12 +27,16 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 		for (byte b:msg){
 			temp+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
 		}
-		logger.info("[" + incoming.remoteAddress() + "]发送信息:" + temp);
+		logger.info("[" + incoming.remoteAddress() + "]发送请求信息:" + temp);
 		byte[] response = businessHandler.process(msg, incoming);
 		if(response != null){
 			ctx.writeAndFlush(response);
+			temp="";
+			for (byte b:response){
+				temp+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
+			}
+			logger.info("[" + incoming.remoteAddress() + "]返回结果信息:" + temp);
 		}
-		logger.info("返回信息:" + response);
 		//包装
 
 	}
