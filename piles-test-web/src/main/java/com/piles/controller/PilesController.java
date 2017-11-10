@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -80,7 +82,10 @@ public class PilesController {
                 VerifyTimePushRequest verifyTimePushRequest = new VerifyTimePushRequest();
                 verifyTimePushRequest.setPileNo("0000000080000004");
                 verifyTimePushRequest.setSerial(0);
-                verifyTimePushRequest.setServerTime("20171107183025");
+                Date dt= new Date(  );
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat( "yyyyMMddHHmmss" );
+
+                verifyTimePushRequest.setServerTime(simpleDateFormat.format( dt ));
                 log.info("校时请求返回报文:{}", JSON.toJSONString(verifyTimePushService.doPush(verifyTimePushRequest)));
 
                 break;
