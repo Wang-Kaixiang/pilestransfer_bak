@@ -20,7 +20,7 @@ import java.util.Date;
 public class HeartBeatBusinessImpl extends BaseBusiness {
 
 
-    private static SimpleDateFormat sdf = new SimpleDateFormat( "yyyyMMddHHmmss" );
+    private static SimpleDateFormat sdf = new SimpleDateFormat( "yyMMddHHmmss" );
 
 
     @Override
@@ -40,4 +40,5 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
     public ECommandCode getReponseCode() {
         return ECommandCode.HEART_BEAT_ANSWER_CODE;
     }
+
 }

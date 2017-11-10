@@ -83,7 +83,7 @@ public class PilesController {
                 verifyTimePushRequest.setPileNo("0000000080000004");
                 verifyTimePushRequest.setSerial(0);
                 Date dt= new Date(  );
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat( "yyyyMMddHHmmss" );
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat( "yyMMddHHmmss" );
 
                 verifyTimePushRequest.setServerTime(simpleDateFormat.format( dt ));
                 log.info("校时请求返回报文:{}", JSON.toJSONString(verifyTimePushService.doPush(verifyTimePushRequest)));
