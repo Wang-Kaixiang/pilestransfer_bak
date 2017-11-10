@@ -48,6 +48,9 @@ public class HeartBeatRequest implements Serializable {
             tempStatus[i - 1] = Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, i, 1 ), 10 ) );
         }
         request.setStatus( tempStatus );
+        if (request.getStatus().length>1){
+            request.getStatus()[1]=5;
+        }
 
         return request;
     }
