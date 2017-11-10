@@ -5,10 +5,12 @@ import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.record.entity.HeartBeatRequest;
+import com.piles.record.service.IHeartBeatService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,6 +24,8 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
 
     private static SimpleDateFormat sdf = new SimpleDateFormat( "yyMMddHHmmss" );
 
+    @Resource
+    IHeartBeatService heartBeatService;
 
     @Override
     protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
@@ -30,7 +34,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity( bodyBytes );
         log.info( "接收到充电桩心跳报文:{}", heartBeatRequest.toString() );
         // 不需要接调用底层接口
-        Date date = new Date();
+        Date date = heartBeatService.heartBeat( heartBeatRequest );
         byte[] responseBody = BytesUtil.str2Bcd( sdf.format( date ) );
         //组装返回报文体
         return responseBody;
