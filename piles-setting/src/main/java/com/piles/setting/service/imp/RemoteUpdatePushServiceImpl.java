@@ -4,6 +4,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.setting.entity.RemoteUpdatePushRequest;
 import com.piles.setting.entity.RemoteUpdateRequest;
 import com.piles.setting.service.IRemoteUpdatePushService;
@@ -41,6 +42,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService {
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
+            ChannelResponseCallBackMap.remove( remoteUpdatePushRequest.getPileNo(),remoteUpdatePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

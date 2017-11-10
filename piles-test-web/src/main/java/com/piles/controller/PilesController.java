@@ -46,8 +46,8 @@ public class PilesController {
                 RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
                 remoteStartPushRequest.setGunNo(1);
                 remoteStartPushRequest.setOrderNo(123456L);
-                remoteStartPushRequest.setPileNo("1000025484561835");
-                remoteStartPushRequest.setSerial("0000");
+                remoteStartPushRequest.setPileNo("0000000080000004");
+                remoteStartPushRequest.setSerial(0);
                 remoteStartPushRequest.setChargeData(new BigDecimal(2));
                 remoteStartPushRequest.setChargeModel(4);
                 remoteStartPushRequest.setChargeStopCode("6464");
@@ -57,15 +57,15 @@ public class PilesController {
                 RemoteClosePushRequest remoteClosePushRequest = new RemoteClosePushRequest();
                 remoteClosePushRequest.setGunNo(1);
                 remoteClosePushRequest.setOrderNo(123456L);
-                remoteClosePushRequest.setPileNo("1000025484561835");
-                remoteClosePushRequest.setSerial("0000");
+                remoteClosePushRequest.setPileNo("0000000080000004");
+                remoteClosePushRequest.setSerial(0);
                 log.info("远程结束充电请求返回报文:{}", JSON.toJSONString(remoteClosePushService.doPush(remoteClosePushRequest)));
 
                 break;
             case "3":
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
-                remoteUpdatePushRequest.setPileNo("1000025484561835");
-                remoteUpdatePushRequest.setSerial("0000");
+                remoteUpdatePushRequest.setPileNo("0000000080000004");
+                remoteUpdatePushRequest.setSerial(0);
                 remoteUpdatePushRequest.setMd5("asdfghjkasdfghjkasdfghjkasdfghjk");
                 remoteUpdatePushRequest.setProtocolVersion("V1.0");
                 remoteUpdatePushRequest.setSoftVersion("V1.23");
@@ -78,24 +78,24 @@ public class PilesController {
             case "4":
 
                 VerifyTimePushRequest verifyTimePushRequest = new VerifyTimePushRequest();
-                verifyTimePushRequest.setPileNo("1000025484561835");
-                verifyTimePushRequest.setSerial("0000");
+                verifyTimePushRequest.setPileNo("0000000080000004");
+                verifyTimePushRequest.setSerial(0);
                 verifyTimePushRequest.setServerTime("20171107183025");
                 log.info("校时请求返回报文:{}", JSON.toJSONString(verifyTimePushService.doPush(verifyTimePushRequest)));
 
                 break;
             case "5":
                 RebootPushRequest rebootPushRequest = new RebootPushRequest();
-                rebootPushRequest.setPileNo("1000025484561835");
-                rebootPushRequest.setSerial("0000");
+                rebootPushRequest.setPileNo("0000000080000004");
+                rebootPushRequest.setSerial(0);
 
                 log.info("重启请求返回报文:{}", JSON.toJSONString(rebootPushService.doPush(rebootPushRequest)));
 
                 break;
             case "6":
                 BillRuleSetPushRequest billRuleSetPushRequest = new BillRuleSetPushRequest();
-                billRuleSetPushRequest.setPileNo("1000025484561835");
-                billRuleSetPushRequest.setSerial("0000");
+                billRuleSetPushRequest.setPileNo("0000000080000004");
+                billRuleSetPushRequest.setSerial(0);
                 billRuleSetPushRequest.setBillingRuleId(4);
                 billRuleSetPushRequest.setBillingRuleVersion(0);
                 billRuleSetPushRequest.setEffectiveTime("171109160712");

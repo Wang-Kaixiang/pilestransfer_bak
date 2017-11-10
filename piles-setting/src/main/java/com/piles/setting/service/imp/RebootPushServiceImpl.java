@@ -4,6 +4,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.setting.entity.BillRuleSetPushRequest;
 import com.piles.setting.entity.BillRuleSetRequest;
 import com.piles.setting.entity.RebootPushRequest;
@@ -45,6 +46,7 @@ public class RebootPushServiceImpl implements IRebootPushService {
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
+            ChannelResponseCallBackMap.remove( rebootPushRequest.getPileNo(),rebootPushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

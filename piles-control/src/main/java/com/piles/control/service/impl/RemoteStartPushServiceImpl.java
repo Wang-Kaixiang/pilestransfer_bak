@@ -4,6 +4,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteCloseRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
@@ -38,6 +39,7 @@ public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
+            ChannelResponseCallBackMap.remove( remoteStartPushRequest.getPileNo(),remoteStartPushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

@@ -24,11 +24,11 @@ public class PushBusinessImpl implements IPushBusiness {
         Channel channel=ChannelMap.getChannel(pileNo);
 
         if (null!=channel){
-            ChannelResponseCallBackMap.add(channel,Integer.parseInt(  basePushRequest.getSerial()),basePushRequest);
+            ChannelResponseCallBackMap.add(channel,  basePushRequest.getSerial(),basePushRequest);
             //拼接报文
             byte[] start=new byte[]{0x68};
             byte[] command=new byte[]{(byte)commandCode.getCode()};
-            byte[] serial= BytesUtil.intToBytes( Integer.parseInt(  basePushRequest.getSerial()) );
+            byte[] serial= BytesUtil.intToBytes( basePushRequest.getSerial());
             byte[] length=BytesUtil.intToBytes( msg.length );
             byte[] temp= Bytes.concat( command,serial,length,msg );
             byte[] crc= BytesUtil.intToBytes( CRC16Util.getCRC( temp ));

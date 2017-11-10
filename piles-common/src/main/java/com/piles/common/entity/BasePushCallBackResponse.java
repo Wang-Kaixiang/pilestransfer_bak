@@ -16,7 +16,7 @@ public class BasePushCallBackResponse<C extends BasePushResponse> {
     /**
      * 流水号
      */
-    private String serial;
+    private int serial;
 
     /**
      * 默认两步 第一步发送成功  第二部是处理成功

@@ -5,6 +5,7 @@ import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteCloseRequest;
 import com.piles.control.service.IRemoteClosePushService;
@@ -36,6 +37,7 @@ public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
+            ChannelResponseCallBackMap.remove( remoteClosePushRequest.getPileNo(),remoteClosePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

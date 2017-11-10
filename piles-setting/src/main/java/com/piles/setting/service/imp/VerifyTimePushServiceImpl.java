@@ -4,6 +4,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.setting.entity.VerifyTimePushRequest;
 import com.piles.setting.entity.VerifyTimeRequest;
 import com.piles.setting.service.IVerifyTimePushService;
@@ -41,6 +42,7 @@ public class VerifyTimePushServiceImpl implements IVerifyTimePushService {
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
+            ChannelResponseCallBackMap.remove( verifyTimePushRequest.getPileNo(),verifyTimePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

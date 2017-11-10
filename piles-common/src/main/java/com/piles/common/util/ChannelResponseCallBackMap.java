@@ -57,4 +57,19 @@ public class ChannelResponseCallBackMap  {
         temp.put( serial,obj );
     }
 
+    /**
+     *
+     * @param pileNo
+     * @param serial
+     * @return
+     */
+    public static void remove(String pileNo, Integer serial){
+        Channel channel=ChannelMap.getChannel( pileNo );
+        if (null!=channel) {
+            ConcurrentHashMap<Integer, BasePushCallBackResponse> temp = map.get( channel );
+            if (null != temp&& temp.contains( serial )) {
+                map.remove( serial );
+            }
+        }
+    }
 }

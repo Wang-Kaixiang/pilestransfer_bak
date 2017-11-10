@@ -15,5 +15,5 @@ public class BasePushRequest {
     /**
      * 默认必填流水号
      */
-    private String serial;
+    private int serial;
 }
