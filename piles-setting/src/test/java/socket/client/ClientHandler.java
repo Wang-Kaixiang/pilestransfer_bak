@@ -1,6 +1,7 @@
 package socket.client;
 
 
+import com.piles.common.util.CRC16Util;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -13,6 +14,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
            temp+=" "+ Integer.toHexString(Byte.toUnsignedInt(b));
         }
         System.out.println("Server say : " + temp);
+        System.out.println("CRC  校验"+CRC16Util.checkMsg( bytes ));
         switch (bytes[1]){
 
             case 0x07 :
