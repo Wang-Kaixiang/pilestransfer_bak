@@ -27,7 +27,7 @@ public class VerifyTimePushServiceImpl implements IVerifyTimePushService {
     /**
      * 默认3秒超时
      */
-    private long timeout = 3000L;
+    private long timeout = 60000L;
 
 
     @Override
