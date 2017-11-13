@@ -11,6 +11,7 @@ import com.piles.control.entity.RemoteCloseRequest;
 import com.piles.control.service.IRemoteClosePushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -46,7 +47,8 @@ public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
     }
 
     /**
-     * 默认3秒超时
+     * 默认1分钟超时
      */
-    private long timeout=60000L;
+    @Value("${timeout:6000}")
+    private long timeout;
 }

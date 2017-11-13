@@ -10,6 +10,7 @@ import com.piles.setting.entity.BillRuleSetRequest;
 import com.piles.setting.service.IBillRuleSetPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -25,9 +26,10 @@ public class BillRuleSetPushServiceImpl implements IBillRuleSetPushService {
     IPushBusiness pushBusiness;
 
     /**
-     * 默认3秒超时
+     * 默认1分钟超时
      */
-    private long timeout = 60000L;
+    @Value("${timeout:6000}")
+    private long timeout;
 
     @Override
     public BasePushCallBackResponse<BillRuleSetRequest> doPush(BillRuleSetPushRequest billRuleSetPushRequest) {
