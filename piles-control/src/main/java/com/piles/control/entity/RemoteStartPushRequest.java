@@ -20,7 +20,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
     private int gunNo;
     /**
      * 充电模式 1位 BIN
-     * 1: 自动充满 2: 按金额充  3: 按时间充 4: 按电量充
+     * 1: 自动充满 2: 按金额充  3: 按时间充 4: 按电量充 5 追加电量
      */
     private int chargeModel;
     /**
@@ -30,6 +30,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
      * 2：按金额充，填金额大小，单位：元，精确到0.001
      * 3：按时间充，填时间长度，单位：秒
      * 4：按电量充，填电量大小，单位：度, 精确到0.001
+     * 5：追加电量，填电量大小，单位：度, 精确到0.001
      */
     private BigDecimal chargeData;
     /**
@@ -56,7 +57,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
         byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel);
         int chargeDataInt = 0;
-        if(chargeModel==2 || chargeModel==4){
+        if(chargeModel==2 || chargeModel==4 || chargeModel==5){
             BigDecimal chargeDataVal = chargeData.multiply(BigDecimal.valueOf(1000));
             chargeDataInt = chargeDataVal.intValue();
         }else if(chargeModel==3){
