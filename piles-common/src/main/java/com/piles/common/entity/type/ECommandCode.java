@@ -40,7 +40,11 @@ public enum ECommandCode {
     REBOOT_CODE(0x1D, "重启"),
     REBOOT_ANSWER_CODE(0x9D, "重启回复"),
     REMOTE_UPDATE_CODE(0x1E, "远程升级"),
-    REMOTE_UPDATE_ANSWER_CODE(0x9E, "远程升级回复");
+    REMOTE_UPDATE_ANSWER_CODE(0x9E, "远程升级回复"),
+    REQUEST_UPDATE_PACKAGE_CODE(0x1F, "请求数据包"),
+    REQUEST_UPDATE_PACKAGE_ANSWER_CODE(0x9F, "请求数据包回复"),
+    UPDATE_RESULT_REPORT_CODE(0x20, "升级结果汇报"),
+    UPDATE_RESULT_REPORT_ANWSER_CODE(0xA0, "升级结果汇报回复");
 
 
     private ECommandCode(int code, String value) {

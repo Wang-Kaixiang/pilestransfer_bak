@@ -63,6 +63,9 @@ public class BusinessFactory implements IBusinessFactory {
             case (byte)0x8B:
                 //计费规则设置
                 return SpringContextUtil.getBean("billRuleSetBusiness");
+            case (byte)0X1F:
+                //请求升级包
+                return SpringContextUtil.getBean("requestUpdatePackageBusiness");
             default:
                 log.error("未匹配到合适的命令码：{}",order);
                 return null;
