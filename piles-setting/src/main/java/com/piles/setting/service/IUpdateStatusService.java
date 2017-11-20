@@ -9,8 +9,8 @@ public interface IUpdateStatusService {
     /**
      * 升级状态汇报
      *
-     * @param UpdateStatusRequest 汇报的状态信息
+     * @param updateStatusRequest 汇报的状态信息
      * @return
      */
-    void updateStatus(UpdateStatusRequest UpdateStatusRequest);
+    void updateStatus(UpdateStatusRequest updateStatusRequest);
 }
