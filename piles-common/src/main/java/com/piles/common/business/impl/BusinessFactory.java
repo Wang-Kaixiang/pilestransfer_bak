@@ -66,6 +66,9 @@ public class BusinessFactory implements IBusinessFactory {
             case (byte)0X1F:
                 //请求升级包
                 return SpringContextUtil.getBean("requestUpdatePackageBusiness");
+            case (byte)0X20:
+                //请求升级包
+                return SpringContextUtil.getBean("updateStatusBusiness");
             default:
                 log.error("未匹配到合适的命令码：{}",order);
                 return null;
