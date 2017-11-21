@@ -1,6 +1,5 @@
 package com.piles.setting.service;
 
-import com.piles.setting.entity.QrSetRequest;
 import com.piles.setting.entity.UpdatePackageRequest;
 import com.piles.setting.entity.UpdatePackageResponse;
 
@@ -10,7 +9,8 @@ import com.piles.setting.entity.UpdatePackageResponse;
 public interface IRequestUpdatePackageService {
     /**
      * 根据段索引获取升级包信息
-     * @param index 当前索引
+     *
+     * @param updatePackageRequest 请求信息
      * @return
      */
     UpdatePackageResponse getUpdatePackage(UpdatePackageRequest updatePackageRequest);
