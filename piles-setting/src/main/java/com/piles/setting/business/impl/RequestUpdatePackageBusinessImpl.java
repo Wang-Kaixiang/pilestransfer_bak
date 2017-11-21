@@ -41,6 +41,9 @@ public class RequestUpdatePackageBusinessImpl extends BaseBusiness{
         //调用底层接口
         UpdatePackageResponse response = requestUpdatePackageService.getUpdatePackage(updatePackageRequest);
         byte[] actualContent = response.getActualContent();
+        if(actualContent == null){
+            actualContent = new byte[]{};
+        }
         int length = actualContent.length;
         if(length>0x9E){//158
             //TODO 超长后返回什么
