@@ -35,5 +35,6 @@
 		<property name="contentType" value="text/html;charset=UTF-8"/>
 		<property name="order" value="1"/>
 	</bean>
+	<mvc:resources mapping="/soft/**" location="/soft/"/>
 
 </beans>
