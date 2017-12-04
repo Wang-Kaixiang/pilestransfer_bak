@@ -55,5 +55,13 @@ public class UpdateStatusRequest implements Serializable {
         return request;
     }
 
-
+    @Override
+    public String toString() {
+        return "UpdateStatusRequest{" +
+                "status=" + status +
+                ", softVersion='" + softVersion + '\'' +
+                ", protocolVersion='" + protocolVersion + '\'' +
+                ", pileNo='" + pileNo + '\'' +
+                '}';
+    }
 }

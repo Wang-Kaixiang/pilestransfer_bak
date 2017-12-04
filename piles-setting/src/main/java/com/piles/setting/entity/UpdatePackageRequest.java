@@ -40,6 +40,11 @@ public class UpdatePackageRequest implements Serializable
         return request;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "UpdatePackageRequest{" +
+                "index=" + index +
+                ", pileNo='" + pileNo + '\'' +
+                '}';
+    }
 }

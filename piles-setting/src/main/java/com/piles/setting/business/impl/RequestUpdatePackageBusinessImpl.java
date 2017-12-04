@@ -29,9 +29,11 @@ public class RequestUpdatePackageBusinessImpl extends BaseBusiness{
 
     @Override
     protected byte[] processBody(byte[] bodyBytes,Channel incoming,int order) {
-
+        log.info( "接收到充电桩请求升级包报文" );
         //依照报文体规则解析报文
         UpdatePackageRequest updatePackageRequest = UpdatePackageRequest.packEntity(bodyBytes, incoming);
+        log.info( "接收到充电桩请求升级包报文:{}", updatePackageRequest.toString() );
+
         //负数直接返回
         if(updatePackageRequest.getIndex()<0){
             UpdatePackageResponse response = new UpdatePackageResponse();

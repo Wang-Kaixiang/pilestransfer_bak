@@ -26,9 +26,11 @@ public class UpdateStatusBusinessImpl extends BaseBusiness {
 
     @Override
     protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
+        log.info( "接收到充电桩升级结果汇报报文" );
 
         //依照报文体规则解析报文
         UpdateStatusRequest updatePackageRequest = UpdateStatusRequest.packEntity(bodyBytes, incoming);
+        log.info( "接收到充电桩升级结果汇报报文:{}", updatePackageRequest.toString() );
         updateStatusService.updateStatus(updatePackageRequest);
 
         //组装返回报文体
