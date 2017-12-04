@@ -24,7 +24,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springDispatcher</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/piles/</url-pattern>
 	</servlet-mapping>
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>

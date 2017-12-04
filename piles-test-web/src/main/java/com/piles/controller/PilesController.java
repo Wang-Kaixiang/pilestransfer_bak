@@ -3,6 +3,7 @@ package com.piles.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.piles.Util;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
@@ -68,13 +69,19 @@ public class PilesController {
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
                 remoteUpdatePushRequest.setPileNo("0000000080000004");
                 remoteUpdatePushRequest.setSerial(0);
-                remoteUpdatePushRequest.setMd5("asdfghjkasdfghjkasdfghjkasdfghjk");
+                remoteUpdatePushRequest.setMd5("a935977e532154c6d5105a5024c65923");
                 remoteUpdatePushRequest.setProtocolVersion("V1.0");
                 remoteUpdatePushRequest.setSoftVersion("V1.23");
-                String url = "http://essrus";
+                String url = "http://59.110.170.111/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
-                log.info("远程升级请求返回报文:{}", JSON.toJSONString(remoteUpdatePushService.doPush(remoteUpdatePushRequest)));
+                BasePushCallBackResponse<RemoteUpdateRequest> testRs=remoteUpdatePushService.doPush(remoteUpdatePushRequest);
+
+                if (null!=testRs.getObj()&&testRs.getObj().getUpdateType()==2){
+                    Util.map.put( "0000000080000004",testRs.getObj().getDownMaxLenLimit() );
+                }
+
+                log.info("远程升级请求返回报文:{}", JSON.toJSONString(testRs));
 
                 break;
             case "4":
