@@ -44,15 +44,18 @@ public class PilesController {
     @RequestMapping("/test")
     public void test(HttpServletRequest request) {
         String type = request.getParameter("type");
+
         switch (type) {
             case "1":
+                String modle=request.getParameter("modle");
+                String data=request.getParameter("data");
                 RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
                 remoteStartPushRequest.setGunNo(1);
                 remoteStartPushRequest.setOrderNo(123456L);
                 remoteStartPushRequest.setPileNo("0000000080000004");
                 remoteStartPushRequest.setSerial(0);
-                remoteStartPushRequest.setChargeData(new BigDecimal(2));
-                remoteStartPushRequest.setChargeModel(4);
+                remoteStartPushRequest.setChargeData(new BigDecimal(Integer.parseInt( data )));
+                remoteStartPushRequest.setChargeModel(Integer.parseInt( modle ));
                 remoteStartPushRequest.setChargeStopCode("6464");
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
                 break;
