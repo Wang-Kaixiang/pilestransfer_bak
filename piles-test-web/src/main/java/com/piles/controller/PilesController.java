@@ -70,9 +70,9 @@ public class PilesController {
                 remoteUpdatePushRequest.setPileNo("0000000080000004");
                 remoteUpdatePushRequest.setSerial(0);
                 remoteUpdatePushRequest.setMd5("63fbc23f412febf1b2230b17f193b007");
-                remoteUpdatePushRequest.setProtocolVersion("1.31");
+                remoteUpdatePushRequest.setProtocolVersion("V1.31");
                 remoteUpdatePushRequest.setSoftVersion("V2.12");
-                String url = "http://59.110.170.111/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
+                String url = "http://59.110.170.111:9090/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
                 BasePushCallBackResponse<RemoteUpdateRequest> testRs=remoteUpdatePushService.doPush(remoteUpdatePushRequest);
@@ -154,10 +154,10 @@ public class PilesController {
         RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
         remoteUpdatePushRequest.setPileNo("0000000080000004");
         remoteUpdatePushRequest.setSerial(0);
-        remoteUpdatePushRequest.setMd5("a935977e532154c6d5105a5024c65923");
-        remoteUpdatePushRequest.setProtocolVersion("V1.01");
-        remoteUpdatePushRequest.setSoftVersion("V1.01");
-        String url = "http://59.110.170.111/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
+        remoteUpdatePushRequest.setMd5("63fbc23f412febf1b2230b17f193b007");
+        remoteUpdatePushRequest.setProtocolVersion("V1.31");
+        remoteUpdatePushRequest.setSoftVersion("V2.12");
+        String url = "http://59.110.170.111:9090/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
         remoteUpdatePushRequest.setUrl(url);
         remoteUpdatePushRequest.setUrlLen(url.length());
         byte[] writeMsg=RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
