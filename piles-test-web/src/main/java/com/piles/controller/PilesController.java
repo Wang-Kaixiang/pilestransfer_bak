@@ -134,6 +134,17 @@ public class PilesController {
 
                 log.info("计费规则设置请求返回报文:{}", JSON.toJSONString(billRuleSetPushService.doPush(billRuleSetPushRequest)));
                 break;
+            case "7":
+                RemoteStartPushRequest remoteStartPushRequest2 = new RemoteStartPushRequest();
+                remoteStartPushRequest2.setGunNo(1);
+                remoteStartPushRequest2.setOrderNo(123457L);
+                remoteStartPushRequest2.setPileNo("0000000080000004");
+                remoteStartPushRequest2.setSerial(0);
+                remoteStartPushRequest2.setChargeData(new BigDecimal(2));
+                remoteStartPushRequest2.setChargeModel(5);
+                remoteStartPushRequest2.setChargeStopCode("6565");
+                log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest2)));
+                break;
         }
 
         System.out.println("gggg");
