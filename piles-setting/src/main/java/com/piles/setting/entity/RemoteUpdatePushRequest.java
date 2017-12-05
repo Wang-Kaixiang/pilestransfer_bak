@@ -36,8 +36,8 @@ public class RemoteUpdatePushRequest extends BasePushRequest  implements Seriali
         String md5 = request.getMd5();
         String url = request.getUrl();
 
-        byte[] softVersionBytes = BytesUtil.intToBytes(0,4);
-        byte[] protocolVersionBytes = BytesUtil.intToBytes(0,4);
+        byte[] softVersionBytes = BytesUtil.intToBytes(0,2);
+        byte[] protocolVersionBytes = BytesUtil.intToBytes(0,2);
         if(StringUtils.isNoneBlank(softVersion)){
             softVersionBytes = new byte[]{};
             //截取掉V
@@ -46,7 +46,7 @@ public class RemoteUpdatePushRequest extends BasePushRequest  implements Seriali
 
             for (int i = 0;i<split.length;i++){
                 int x = Integer.parseInt(split[i]);
-                softVersionBytes= Bytes.concat(softVersionBytes,BytesUtil.intToBytes(x,2));
+                softVersionBytes= Bytes.concat(softVersionBytes,BytesUtil.intToBytes(x,1));
             }
         }
         if(StringUtils.isNoneBlank(protocolVersion)){
@@ -57,7 +57,7 @@ public class RemoteUpdatePushRequest extends BasePushRequest  implements Seriali
 
             for (int i = 0;i<split.length;i++){
                 int x = Integer.parseInt(split[i]);
-                protocolVersionBytes= Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,2));
+                protocolVersionBytes= Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,1));
             }
         }
         byte[] md5Bytes = md5.getBytes();
