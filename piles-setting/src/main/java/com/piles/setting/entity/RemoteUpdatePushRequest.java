@@ -42,26 +42,26 @@ public class RemoteUpdatePushRequest extends BasePushRequest  implements Seriali
             softVersionBytes = new byte[]{};
             //截取掉V
             String version = softVersion.substring(1);
-            String[] split = version.split(".");
+            String[] split = version.split("\\.");
 
             for (int i = 0;i<split.length;i++){
                 int x = Integer.parseInt(split[i]);
-                Bytes.concat(softVersionBytes,BytesUtil.intToBytes(x,2));
+                softVersionBytes= Bytes.concat(softVersionBytes,BytesUtil.intToBytes(x,2));
             }
         }
         if(StringUtils.isNoneBlank(protocolVersion)){
             protocolVersionBytes = new byte[]{};
             //截取掉V
             String version = protocolVersion.substring(1);
-            String[] split = version.split(".");
+            String[] split = version.split("\\.");
 
             for (int i = 0;i<split.length;i++){
                 int x = Integer.parseInt(split[i]);
-                Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,2));
+                protocolVersionBytes= Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,2));
             }
         }
         byte[] md5Bytes = md5.getBytes();
-        if(url!=null){
+        if(StringUtils.isEmpty( url )){
             url = "";
         }
         int urlLen = url.length();

@@ -70,8 +70,8 @@ public class PilesController {
                 remoteUpdatePushRequest.setPileNo("0000000080000004");
                 remoteUpdatePushRequest.setSerial(0);
                 remoteUpdatePushRequest.setMd5("a935977e532154c6d5105a5024c65923");
-                remoteUpdatePushRequest.setProtocolVersion("V1.0");
-                remoteUpdatePushRequest.setSoftVersion("V1.23");
+                remoteUpdatePushRequest.setProtocolVersion("V1.01");
+                remoteUpdatePushRequest.setSoftVersion("V1.01");
                 String url = "http://59.110.170.111/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
@@ -148,5 +148,23 @@ public class PilesController {
         }
 
         System.out.println("gggg");
+    }
+
+    public static void main(String[] args) {
+        RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
+        remoteUpdatePushRequest.setPileNo("0000000080000004");
+        remoteUpdatePushRequest.setSerial(0);
+        remoteUpdatePushRequest.setMd5("a935977e532154c6d5105a5024c65923");
+        remoteUpdatePushRequest.setProtocolVersion("V1.01");
+        remoteUpdatePushRequest.setSoftVersion("V1.01");
+        String url = "http://59.110.170.111/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
+        remoteUpdatePushRequest.setUrl(url);
+        remoteUpdatePushRequest.setUrlLen(url.length());
+        byte[] writeMsg=RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
+        String pushMsg="";
+        for (byte b:writeMsg){
+            pushMsg+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
+        }
+        System.out.println(pushMsg);
     }
 }
