@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class UploadRecordService implements IUploadRecordService {
     @Override
     public boolean uploadRecord(UploadRecordRequest uploadRecordRequest) {
-        return false;
+        return true;
     }
 }
