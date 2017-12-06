@@ -55,8 +55,8 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         String chargeStopCode = request.getChargeStopCode();
         long orderNo = request.getOrderNo();
         byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
-        byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel);
-        int chargeDataInt = 0;
+        byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel,1);
+        int chargeDataInt = request.getChargeData().intValue();
         if(chargeModel==2 || chargeModel==4 || chargeModel==5){
             BigDecimal chargeDataVal = chargeData.multiply(BigDecimal.valueOf(1000));
             chargeDataInt = chargeDataVal.intValue();
