@@ -56,14 +56,14 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         long orderNo = request.getOrderNo();
         byte[] gunNoBytes = BytesUtil.intToBytes(gunNo,1);
         byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel,1);
-        int chargeDataInt = request.getChargeData().intValue();
+        BigDecimal chargeDataInt = request.getChargeData();
         if(chargeModel==2 || chargeModel==4 || chargeModel==5){
             BigDecimal chargeDataVal = chargeData.multiply(BigDecimal.valueOf(1000));
-            chargeDataInt = chargeDataVal.intValue();
+            chargeDataInt = chargeDataVal;
         }else if(chargeModel==3){
-            chargeDataInt = chargeData.intValue();
+            chargeDataInt = chargeData;
         }
-        byte[] chargeDataBytes = BytesUtil.intToBytes(chargeDataInt,4);
+        byte[] chargeDataBytes = BytesUtil.intToBytes(chargeDataInt.intValue(),4);
         byte[] chargeStopCodeBytes = BytesUtil.str2Bcd(chargeStopCode);
         byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
         return Bytes.concat(gunNoBytes,chargeModelBytes,chargeDataBytes,chargeStopCodeBytes,orderNoBytes);
@@ -73,8 +73,8 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
     public static void main(String[] args) {
         RemoteStartPushRequest request = new RemoteStartPushRequest();
         request.setGunNo(1);
-        request.setChargeModel(3);
-        request.setChargeData(new BigDecimal(34324234L));
+        request.setChargeModel(4);
+        request.setChargeData(new BigDecimal(0.1));
         request.setChargeStopCode("1245");
         request.setOrderNo(1223123L);
         RemoteStartPushRequest.packBytes(request);
