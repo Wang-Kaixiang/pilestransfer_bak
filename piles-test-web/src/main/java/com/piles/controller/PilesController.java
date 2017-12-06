@@ -54,7 +54,7 @@ public class PilesController {
                 remoteStartPushRequest.setOrderNo(123456L);
                 remoteStartPushRequest.setPileNo("0000000080000004");
                 remoteStartPushRequest.setSerial(0);
-                remoteStartPushRequest.setChargeData(new BigDecimal(Integer.parseInt( data )));
+                remoteStartPushRequest.setChargeData(BigDecimal.valueOf(Double.valueOf(data)));
                 remoteStartPushRequest.setChargeModel(Integer.parseInt( modle ));
                 remoteStartPushRequest.setChargeStopCode("6464");
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
@@ -154,20 +154,8 @@ public class PilesController {
     }
 
     public static void main(String[] args) {
-        RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
-        remoteUpdatePushRequest.setPileNo("0000000080000004");
-        remoteUpdatePushRequest.setSerial(0);
-        remoteUpdatePushRequest.setMd5("63fbc23f412febf1b2230b17f193b007");
-        remoteUpdatePushRequest.setProtocolVersion("V1.31");
-        remoteUpdatePushRequest.setSoftVersion("V2.12");
-        String url = "http://59.110.170.111:9090/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
-        remoteUpdatePushRequest.setUrl(url);
-        remoteUpdatePushRequest.setUrlLen(url.length());
-        byte[] writeMsg=RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
-        String pushMsg="";
-        for (byte b:writeMsg){
-            pushMsg+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
-        }
-        System.out.println(pushMsg);
+        String data="0.1";
+        BigDecimal decimal=BigDecimal.valueOf(Double.valueOf(data));
+        System.out.println(decimal.byteValue());
     }
 }
