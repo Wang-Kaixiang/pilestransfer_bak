@@ -49,9 +49,10 @@ public class PilesController {
             case "1":
                 String modle=request.getParameter("modle");
                 String data=request.getParameter("data");
+                String orderNo=request.getParameter("orderNo");
                 RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
                 remoteStartPushRequest.setGunNo(1);
-                remoteStartPushRequest.setOrderNo(123456L);
+                remoteStartPushRequest.setOrderNo(Long.valueOf( orderNo ));
                 remoteStartPushRequest.setPileNo("0000000080000004");
                 remoteStartPushRequest.setSerial(0);
                 remoteStartPushRequest.setChargeData(BigDecimal.valueOf(Double.valueOf(data)));
