@@ -18,12 +18,12 @@ public class ChargeRemoteStartRequest {
     /**
      * 抢号 1 位  BIN 1: A枪 2: B枪
      */
-    private int gunNo;
+    private Integer gunNo;
     /**
      * 充电模式 1位 BIN
      * 1: 自动充满 2: 按金额充  3: 按时间充 4: 按电量充
      */
-    private int chargeModel;
+    private Integer chargeModel;
     /**
      * 充电数据 4位 BIN
      * 对应每种充电模式的数据。
@@ -41,5 +41,5 @@ public class ChargeRemoteStartRequest {
     /**
      * 订单号 8位 BIN
      */
-    private long orderNo;
+    private Long orderNo;
 }

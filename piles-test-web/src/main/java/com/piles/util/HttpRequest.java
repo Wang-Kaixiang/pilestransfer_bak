@@ -1,6 +1,8 @@
 package com.piles.util;
 
 import com.alibaba.fastjson.JSONObject;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -8,9 +10,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.util.EntityUtils;
 
 import java.nio.charset.Charset;
 
+@Slf4j
 public class HttpRequest {
 
 
@@ -37,12 +41,17 @@ public class HttpRequest {
             post.setEntity(entity);
 
             HttpResponse response = httpClient.execute(post);
-
+            HttpEntity entityResponse=response.getEntity();
+            //EntityUtils中的toString()方法转换服务器的响应数据
+            String str= EntityUtils.toString(entityResponse, "utf-8");
             // 检验返回码
             int statusCode = response.getStatusLine().getStatusCode();
             if(statusCode != HttpStatus.SC_OK){
                 isSuccess = false;
+                log.error("请求信息:"+jsonStr+" 返回结果"+str);
             }else{
+
+                log.info("请求信息:"+jsonStr+" 返回结果"+str);
                 return true;
             }
         } catch (Exception e) {
