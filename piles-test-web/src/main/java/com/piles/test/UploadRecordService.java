@@ -22,8 +22,10 @@ public class UploadRecordService implements IUploadRecordService {
         jsonObject.put("totalAmmeterDegree",uploadRecordRequest.getTotalAmmeterDegree());
 
 //        http://tox.tunnel.qydev.com/order/powerEnd
+        JSONObject jsonObject2= new JSONObject();
+        jsonObject2.put("args",jsonObject);
 
-        boolean flag=HttpRequest.httpPostWithJson("args="+jsonObject.toString(),"http://elec.toxchina.com:90/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson(jsonObject2.toString(),"http://elec.toxchina.com:90/order/powerEnd");
 
         return flag;
     }

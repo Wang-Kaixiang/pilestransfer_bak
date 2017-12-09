@@ -168,9 +168,11 @@ public class PilesController {
         jsonObject.put("endReason",type);
         jsonObject.put("totalAmmeterDegree",0.2);
 
+        JSONObject jsonObject2= new JSONObject();
+        jsonObject2.put("args",jsonObject);
 //        http://tox.tunnel.qydev.com/order/powerEnd
 
-        boolean flag= HttpRequest.httpPostWithJson("args="+jsonObject.toString(),"http://elec.toxchina.com:90/order/powerEnd");
+        boolean flag= HttpRequest.httpPostWithJson(jsonObject2.toString(),"http://elec.toxchina.com:90/order/powerEnd");
 
         return flag;
     }
