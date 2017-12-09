@@ -40,27 +40,32 @@ public class ChargeController {
     @RequestMapping(value = "/charge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> charge(ChargeRemoteStartRequest remoteStartRequest) {
+        log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
         //check 参数
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (Util.orderNo2Seril.containsKey(remoteStartRequest.getOrderNo()) && null != Util.getChargePushOrderOk(String.valueOf(remoteStartRequest.getOrderNo()))) {
             map.put("status", "200");
             map.put("msg", "启动充电发送命令成功,详细结果见结果");
             map.put("data", Util.getChargePushOrderOk(String.valueOf(remoteStartRequest.getOrderNo())));
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getGunNo()) || 1 != remoteStartRequest.getGunNo()) {
             map.put("status", "-1");
             map.put("msg", "充电桩枪号不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getOrderNo())) {
             map.put("status", "-1");
             map.put("msg", "订单号不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (!(1 == remoteStartRequest.getChargeModel()
@@ -70,6 +75,7 @@ public class ChargeController {
                 ) {
             map.put("status", "-1");
             map.put("msg", "充电模式不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         //获取连接channel 获取不到无法推送
@@ -77,6 +83,7 @@ public class ChargeController {
         if (null == channel) {
             map.put("status", "400");
             map.put("msg", "充电桩链接不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
 
@@ -125,6 +132,7 @@ public class ChargeController {
 
         }
 
+        log.info("return请求充电请求fan:"+JSON.toJSONString(map));
         return map;
 
     }
@@ -138,27 +146,32 @@ public class ChargeController {
     @RequestMapping(value = "/appendCharge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> appendharge(ChargeRemoteStartRequest remoteStartRequest) {
+        log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
         //check 参数
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (Util.orderNo2Seril.containsKey(remoteStartRequest.getOrderNo()) && null != Util.getChargePushOrderOk(String.valueOf(remoteStartRequest.getOrderNo()))) {
             map.put("status", "200");
             map.put("msg", "追加充电发送命令成功,详细结果见结果");
             map.put("data", Util.getChargePushOrderOk(String.valueOf(remoteStartRequest.getOrderNo())));
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getGunNo()) || 1 != remoteStartRequest.getGunNo()) {
             map.put("status", "-1");
             map.put("msg", "充电桩枪号不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getOrderNo())) {
             map.put("status", "-1");
             map.put("msg", "订单号不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
 
@@ -167,6 +180,7 @@ public class ChargeController {
         if (null == channel) {
             map.put("status", "400");
             map.put("msg", "充电桩链接不可用");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
 
@@ -215,6 +229,7 @@ public class ChargeController {
 
         }
 
+        log.info("return请求充电请求fan:"+JSON.toJSONString(map));
         return map;
 
     }
