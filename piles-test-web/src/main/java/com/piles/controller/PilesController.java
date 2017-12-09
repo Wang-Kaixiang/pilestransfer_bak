@@ -2,7 +2,9 @@ package com.piles.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.piles.util.HttpRequest;
 import com.piles.util.Util;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
@@ -153,6 +155,24 @@ public class PilesController {
         }
 
         return "{\"status\":\"200\"}";
+    }
+
+    @RequestMapping("/test2")
+    @ResponseBody
+    public boolean  test2(HttpServletRequest request) {
+        String type = request.getParameter("type");
+        JSONObject jsonObject= new JSONObject();
+        jsonObject.put("orderNo",123455);
+        jsonObject.put("pileNo","0000000080000004");
+        jsonObject.put("serial",123);
+        jsonObject.put("endReason",type);
+        jsonObject.put("totalAmmeterDegree",0.2);
+
+//        http://tox.tunnel.qydev.com/order/powerEnd
+
+        boolean flag= HttpRequest.httpPostWithJson("args="+jsonObject.toString(),"http://elec.toxchina.com:90/order/powerEnd");
+
+        return flag;
     }
 
     public static void main(String[] args) {
