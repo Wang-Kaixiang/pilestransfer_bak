@@ -23,7 +23,7 @@ public class UploadRecordService implements IUploadRecordService {
 
 //        http://tox.tunnel.qydev.com/order/powerEnd
 
-        boolean flag=HttpRequest.httpPostWithJson("args="+jsonObject.toString(),"http://tox.tunnel.qydev.com/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson("args="+jsonObject.toString(),"http://elec.toxchina.com:90/order/powerEnd");
 
         return flag;
     }

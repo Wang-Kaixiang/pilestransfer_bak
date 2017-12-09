@@ -111,7 +111,7 @@ public class ChargeController {
 
         log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
 
-        map.put("status", remoteStartRequestBasePushCallBackResponse.getCode());
+        map.put("status", remoteStartRequestBasePushCallBackResponse.getCode().getCode());
 
         switch (remoteStartRequestBasePushCallBackResponse.getCode().getCode()) {
             case 200:
@@ -207,7 +207,7 @@ public class ChargeController {
 
         log.info("远程启动充电追加充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
 
-        map.put("status", remoteStartRequestBasePushCallBackResponse.getCode());
+        map.put("status", remoteStartRequestBasePushCallBackResponse.getCode().getCode());
 
         switch (remoteStartRequestBasePushCallBackResponse.getCode().getCode()) {
             case 200:
