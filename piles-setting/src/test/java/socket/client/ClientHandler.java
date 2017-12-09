@@ -1,6 +1,8 @@
 package socket.client;
 
 
+import com.google.common.primitives.Bytes;
+import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -14,6 +16,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
            temp+=" "+ Integer.toHexString(Byte.toUnsignedInt(b));
         }
         System.out.println("Server say : " + temp);
+
         System.out.println("CRC  校验"+CRC16Util.checkMsg( bytes ));
         switch (bytes[1]){
 
@@ -23,8 +26,23 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
                 break;
 
             case 0x06 :
+                byte byte1=bytes[2];
+                byte byte2=bytes[3];
+                byte order14=bytes[14];
+                byte order15=bytes[15];
+                byte order16=bytes[16];
+                byte order17=bytes[17];
+                byte order18=bytes[18];
+                byte order19=bytes[19];
+                byte order20=bytes[20];
+                byte order21=bytes[21];
 //                远程启动充电
-                channelHandlerContext.writeAndFlush( new byte[]{0x68,(byte)0x86,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x69,0x36} );
+                byte[] temp2=new byte[]{(byte)0x86,byte1,byte2,0x00,0x09,order14,order15,order16,order17,order18,order19,order20,order21,0x00};
+
+                int crcInt = CRC16Util.getCRC(temp2);
+                byte[] crc=BytesUtil.intToBytes(crcInt);
+                byte[] newByte=Bytes.concat(new byte[]{0x68},temp2,crc);
+                channelHandlerContext.channel().writeAndFlush(newByte );
 break;
             //校时
             case 0x0E :
