@@ -34,6 +34,7 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
         //依照报文体规则解析报文
         UploadRecordRequest uploadRecordRequest = UploadRecordRequest.packEntity( bodyBytes );
         uploadRecordRequest.setPileNo( ChannelMap.getChannel( incoming ) );
+        uploadRecordRequest.setSerial(order);
         log.info( "接收到充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord( uploadRecordRequest );

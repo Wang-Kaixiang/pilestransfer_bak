@@ -1,6 +1,6 @@
 package com.piles.test;
 
-import com.piles.Util;
+import com.piles.util.Util;
 import com.piles.common.util.BytesUtil;
 import com.piles.setting.entity.UpdatePackageRequest;
 import com.piles.setting.entity.UpdatePackageResponse;

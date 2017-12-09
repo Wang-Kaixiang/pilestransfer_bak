@@ -3,11 +3,10 @@ package com.piles.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.piles.Util;
+import com.piles.util.Util;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
-import com.piles.control.service.ILoginService;
 import com.piles.control.service.IRemoteClosePushService;
 import com.piles.control.service.IRemoteStartPushService;
 import com.piles.setting.entity.*;
@@ -15,6 +14,7 @@ import com.piles.setting.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +42,8 @@ public class PilesController {
     private IBillRuleSetPushService billRuleSetPushService;
 
     @RequestMapping("/test")
-    public void test(HttpServletRequest request) {
+    @ResponseBody
+    public String  test(HttpServletRequest request) {
         String type = request.getParameter("type");
 
         switch (type) {
@@ -151,7 +152,7 @@ public class PilesController {
                 break;
         }
 
-        System.out.println("gggg");
+        return "{\"status\":\"200\"}";
     }
 
     public static void main(String[] args) {

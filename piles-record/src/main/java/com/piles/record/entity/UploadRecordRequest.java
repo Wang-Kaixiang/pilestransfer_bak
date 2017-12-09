@@ -68,6 +68,8 @@ public class UploadRecordRequest implements Serializable {
     //停车费金额	BIN	4	单位: 元，精确度为0.001
     private BigDecimal parkingAmount;
 
+    private int serial;
+
     /**
      * 解析报文并封装request体
      *
