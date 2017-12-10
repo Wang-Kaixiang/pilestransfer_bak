@@ -14,6 +14,7 @@ import com.piles.control.service.IRemoteStartPushService;
 import com.piles.setting.entity.*;
 import com.piles.setting.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +25,7 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -168,11 +170,11 @@ public class PilesController {
         jsonObject.put("endReason",type);
         jsonObject.put("totalAmmeterDegree",0.2);
 
-        JSONObject jsonObject2= new JSONObject();
-        jsonObject2.put("args",jsonObject);
 //        http://tox.tunnel.qydev.com/order/powerEnd
+        Map<String,JSONObject> map= new HashedMap();
+        map.put("args",jsonObject);
 
-        boolean flag= HttpRequest.httpPostWithJson(jsonObject2.toString(),"http://elec.toxchina.com:90/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/Tox_Elec/order/powerEnd");
 
         return flag;
     }

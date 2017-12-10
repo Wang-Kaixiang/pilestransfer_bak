@@ -22,23 +22,13 @@ public class UploadRecordService implements IUploadRecordService {
         jsonObject.put("totalAmmeterDegree",uploadRecordRequest.getTotalAmmeterDegree());
 
 //        http://tox.tunnel.qydev.com/order/powerEnd
-        JSONObject jsonObject2= new JSONObject();
-        jsonObject2.put("args",jsonObject);
+        Map<String,JSONObject> map= new HashedMap();
+        map.put("args",jsonObject);
 
-        boolean flag=HttpRequest.httpPostWithJson(jsonObject2.toString(),"http://elec.toxchina.com:90/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/Tox_Elec/order/powerEnd");
 
         return flag;
     }
 
-    public static void main(String[] args) {
-        JSONObject jsonObject= new JSONObject();
-        jsonObject.put("orderNo",123456);
-        jsonObject.put("pileNo","00000008000004");
-        jsonObject.put("serial",98765445);
-        jsonObject.put("endReason",1);
-        jsonObject.put("totalAmmeterDegree",1.2);
 
-//        http://tox.tunnel.qydev.com/order/powerEnd
-        System.out.println("args="+jsonObject.toString());
-    }
 }

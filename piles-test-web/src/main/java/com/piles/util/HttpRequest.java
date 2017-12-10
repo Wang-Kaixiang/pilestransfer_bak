@@ -5,20 +5,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
 
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class HttpRequest {
 
 
-    public static boolean httpPostWithJson(String jsonStr, String url){
+    public static boolean httpPostWithJson(Map<String,JSONObject> map, String url){
         boolean isSuccess = false;
 
         HttpPost post = null;
@@ -31,14 +37,15 @@ public class HttpRequest {
 
             post = new HttpPost(url);
             // 构造消息头
-            post.setHeader("Content-type", "application/json; charset=utf-8");
+            post.setHeader("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-            // 构建消息实体
-            StringEntity entity = new StringEntity(jsonStr, Charset.forName("UTF-8"));
-            entity.setContentEncoding("UTF-8");
-            // 发送Json格式的数据请求
-            entity.setContentType("application/json");
-            post.setEntity(entity);
+            List<NameValuePair> nvps = new ArrayList<NameValuePair>();
+            for (String s:map.keySet()){
+            nvps.add(new BasicNameValuePair(s, map.get(s).toJSONString()));
+
+            }
+            UrlEncodedFormEntity urlEncodedFormEntity=new UrlEncodedFormEntity(nvps,Charset.forName("UTF-8"));
+            post.setEntity(urlEncodedFormEntity);
 
             HttpResponse response = httpClient.execute(post);
             HttpEntity entityResponse=response.getEntity();
@@ -48,10 +55,10 @@ public class HttpRequest {
             int statusCode = response.getStatusLine().getStatusCode();
             if(statusCode != HttpStatus.SC_OK){
                 isSuccess = false;
-                log.error("请求信息:"+jsonStr+" 返回结果"+str);
+                log.error("请求信息:"+map+" 返回结果"+str);
             }else{
 
-                log.info("请求信息:"+jsonStr+" 返回结果"+str);
+                log.info("请求信息:"+map+" 返回结果"+str);
                 return true;
             }
         } catch (Exception e) {
