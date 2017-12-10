@@ -31,7 +31,7 @@ public class SocketClient {
 
             ch.writeAndFlush(msg);
             while (true){
-                Thread.sleep(10000L);
+                Thread.sleep(3000L);
                 msg= new byte[]{0x68,0x0c,0x00,0x00,0x00,0x03,0x02,0x00,0x01,(byte)0xf4,0x2a};
 
                 ch.writeAndFlush(msg);

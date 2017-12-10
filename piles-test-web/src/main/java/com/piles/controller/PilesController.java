@@ -75,19 +75,20 @@ public class PilesController {
 
                 break;
             case "3":
+                String pileNo = request.getParameter("pileNo");
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
-                remoteUpdatePushRequest.setPileNo("0000000080000004");
+                remoteUpdatePushRequest.setPileNo(pileNo);
                 remoteUpdatePushRequest.setSerial(0);
                 remoteUpdatePushRequest.setMd5("63fbc23f412febf1b2230b17f193b007");
                 remoteUpdatePushRequest.setProtocolVersion("V1.31");
                 remoteUpdatePushRequest.setSoftVersion("V2.12");
-                String url = "http://59.110.170.111:9090/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
+                String url = "http://59.110.170.111:80/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
                 BasePushCallBackResponse<RemoteUpdateRequest> testRs=remoteUpdatePushService.doPush(remoteUpdatePushRequest);
 
                 if (null!=testRs.getObj()&&testRs.getObj().getUpdateType()==2){
-                    Util.map.put( "0000000080000004",testRs.getObj().getDownMaxLenLimit() );
+                    Util.map.put( pileNo,testRs.getObj().getDownMaxLenLimit() );
                 }
 
                 log.info("远程升级请求返回报文:{}", JSON.toJSONString(testRs));
