@@ -65,6 +65,9 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         }
         byte[] chargeDataBytes = BytesUtil.intToBytes(chargeDataInt.intValue(),4);
         byte[] chargeStopCodeBytes = BytesUtil.str2Bcd(chargeStopCode);
+        if (chargeStopCodeBytes.length==1){
+            chargeStopCodeBytes=Bytes.concat( new byte[]{0},chargeStopCodeBytes );
+        }
         byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
         return Bytes.concat(gunNoBytes,chargeModelBytes,chargeDataBytes,chargeStopCodeBytes,orderNoBytes);
     }
@@ -75,7 +78,7 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         request.setGunNo(1);
         request.setChargeModel(4);
         request.setChargeData(new BigDecimal(0.1));
-        request.setChargeStopCode("1245");
+        request.setChargeStopCode("4");
         request.setOrderNo(1223123L);
         RemoteStartPushRequest.packBytes(request);
     }
