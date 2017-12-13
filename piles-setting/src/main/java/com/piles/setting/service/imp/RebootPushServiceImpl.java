@@ -31,7 +31,7 @@ public class RebootPushServiceImpl implements IRebootPushService {
     /**
      * 默认1分钟超时
      */
-    @Value("${timeout:6000}")
+    @Value("${timeout:60000}")
     private long timeout;
 
 
