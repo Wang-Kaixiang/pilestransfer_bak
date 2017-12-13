@@ -15,9 +15,8 @@
 			<!--日志文件输出的文件名 -->
 			<fileNamePattern>${LOG_HOME}/${FILE_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
 			<!--日志文件保留天数 -->
-			<maxFileSize>10MB</maxFileSize>
+			<maxFileSize>500MB</maxFileSize>
 			<maxHistory>30</maxHistory>
-			<totalSizeCap>2GB</totalSizeCap>
 		</rollingPolicy>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,从左显示5个字符宽度;%msg:日志消息;%n:换行符 -->
