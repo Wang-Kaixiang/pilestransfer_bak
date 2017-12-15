@@ -99,7 +99,10 @@ public class ChargeController {
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
         BasePushCallBackResponse<RemoteStartRequest> remoteStartRequestBasePushCallBackResponse = remoteStartPushService.doPush(remoteStartPushRequest);
 
-
+        if (remoteStartRequestBasePushCallBackResponse.getCode() != READ_OK) {
+            //重试1
+            remoteStartRequestBasePushCallBackResponse = remoteStartPushService.doPush(remoteStartPushRequest);
+        }
         log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
 
         map.put("status", remoteStartRequestBasePushCallBackResponse.getCode().getCode());
