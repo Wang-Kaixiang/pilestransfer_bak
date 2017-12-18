@@ -93,5 +93,6 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 		Channel incoming = ctx.channel();
 		ctx.close();
 		logger.error("exceptioncaught," + incoming.remoteAddress(), cause);
+		ChannelMap.removeChannel(incoming);
 	}
 }

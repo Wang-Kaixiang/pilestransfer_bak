@@ -4,6 +4,7 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.piles.common.util.ChannelMap;
 import com.piles.util.HttpRequest;
 import com.piles.util.Util;
 import com.piles.common.entity.BasePushCallBackResponse;
@@ -13,6 +14,7 @@ import com.piles.control.service.IRemoteClosePushService;
 import com.piles.control.service.IRemoteStartPushService;
 import com.piles.setting.entity.*;
 import com.piles.setting.service.*;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
@@ -155,6 +157,14 @@ public class PilesController {
                 remoteStartPushRequest2.setChargeStopCode("6565");
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest2)));
                 break;
+            case "8":
+                String pileNo2=request.getParameter("pileNo");
+                Channel channel= ChannelMap.getChannel( pileNo2 );
+                if (null==channel){
+                    return "查不到在线的连接";
+                }
+                return "当前的连接是:"+channel.remoteAddress();
+
         }
 
         return "{\"status\":\"200\"}";
