@@ -4,6 +4,7 @@ package com.piles.common.util;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.netty.channel.Channel;
+import org.apache.commons.collections.map.HashedMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +17,12 @@ public class ChannelMap {
     /**
      * key:桩编号,value:channel
      */
-    private static Map<String, Channel> channelMap2 = Maps.newConcurrentMap();
+    private static Map<String, Channel> channelMap2 = new HashedMap(  );
 
     /**
      * key:channel,value:桩编号
      */
-    private static Map<Channel, String> channelMap3 =  Maps.newConcurrentMap();
+    private static Map<Channel, String> channelMap3 =  new HashedMap(  );
 
     /**
      *
