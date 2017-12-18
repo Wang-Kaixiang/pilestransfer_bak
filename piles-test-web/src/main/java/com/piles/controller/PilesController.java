@@ -161,9 +161,9 @@ public class PilesController {
                 String pileNo2=request.getParameter("pileNo");
                 Channel channel= ChannelMap.getChannel( pileNo2 );
                 if (null==channel){
-                    return "查不到在线的连接";
+                    return "no connection";
                 }
-                return "当前的连接是:"+channel.remoteAddress();
+                return "connection is:"+channel.remoteAddress();
 
         }
 

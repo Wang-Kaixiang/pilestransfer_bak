@@ -34,7 +34,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity( bodyBytes );
         log.info( "接收到充电桩心跳报文:{}", heartBeatRequest.toString() );
-        if (!ChannelMap.getChannel( heartBeatRequest.getPileNo() ).remoteAddress().equals( incoming.remoteAddress() )) {
+        if (null!=ChannelMap.getChannel( heartBeatRequest.getPileNo() )&&!ChannelMap.getChannel( heartBeatRequest.getPileNo() ).remoteAddress().equals( incoming.remoteAddress() )) {
             log.error( "--------------------充电桩通道变更 原来是" + ChannelMap.getChannel( heartBeatRequest.getPileNo() ).remoteAddress() + "现在的：" + incoming.remoteAddress() );
             ChannelMap.removeChannel( heartBeatRequest.getPileNo() );
         }
