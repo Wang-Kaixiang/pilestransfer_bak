@@ -9,6 +9,7 @@ import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -34,8 +35,14 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity( bodyBytes );
         log.info( "接收到充电桩心跳报文:{}", heartBeatRequest.toString() );
-        if (null!=ChannelMap.getChannel( heartBeatRequest.getPileNo() )&&!ChannelMap.getChannel( heartBeatRequest.getPileNo() ).remoteAddress().equals( incoming.remoteAddress() )) {
-            log.error( "--------------------充电桩通道变更 原来是" + ChannelMap.getChannel( heartBeatRequest.getPileNo() ).remoteAddress() + "现在的：" + incoming.remoteAddress() );
+        String pileNo=ChannelMap.getChannel( incoming );
+        if (StringUtils.isEmpty( pileNo )){
+            return null;
+        }
+        heartBeatRequest.setPileNo( pileNo );
+        Channel channelNow=ChannelMap.getChannel( pileNo );
+        if (null!=channelNow&&channelNow!=incoming){
+            log.error( "--------------------充电桩通道变更 原来是" + channelNow.remoteAddress() + "现在的：" + incoming.remoteAddress() );
             ChannelMap.removeChannel( heartBeatRequest.getPileNo() );
         }
         if (null == ChannelMap.getChannel( heartBeatRequest.getPileNo() )) {
