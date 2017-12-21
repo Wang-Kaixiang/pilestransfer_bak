@@ -58,9 +58,14 @@ public class ChargeController {
         }
         try {
             serial=Integer.parseInt( remoteStartRequest.getSerial() );
+            if (serial>65535){
+                map.put("status", "-1");
+                map.put("msg", "流水号不能大于65535");
+                log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            }
         }catch (Exception e){
             map.put("status", "-1");
-            map.put("msg", "流水号需为8位数字");
+            map.put("msg", "流水号需为数字");
             log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
@@ -174,9 +179,14 @@ public class ChargeController {
         }
         try {
             serial=Integer.parseInt( remoteStartRequest.getSerial() );
+            if (serial>65535){
+                map.put("status", "-1");
+                map.put("msg", "流水号不能大于65535");
+                log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            }
         }catch (Exception e){
             map.put("status", "-1");
-            map.put("msg", "流水号需为8位数字");
+            map.put("msg", "流水号需要是数字");
             log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
