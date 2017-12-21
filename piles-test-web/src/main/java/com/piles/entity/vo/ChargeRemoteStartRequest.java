@@ -42,4 +42,8 @@ public class ChargeRemoteStartRequest {
      * 订单号 8位 BIN
      */
     private Long orderNo;
+    /**
+     * 流水号
+     */
+    private String serial;
 }

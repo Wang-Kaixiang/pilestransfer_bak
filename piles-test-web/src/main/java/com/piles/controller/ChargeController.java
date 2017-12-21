@@ -42,6 +42,7 @@ public class ChargeController {
     public Map<String, Object> charge(ChargeRemoteStartRequest remoteStartRequest) {
         log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
+        int serial=0;
         //check 参数
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
@@ -49,6 +50,21 @@ public class ChargeController {
             log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
+        if (StringUtils.isEmpty(remoteStartRequest.getSerial())) {
+            map.put("status", "-1");
+            map.put("msg", "流水号为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
+        try {
+            serial=Integer.parseInt( remoteStartRequest.getSerial() );
+        }catch (Exception e){
+            map.put("status", "-1");
+            map.put("msg", "流水号需为8位数字");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
+
         if (Util.orderNo2Seril.containsKey(remoteStartRequest.getOrderNo()) && null != Util.getChargePushOrderOk(String.valueOf(remoteStartRequest.getOrderNo()))) {
             map.put("status", "200");
             map.put("msg", "启动充电发送命令成功,详细结果见结果");
@@ -93,7 +109,7 @@ public class ChargeController {
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
 //        remoteStartPushRequest.setPileNo("0000000080000004");
-        remoteStartPushRequest.setSerial(Util.getNum());
+        remoteStartPushRequest.setSerial(serial);
         remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
         remoteStartPushRequest.setChargeModel(remoteStartRequest.getChargeModel());
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
@@ -143,9 +159,24 @@ public class ChargeController {
         log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
         //check 参数
+        int serial=0;
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
+        if (StringUtils.isEmpty(remoteStartRequest.getSerial())) {
+            map.put("status", "-1");
+            map.put("msg", "流水号为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
+        try {
+            serial=Integer.parseInt( remoteStartRequest.getSerial() );
+        }catch (Exception e){
+            map.put("status", "-1");
+            map.put("msg", "流水号需为8位数字");
             log.info("return请求充电请求fan:"+JSON.toJSONString(map));
             return map;
         }
@@ -183,7 +214,7 @@ public class ChargeController {
         remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
-        remoteStartPushRequest.setSerial(Util.getNum());
+        remoteStartPushRequest.setSerial(serial);
         remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
         remoteStartPushRequest.setChargeModel(5);
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
