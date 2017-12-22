@@ -8,6 +8,6 @@ import org.springframework.stereotype.Service;
 public class QrSetServiceImpl implements IQrSetService {
     @Override
     public String qrSet(QrSetRequest qrSetRequest) {
-        return "zheshiceshierweima";
+        return qrSetRequest.getPileNo();
     }
 }
