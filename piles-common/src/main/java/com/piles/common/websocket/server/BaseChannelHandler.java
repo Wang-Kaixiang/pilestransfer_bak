@@ -90,9 +90,10 @@ public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-		Channel incoming = ctx.channel();
-		ctx.close();
-		logger.error("exceptioncaught," + incoming.remoteAddress(), cause);
-		ChannelMap.removeChannel(incoming);
+		//出现异常只打印日志
+//		Channel incoming = ctx.channel();
+//		ctx.close();
+		logger.error("exceptioncaught," + ctx.channel().remoteAddress(), cause);
+//		ChannelMap.removeChannel(incoming);
 	}
 }

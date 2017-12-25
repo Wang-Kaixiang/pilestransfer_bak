@@ -23,6 +23,9 @@ public class RequestUpdatePackageServiceImpl implements IRequestUpdatePackageSer
         log.info( "请求升级包当前桩号:{}", pileNo );
         UpdatePackageResponse response = new UpdatePackageResponse();
         Integer limit = Util.map.get( pileNo );
+        if (null==limit){
+            limit=512;
+        }
 
         File file = new File( "/piletransfer/soft/AcOneV2.12.bin" );
         int totalIndex=getFileTotal( limit,file );
