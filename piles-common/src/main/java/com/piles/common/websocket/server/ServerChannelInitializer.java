@@ -7,6 +7,7 @@ import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 
 		pipeline.addLast("decoder", new ByteArrayDecoder());
 		pipeline.addLast("encoder", new ByteArrayEncoder());
+		pipeline.addLast( new ReadTimeoutHandler(60*5  ) );
 
 		pipeline.addLast("handler", baseChannelHandler);
 	}
