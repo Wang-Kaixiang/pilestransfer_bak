@@ -81,7 +81,7 @@ public class PilesController {
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
                 remoteUpdatePushRequest.setPileNo(pileNo);
                 remoteUpdatePushRequest.setSerial(0);
-                remoteUpdatePushRequest.setMd5("2f911bb328e39a4aad46c6f395fd209e");
+                remoteUpdatePushRequest.setMd5("95e1c315e9f4ac4ebb85ac41526f6912");
                 remoteUpdatePushRequest.setProtocolVersion("V1.31");
                 remoteUpdatePushRequest.setSoftVersion("V2.12");
                 String url = "http://59.110.170.111:80/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
