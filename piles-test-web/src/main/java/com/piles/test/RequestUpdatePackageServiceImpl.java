@@ -27,7 +27,7 @@ public class RequestUpdatePackageServiceImpl implements IRequestUpdatePackageSer
             limit=512;
         }
 
-        File file = new File( "/piletransfer/soft/AcOneV2.12.bin" );
+        File file = new File( "/piletransfer/soft/AcOneV2.13.bin" );
         int totalIndex=getFileTotal( limit,file );
         if (file.exists()) {
             byte[] re=getFile( limit ,file,index);
