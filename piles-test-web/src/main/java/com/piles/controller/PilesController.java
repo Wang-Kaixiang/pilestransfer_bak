@@ -81,10 +81,10 @@ public class PilesController {
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
                 remoteUpdatePushRequest.setPileNo(pileNo);
                 remoteUpdatePushRequest.setSerial(0);
-                remoteUpdatePushRequest.setMd5("95e1c315e9f4ac4ebb85ac41526f6912");
+                remoteUpdatePushRequest.setMd5("12000cabbfe6d6c4e455aae46061ab2e");
                 remoteUpdatePushRequest.setProtocolVersion("V1.31");
-                remoteUpdatePushRequest.setSoftVersion("V2.12");
-                String url = "http://59.110.170.111:80/piles-test-web-1.0.0/soft/AcOneV2.12.bin";
+                remoteUpdatePushRequest.setSoftVersion("V2.13");
+                String url = "http://59.110.170.111:80/piles-test-web-1.0.0/soft/AcOneV2.13.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
                 BasePushCallBackResponse<RemoteUpdateRequest> testRs=remoteUpdatePushService.doPush(remoteUpdatePushRequest);
