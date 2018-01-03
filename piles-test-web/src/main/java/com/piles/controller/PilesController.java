@@ -5,7 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.piles.common.util.ChannelMap;
+import com.piles.util.FileUtil;
 import com.piles.util.HttpRequest;
+import com.piles.util.Md5Util;
 import com.piles.util.Util;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,12 +82,25 @@ public class PilesController {
                 break;
             case "3":
                 String pileNo = request.getParameter("pileNo");
+                String softVersion=request.getParameter( "softVersion" );
+                String protocalVersion=request.getParameter( "protocalVersion" );
+                File file= FileUtil.getFile();
+                if (null==file){
+                    log.error( "找不到对应文件" );
+                    break;
+                }
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
                 remoteUpdatePushRequest.setPileNo(pileNo);
                 remoteUpdatePushRequest.setSerial(0);
-                remoteUpdatePushRequest.setMd5("12000cabbfe6d6c4e455aae46061ab2e");
-                remoteUpdatePushRequest.setProtocolVersion("V1.31");
-                remoteUpdatePushRequest.setSoftVersion("V2.13");
+                try {
+                    remoteUpdatePushRequest.setMd5( Md5Util.getMd5ByFile( file ));
+                } catch (FileNotFoundException e) {
+                    log.error( "文件找不到",e );
+                }
+                remoteUpdatePushRequest.setProtocolVersion(protocalVersion);
+//                remoteUpdatePushRequest.setProtocolVersion("V1.31");
+//                remoteUpdatePushRequest.setSoftVersion("V2.13");
+                remoteUpdatePushRequest.setSoftVersion(softVersion);
                 String url = "http://59.110.170.111:80/piles-test-web-1.0.0/soft/AcOneV2.13.bin";
                 remoteUpdatePushRequest.setUrl(url);
                 remoteUpdatePushRequest.setUrlLen(url.length());
