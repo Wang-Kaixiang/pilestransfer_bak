@@ -1,7 +1,7 @@
 package com.piles.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.piles.record.entity.UploadRecordRequest;
+import com.piles.record.domain.UploadRecord;
 import com.piles.record.service.IUploadRecordService;
 import com.piles.util.HttpRequest;
 import org.apache.commons.collections.map.HashedMap;
@@ -12,14 +12,14 @@ import java.util.Map;
 @Service
 public class UploadRecordService implements IUploadRecordService {
     @Override
-    public boolean uploadRecord(UploadRecordRequest uploadRecordRequest) {
+    public boolean uploadRecord(UploadRecord uploadRecord) {
         //请求一个接口
         JSONObject jsonObject= new JSONObject();
-        jsonObject.put("orderNo",uploadRecordRequest.getOrderNo());
-        jsonObject.put("pileNo",uploadRecordRequest.getPileNo());
-        jsonObject.put("serial",uploadRecordRequest.getSerial());
-        jsonObject.put("endReason",uploadRecordRequest.getEndReason());
-        jsonObject.put("totalAmmeterDegree",uploadRecordRequest.getTotalAmmeterDegree());
+        jsonObject.put("orderNo",uploadRecord.getOrderNo());
+        jsonObject.put("pileNo",uploadRecord.getPileNo());
+        jsonObject.put("serial",uploadRecord.getSerial());
+        jsonObject.put("endReason",uploadRecord.getEndReason());
+        jsonObject.put("totalAmmeterDegree",uploadRecord.getTotalAmmeterDegree());
 
 //        http://tox.tunnel.qydev.com/order/powerEnd
         Map<String,JSONObject> map= new HashedMap();

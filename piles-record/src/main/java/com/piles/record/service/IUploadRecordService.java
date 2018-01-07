@@ -1,6 +1,6 @@
 package com.piles.record.service;
 
-import com.piles.record.entity.UploadRecordRequest;
+import com.piles.record.domain.UploadRecord;
 
 /**
  * 上传充电记录接口
@@ -8,8 +8,8 @@ import com.piles.record.entity.UploadRecordRequest;
 public interface IUploadRecordService {
     /**
      * 上传充电记录
-     * @param uploadRecordRequest 请求体
+     * @param uploadRecord 请求体
      * @return 成功返回boolean类型
      */
-    boolean uploadRecord(UploadRecordRequest uploadRecordRequest);
+    boolean uploadRecord(UploadRecord uploadRecord);
 }
