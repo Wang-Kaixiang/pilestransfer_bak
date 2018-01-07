@@ -81,7 +81,7 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
             case MONITOR_DATA_CODE:
                 //充电过程实时监测数据
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==1) {
-                    return SpringContextUtil.getBean("xunDaoUnploadMonitorDataBusiness");
+                    return SpringContextUtil.getBean("xunDaoUploadChargeMonitorBusiness");
                 }
             default:
                 log.error("接收到报文{}，未匹配到合适的命令码：{}",msg,typeCode);

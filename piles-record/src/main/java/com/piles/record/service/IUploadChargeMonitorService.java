@@ -1,5 +1,6 @@
 package com.piles.record.service;
 
+import com.piles.record.domain.UploadChargeMonitor;
 import com.piles.record.entity.UploadChargeMonitorRequest;
 
 /**
@@ -9,7 +10,7 @@ public interface IUploadChargeMonitorService {
     /**
      * 上传充电过程监测数据
      *
-     * @param uploadChargeMonitorRequest 请求体
+     * @param uploadChargeMonitor 请求体
      */
-    void uploadChargeMonitor(UploadChargeMonitorRequest uploadChargeMonitorRequest);
+    void uploadChargeMonitor(UploadChargeMonitor uploadChargeMonitor);
 }
