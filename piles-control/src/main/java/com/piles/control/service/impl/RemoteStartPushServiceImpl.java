@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service("remoteStartPushService_1")
 public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
-    @Autowired
+    @Resource(name = "pushBusinessImpl")
     IPushBusiness pushBusiness;
 
 

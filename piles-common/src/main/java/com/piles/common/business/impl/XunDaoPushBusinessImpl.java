@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
+@Service("xunDaoPushBusinessImpl")
 public class XunDaoPushBusinessImpl implements IPushBusiness {
     @Override
     public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, Enum<?> commandCode) {
