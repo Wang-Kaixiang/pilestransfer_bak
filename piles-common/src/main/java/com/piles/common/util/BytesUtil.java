@@ -33,7 +33,6 @@ public class BytesUtil {
         return src;
     }
 
-
     /**
      * byte数组中取int数值，本方法适用于(低位在后，高位在前)的顺序。
      */
@@ -210,16 +209,110 @@ public class BytesUtil {
         return bbt;
     }
 
+    /**
+     * 将int转为byte 小端模式
+     * @param value int值
+     * @return
+     */
+    public static byte[] intToBytesLittle(int value)
+    {
+        //limit 传入2
+        return intToBytes(value,2);
+    }
+
+    /**
+     * 将int转换byte 小端模式
+     * @param value int值
+     * @param limit 保留长度
+     * @return
+     */
+    public static byte[] intToBytesLittle(int value,int limit) {
+        byte[] src = new byte[limit];
+        for(int i =0;i<limit;i++){
+            int x = 8 * i;
+            if(x == 0){
+                src[i] = (byte) (value & 0xFF);
+            }else {
+                src[i] = (byte) ((value >> x) & 0xFF);
+            }
+        }
+        return src;
+
+    }
+
+    /**
+     * byte数组中取int数值，本方法适用于(低位在前，高位在后 )的顺序。小端模式
+     */
+    public static int bytesToIntLittle(byte[] src) {
+
+        if(src==null){
+            return 0;
+        }
+        int len = src.length;
+        if (len==0){
+            return 0;
+        }
+        int value = 0;
+        for(int i = 0;i<len;i++){
+            value = value | ((src[i] & 0xFF) << (8 * i));
+        }
+        return value;
+    }
+
+    /**
+     * long转字节，小端模式
+     * @param number
+     * @param limit 保留字节位
+     * @return
+     */
+    public static byte[] long2ByteLittle(long number,int limit){
+        long temp = number;
+        byte[] b =new byte[limit];
+        for(int i =0; i < b.length; i++){
+            b[i]=new Long(temp &0xff).byteValue();//
+            //将最低位保存在最前面
+            temp = temp >>8;// 向右移8位
+        }
+        return b;
+    }
+
+
+    /**
+     * 字节转long 小端模式
+     * @param src
+     * @return
+     */
+    public static long byte2LongLittle(byte[] src){
+        long s = 0;
+        for(int i =0; i < src.length; i++){
+            //防止转为int
+            long si = src[i] & 0xFF;
+            si = si << (8*i);
+            s = s | si;
+        }
+        return s;
+    }
+
+
     public static void main(String[] args) {
-//        byte[] bytes = intToBytes(65433,4);
+        System.out.println(3 << 1);
+        byte[] bytes = intToBytes(3,4);
+        byte[] bytes1 = intToBytesLittle(232424244,4);
+        System.out.println(bytesToIntLittle(bytes1));
+        long x = 5L;
+        System.out.println(Long.MAX_VALUE);
+        byte[] bytes2 = long2Byte(x);
+        System.out.println(binary(bytes2,2));
+        System.out.println(byte2LongLittle(bytes2));
+
 ////        byte[] bytes = intToBytes(30000,2);
 //        int i = bytesToInt(bytes,0);
 //        System.out.println(i);
 //        System.out.println(BigDecimal.valueOf(BytesUtil.bytesToInt(bytes, 0)).divide(new BigDecimal(1000),3,BigDecimal.ROUND_HALF_UP));
 
-        String xx = "ffdf";
-        byte[] bytes = xx.getBytes();
-        System.out.println(bytes);
+//        String xx = "ffdf";
+//        byte[] bytes = xx.getBytes();
+//        System.out.println(bytes);
 
 
 //        System.out.println(i);
@@ -237,6 +330,6 @@ public class BytesUtil {
 //        byte[] bytes = BytesUtil.str2Bcd("171108");
 //        String s = BytesUtil.bcd2Str(bytes);
 //        System.out.println(s);
-        System.out.println(String.valueOf(0x53));
+//        System.out.println(String.valueOf(0x53));
     }
 }
