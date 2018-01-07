@@ -1,5 +1,6 @@
 package com.piles.test;
 
+import com.piles.setting.domain.UpdateStatusReport;
 import com.piles.setting.entity.UpdateStatusRequest;
 import com.piles.setting.service.IUpdateStatusService;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,8 @@ public class UpdateStatusServiceImpl implements IUpdateStatusService {
 
 
     @Override
-    public void updateStatus(UpdateStatusRequest updateStatusRequest) {
-        log.info("进入升级状态汇报接口" + updateStatusRequest.toString());
+    public void updateStatus(UpdateStatusReport updateStatusReport) {
+        log.info("进入升级状态汇报接口" + updateStatusReport.toString());
 
     }
 }

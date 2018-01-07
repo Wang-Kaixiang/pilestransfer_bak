@@ -69,7 +69,7 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 }
                 //远程升级后充电桩升级结果及当前版本上送(充电桩后台 交直流共用)
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==53) {
-                    return SpringContextUtil.getBean("xunDaoUploadUpdateResultBusiness");
+                    return SpringContextUtil.getBean("xunDaoUpdateStatusBusiness");
                 }
                 //充电 回复 or 停止 回复
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==28) {

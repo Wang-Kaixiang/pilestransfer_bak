@@ -18,7 +18,7 @@ public class UploadRecord {
     /**
      * 订单号
      */
-    private long orderNo;
+    private String orderNo;
     /**
      * 桩编号
      */

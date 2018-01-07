@@ -309,6 +309,21 @@ public class BytesUtil {
         return s;
     }
 
+    /**
+     * 使用字节数组替换目标数组从指定位置开始替换字节
+     * @param target 被替换的数组
+     * @param startIndex 开始位置
+     * @param replace 用于替换的数组
+     */
+    public static void replaceBytes(byte[] target,int startIndex,byte[] replace){
+        //TODO 暂时由外界保证不会出数组越界的异常
+        for (int i = 0; i < replace.length; i++) {
+            int targetIndex = startIndex+i;
+            target[targetIndex] = replace[i];
+        }
+
+    }
+
 
     public static void main(String[] args) {
         int i = bytesToInt("f".getBytes(), 0);
