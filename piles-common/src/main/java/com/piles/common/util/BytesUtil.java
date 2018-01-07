@@ -164,7 +164,7 @@ public class BytesUtil {
      * @输入参数: BCD码
      * @输出结果: 10进制串
      */
-    public static String littlebcd2Str(byte[] bytes){
+    public static String bcd2Strlittle(byte[] bytes){
         Stack<String> strings=new Stack<>();
         String temp=bcd2Str(bytes);
         for (int i=0;i<temp.length();i=i+2){
