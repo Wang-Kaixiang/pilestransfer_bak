@@ -63,7 +63,28 @@ public class CRC16Util {
 //
 //        System.out.println(checkMsg( temp ));
 //        System.out.println();
-            String str = "0.0.5 -N- 172.18.66.43 iflight.java.dsf.itradecore 201711081638 BOOK_VALIDATE S1 check_cabin ERROR";
+        byte[] xunDaoCRC = getXunDaoCRC(BytesUtil.intToBytesLittle(221421444));
+        String str = "0.0.5 -N- 172.18.66.43 iflight.java.dsf.itradecore 201711081638 BOOK_VALIDATE S1 check_cabin ERROR";
             System.out.println(str.length());
     }
+
+    /**
+     * 循道 求crc算法，是将数据内容转int累加 然后取模256，返回两位字节
+     * @param dataBytes
+     * @return
+     */
+    public static byte[] getXunDaoCRC(byte[] dataBytes) {
+        int crc = 0;//默认值
+        if(dataBytes == null){
+            return null;
+        }
+        for(int i = 0;i<dataBytes.length;i++){
+            byte dataByte = dataBytes[i];
+            int y = BytesUtil.bytesToIntLittle(new byte[]{dataByte});
+            crc += y;
+        }
+        crc = crc%256;
+        return BytesUtil.intToBytesLittle(crc,2);
+    }
+
 }

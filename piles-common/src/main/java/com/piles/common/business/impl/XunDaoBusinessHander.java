@@ -62,8 +62,8 @@ public  class XunDaoBusinessHander implements IBusinessHandler {
                     byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
                     byte[] crcBytes = BytesUtil.copyBytes(msg, 10, 2);
                     //TODO 校验crc
-                    int crc = CRC16Util.getCRC(dataBytes);
-                    if (!Integer.toHexString( crc ).equalsIgnoreCase( Integer.toHexString( BytesUtil.bytesToIntLittle(crcBytes)) )) {
+                    byte[] checkBytes = CRC16Util.getXunDaoCRC(dataBytes);
+                    if (!Integer.toHexString(  BytesUtil.bytesToIntLittle(checkBytes) ).equalsIgnoreCase( Integer.toHexString( BytesUtil.bytesToIntLittle(crcBytes)) )) {
                         log.error("CRC验证未通过");
                         return null;
                     }
