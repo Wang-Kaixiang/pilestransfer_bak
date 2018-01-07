@@ -295,15 +295,17 @@ public class BytesUtil {
 
 
     public static void main(String[] args) {
-        System.out.println(3 << 1);
-        byte[] bytes = intToBytes(3,4);
-        byte[] bytes1 = intToBytesLittle(232424244,4);
-        System.out.println(bytesToIntLittle(bytes1));
-        long x = 5L;
-        System.out.println(Long.MAX_VALUE);
-        byte[] bytes2 = long2Byte(x);
-        System.out.println(binary(bytes2,2));
-        System.out.println(byte2LongLittle(bytes2));
+        int i = bytesToInt("f".getBytes(), 0);
+        System.out.println(i);
+//        System.out.println(3 << 1);
+//        byte[] bytes = intToBytes(3,4);
+//        byte[] bytes1 = intToBytesLittle(232424244,4);
+//        System.out.println(bytesToIntLittle(bytes1));
+//        long x = 5L;
+//        System.out.println(Long.MAX_VALUE);
+//        byte[] bytes2 = long2Byte(x);
+//        System.out.println(binary(bytes2,2));
+//        System.out.println(byte2LongLittle(bytes2));
 
 ////        byte[] bytes = intToBytes(30000,2);
 //        int i = bytesToInt(bytes,0);
