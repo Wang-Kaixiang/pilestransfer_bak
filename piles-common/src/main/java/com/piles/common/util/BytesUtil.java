@@ -6,9 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class BytesUtil {
     /**
@@ -160,6 +158,24 @@ public class BytesUtil {
             temp.append((byte)(bytes[i]& 0x0f));
         }
         return temp.toString();
+    }
+    /** *//**
+     * @函数功能: BCD码转为10进制串(阿拉伯数据) 小端模式
+     * @输入参数: BCD码
+     * @输出结果: 10进制串
+     */
+    public static String littlebcd2Str(byte[] bytes){
+        Stack<String> strings=new Stack<>();
+        String temp=bcd2Str(bytes);
+        for (int i=0;i<temp.length();i=i+2){
+            strings.push(temp.substring(i,i+2));
+
+        }
+        StringBuilder stringBuilder=new StringBuilder();
+        while (!strings.isEmpty()){
+            stringBuilder.append(strings.pop());
+        }
+        return stringBuilder.toString();
     }
 
     /**

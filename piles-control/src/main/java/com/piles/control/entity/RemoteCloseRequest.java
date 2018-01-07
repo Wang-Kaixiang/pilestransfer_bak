@@ -33,7 +33,17 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
         request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 8, 1 ), 10 ) ) );
         return request;
     }
-
+    /**
+     * 解析报文并封装request体
+     *
+     * @param msg
+     * @return
+     */
+    public static RemoteCloseRequest packEntityXunDao(byte[] msg) {
+        RemoteCloseRequest request = new RemoteCloseRequest();
+        request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 9, 1 ), 10 ) ) );
+        return request;
+    }
 
     public static void main(String[] args) {
 //        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
