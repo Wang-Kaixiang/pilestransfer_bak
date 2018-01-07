@@ -70,6 +70,20 @@ public class LoginRequest implements Serializable
 
         return request;
     }
+    /**
+     * 解析报文并封装request体
+     * @param msg
+     * @return
+     */
+    public static LoginRequest packEntityXundao(byte[] msg){
+        LoginRequest request=new LoginRequest();
+        //TODO 转小端模式
+        request.setPileNo(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,3,8)));
+        request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,2,1),10)));
+
+
+        return request;
+    }
 
     @Override
     public String toString() {

@@ -40,7 +40,7 @@ public class PushBusinessImpl implements IPushBusiness {
             for (byte b:writeMsg){
                 pushMsg+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
             }
-            log.info("向[" + channel.remoteAddress() + "]主动发送push请求信息:" + pushMsg);
+            log.info("向蔚景[" + channel.remoteAddress() + "]主动发送push请求信息:" + pushMsg);
             ChannelFuture channelFuture=channel.writeAndFlush(writeMsg);
             channelFuture.addListener( new ChannelFutureListener() {
                 @Override

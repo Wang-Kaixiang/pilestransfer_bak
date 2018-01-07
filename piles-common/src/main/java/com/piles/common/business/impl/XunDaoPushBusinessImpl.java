@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class XundaoPushBusinessImpl implements IPushBusiness {
+public class XunDaoPushBusinessImpl implements IPushBusiness {
     @Override
     public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, Enum<?> commandCode) {
         //获取连接channel 获取不到无法推送
