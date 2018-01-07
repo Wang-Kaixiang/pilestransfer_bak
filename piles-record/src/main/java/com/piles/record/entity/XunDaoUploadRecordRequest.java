@@ -68,15 +68,15 @@ public class XunDaoUploadRecordRequest implements Serializable {
     public static XunDaoUploadRecordRequest packEntity(byte[] msg) {
         XunDaoUploadRecordRequest request = new XunDaoUploadRecordRequest();
         int cursor = 0;
-        request.setPileNo( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setOrderNo( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 16 ) ) );
+        request.setOrderNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 16 ) ) );
         cursor += 16;
         request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setUserCardNo( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setUserCardNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setSubTimeBillFlag( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setSubTimeBillFlag( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
         request.setStartTime( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 7 ) ) );
         cursor += 7;
@@ -91,9 +91,9 @@ public class XunDaoUploadRecordRequest implements Serializable {
         request.setEveryHalfHourDegress(list);
         request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
-        request.setMeasureNumberType( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
+        request.setMeasureNumberType( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
         cursor += 2;
-        request.setBizType( BytesUtil.bcd2Str( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
+        request.setBizType( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
         cursor += 2;
         request.setEWalletBalance( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         cursor += 4;
