@@ -5,6 +5,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
+import com.piles.common.entity.type.XunDaoTypeCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
 import com.piles.common.util.ChannelMapByEntity;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PushBusinessImpl implements IPushBusiness {
     @Override
-    public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, ECommandCode commandCode) {
+    public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, Enum<?> commandCode) {
         //获取连接channel 获取不到无法推送
         Channel channel=ChannelMapByEntity.getChannel(tradeTypeCode,pileNo);
 
@@ -27,7 +28,7 @@ public class PushBusinessImpl implements IPushBusiness {
             ChannelResponseCallBackMap.add(channel,  basePushRequest.getSerial(),basePushRequest);
             //拼接报文
             byte[] start=new byte[]{0x68};
-            byte[] command=new byte[]{(byte)commandCode.getCode()};
+            byte[] command=new byte[]{(byte)((XunDaoTypeCode)commandCode).getCode()};
             byte[] serial= BytesUtil.intToBytes( basePushRequest.getSerial());
             byte[] length=BytesUtil.intToBytes( msg.length );
             byte[] temp= Bytes.concat( command,serial,length,msg );
