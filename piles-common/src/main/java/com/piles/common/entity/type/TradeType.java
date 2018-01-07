@@ -5,7 +5,7 @@ package com.piles.common.entity.type;
  */
 public enum TradeType {
 
-    TU_KE(1, "途客"),
+    WEI_JING(1, "蔚景"),
     XUN_DAO(2, "寻道");
 
     private TradeType(int code, String value) {
