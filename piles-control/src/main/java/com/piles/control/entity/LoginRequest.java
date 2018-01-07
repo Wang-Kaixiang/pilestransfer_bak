@@ -77,8 +77,7 @@ public class LoginRequest implements Serializable
      */
     public static LoginRequest packEntityXundao(byte[] msg){
         LoginRequest request=new LoginRequest();
-        //TODO 转小端模式
-        request.setPileNo(BytesUtil.bcd2Str(BytesUtil.copyBytes(msg,3,8)));
+        request.setPileNo(BytesUtil.bcd2Strlittle(BytesUtil.copyBytes(msg,3,8)));
         request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,2,1),10)));
 
 
@@ -101,8 +100,8 @@ public class LoginRequest implements Serializable
     }
 
     public static void main(String[] args) {
-        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
-        packEntity(msg);
+        byte[] msg= new byte[]{0x68,0x01,0x02,0x04,0x28,0x00,0x00,0x00,0x30,0x40,0x31,0x00,0x00};
+        System.out.println(packEntityXundao(msg));
 
     }
 
