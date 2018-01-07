@@ -13,5 +13,5 @@ public interface IPushBusiness {
      * @param pileNo 桩编号
      * @return
      */
-    boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushCallBackResponse, ECommandCode eCommandCode);
+    boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushCallBackResponse, Enum<?> eCommandCode);
 }
