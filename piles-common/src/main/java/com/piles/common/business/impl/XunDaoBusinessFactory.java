@@ -2,7 +2,6 @@ package com.piles.common.business.impl;
 
 import com.piles.common.business.IBusiness;
 import com.piles.common.business.IBusinessFactory;
-import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.XunDaoTypeCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.SpringContextUtil;
@@ -74,7 +73,8 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 }
 //            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6, 1));
                 //下发数据项
-            case SEND_DATA_CODE:
+            case RE_START_OR_STOP:
+                return SpringContextUtil.getBean("xunDaoStartOrStopBusiness");
             //监控数据项
             case MONITOR_DATA_CODE:
                 //充电过程实时监测数据
