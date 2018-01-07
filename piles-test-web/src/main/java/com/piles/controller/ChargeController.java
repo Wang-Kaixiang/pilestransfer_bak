@@ -4,6 +4,7 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.piles.common.entity.BasePushCallBackResponse;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.RemoteStartPushRequest;
 import com.piles.control.entity.RemoteStartRequest;
@@ -122,6 +123,12 @@ public class ChargeController {
         if (null!=map){
             return map;
         }
+        if (TradeType.XUN_DAO.getCode()==remoteStartRequest.getTradeTypeCode()){
+            map.put("status", "-1");
+            map.put("msg", "充电桩不支持追加电量");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
 
         RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
         remoteStartPushRequest.setTradeTypeCode(remoteStartRequest.getTradeTypeCode());
@@ -179,6 +186,13 @@ public class ChargeController {
         //check 参数
         int serial=0;
 
+
+        if (StringUtils.isEmpty(remoteStartRequest.getTradeTypeCode())) {
+            map.put("status", "-1");
+            map.put("msg", "充电桩厂商类型为空");
+            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            return map;
+        }
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");

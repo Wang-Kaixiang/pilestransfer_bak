@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@Service
+@Service("xunDaoPushBusinessImpl")
 public class XunDaoPushBusinessImpl implements IPushBusiness {
     @Override
     public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, Enum<?> commandCode) {
@@ -25,22 +25,12 @@ public class XunDaoPushBusinessImpl implements IPushBusiness {
 
         if (null!=channel){
             ChannelResponseCallBackMap.add(channel,  basePushRequest.getSerial(),basePushRequest);
-            //拼接报文 循道 TODO
-            byte[] start=new byte[]{0x68};
-            byte[] command=new byte[]{(byte)((ECommandCode)commandCode).getCode()};
-            byte[] serial= BytesUtil.intToBytes( basePushRequest.getSerial());
-            byte[] length=BytesUtil.intToBytes( msg.length );
-            byte[] temp= Bytes.concat( command,serial,length,msg );
-            byte[] crc= BytesUtil.intToBytes( CRC16Util.getCRC( temp ));
-
-            byte[] writeMsg=Bytes.concat( start,temp,crc );
-
             String pushMsg="";
-            for (byte b:writeMsg){
+            for (byte b:msg){
                 pushMsg+= " "+ Integer.toHexString(Byte.toUnsignedInt(b));
             }
             log.info("向循道[" + channel.remoteAddress() + "]主动发送push请求信息:" + pushMsg);
-            ChannelFuture channelFuture=channel.writeAndFlush(writeMsg);
+            ChannelFuture channelFuture=channel.writeAndFlush(msg);
             channelFuture.addListener( new ChannelFutureListener() {
                 @Override
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {

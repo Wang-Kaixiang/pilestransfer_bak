@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class RebootPushServiceImpl implements IRebootPushService {
 
-    @Autowired
+    @Resource(name = "pushBusinessImpl")
     IPushBusiness pushBusiness;
 
     /**
