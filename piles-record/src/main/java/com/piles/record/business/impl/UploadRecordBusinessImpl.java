@@ -5,7 +5,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.record.entity.UploadRecordRequest;
 import com.piles.record.service.IUploadRecordService;
 import io.netty.channel.Channel;
@@ -33,7 +33,7 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
         log.info( "接收到充电桩上传充电记录报文" );
         //依照报文体规则解析报文
         UploadRecordRequest uploadRecordRequest = UploadRecordRequest.packEntity( bodyBytes );
-        uploadRecordRequest.setPileNo( ChannelMap.getChannel( incoming ) );
+        uploadRecordRequest.setPileNo( ChannelMapByEntity.getChannel( incoming ).getPileNo() );
         uploadRecordRequest.setSerial(order);
         log.info( "接收到充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
         //调用底层接口

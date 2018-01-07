@@ -7,7 +7,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class PushBusinessImpl implements IPushBusiness {
     @Override
-    public boolean push(byte[] msg, String pileNo, BasePushCallBackResponse basePushRequest, ECommandCode commandCode) {
+    public boolean push(byte[] msg, int tradeTypeCode,String pileNo, BasePushCallBackResponse basePushRequest, ECommandCode commandCode) {
         //获取连接channel 获取不到无法推送
-        Channel channel=ChannelMap.getChannel(pileNo);
+        Channel channel=ChannelMapByEntity.getChannel(tradeTypeCode,pileNo);
 
         if (null!=channel){
             ChannelResponseCallBackMap.add(channel,  basePushRequest.getSerial(),basePushRequest);

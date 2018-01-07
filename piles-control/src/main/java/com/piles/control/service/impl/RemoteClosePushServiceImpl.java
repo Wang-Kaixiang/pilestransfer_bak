@@ -31,14 +31,14 @@ public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
         byte[] pushMsg=RemoteClosePushRequest.packBytes(remoteClosePushRequest);
         BasePushCallBackResponse<RemoteCloseRequest> basePushCallBackResponse=new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteClosePushRequest.getSerial() );
-        boolean flag= pushBusiness.push(pushMsg,remoteClosePushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_OVER_CODE);
+        boolean flag= pushBusiness.push(pushMsg,remoteClosePushRequest.getTradeTypeCode(),remoteClosePushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_OVER_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
-            ChannelResponseCallBackMap.remove( remoteClosePushRequest.getPileNo(),remoteClosePushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove( remoteClosePushRequest.getTradeTypeCode(),remoteClosePushRequest.getPileNo(),remoteClosePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

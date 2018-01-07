@@ -2,9 +2,11 @@ package com.piles.control.business.impl;
 
 import com.google.common.primitives.Bytes;
 import com.piles.common.business.BaseBusiness;
+import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.ECommandCode;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.LoginRequest;
 import com.piles.control.service.ILoginService;
 import io.netty.channel.Channel;
@@ -22,6 +24,7 @@ public class LoginBusinessImpl extends BaseBusiness{
 
     @Resource
     private ILoginService loginService;
+    private static final TradeType TRADE_TYPE=TradeType.WEI_JING;
 
 //    @Override
 //    public SocketBaseDTO process(byte[] msg) {
@@ -39,8 +42,9 @@ public class LoginBusinessImpl extends BaseBusiness{
         //调用底层接口
         boolean flag = loginService.login(loginRequest);
         if (flag){
-            ChannelMap.addChannel(loginRequest.getPileNo(),incoming);
-            ChannelMap.addChannel(incoming,loginRequest.getPileNo());
+            ChannelEntity channelEntity=new ChannelEntity(loginRequest.getPileNo(),TradeType.fromCode(TradeType.WEI_JING.getCode()));
+            ChannelMapByEntity.addChannel(channelEntity,incoming);
+            ChannelMapByEntity.addChannel(incoming,channelEntity);
         }
         byte[] pileNo = BytesUtil.copyBytes(bodyBytes, 0, 8);
         byte[] result = flag==true?new byte[]{0x00}:new byte[]{0x01};

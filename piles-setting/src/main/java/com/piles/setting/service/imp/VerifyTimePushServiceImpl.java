@@ -37,14 +37,14 @@ public class VerifyTimePushServiceImpl implements IVerifyTimePushService {
         byte[] pushMsg = VerifyTimePushRequest.packBytes( verifyTimePushRequest );
         BasePushCallBackResponse<VerifyTimeRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( verifyTimePushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, verifyTimePushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.VERIFY_TIME_CODE );
+        boolean flag = pushBusiness.push( pushMsg,verifyTimePushRequest.getTradeTypeCode(), verifyTimePushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.VERIFY_TIME_CODE );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
-            ChannelResponseCallBackMap.remove( verifyTimePushRequest.getPileNo(),verifyTimePushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove(verifyTimePushRequest.getTradeTypeCode(), verifyTimePushRequest.getPileNo(),verifyTimePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

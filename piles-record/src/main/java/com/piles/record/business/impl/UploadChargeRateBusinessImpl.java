@@ -3,7 +3,7 @@ package com.piles.record.business.impl;
 
 import com.piles.common.business.BaseBusiness;
 import com.piles.common.entity.type.ECommandCode;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.record.entity.UploadChargeRateRequest;
 import com.piles.record.service.IUploadChargeRateService;
 import io.netty.channel.Channel;
@@ -28,7 +28,7 @@ public class UploadChargeRateBusinessImpl extends BaseBusiness {
         log.info( "接收到充电桩上传充电进度报文" );
         //依照报文体规则解析报文
         UploadChargeRateRequest uploadChargeRateRequest = UploadChargeRateRequest.packEntity( bodyBytes );
-        uploadChargeRateRequest.setPileNo( ChannelMap.getChannel( incoming ) );
+        uploadChargeRateRequest.setPileNo( ChannelMapByEntity.getChannel( incoming ).getPileNo() );
         log.info( "接收到充电桩上传充电进度报文:{}", uploadChargeRateRequest.toString() );
         //调用底层接口
         boolean flag = uploadChargeRateService.uploadChargeRate( uploadChargeRateRequest );

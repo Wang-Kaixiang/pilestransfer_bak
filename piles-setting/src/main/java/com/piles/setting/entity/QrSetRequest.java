@@ -1,7 +1,8 @@
 package com.piles.setting.entity;
 
+import com.piles.common.entity.ChannelEntity;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.*;
 import io.netty.util.Attribute;
@@ -34,14 +35,14 @@ public class QrSetRequest implements Serializable
      * @return
      */
     public static QrSetRequest packEntity(byte[] msg, Channel income){
-        String pileNoTemp=ChannelMap.getChannel(income);
-        if (StringUtils.isEmpty(pileNoTemp)){
+        ChannelEntity channelEntity=ChannelMapByEntity.getChannel(income);
+        if (null==channelEntity){
             return null;
         }
         QrSetRequest request=new QrSetRequest();
 
         request.setGunNo(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,0,1),10)));
-        request.setPileNo(pileNoTemp);
+        request.setPileNo(channelEntity.getPileNo());
         return request;
     }
 

@@ -41,14 +41,14 @@ public class RebootPushServiceImpl implements IRebootPushService {
         byte[] pushMsg = RebootPushRequest.packBytes( rebootPushRequest );
         BasePushCallBackResponse<RebootRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( rebootPushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, rebootPushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REBOOT_CODE );
+        boolean flag = pushBusiness.push( pushMsg, rebootPushRequest.getTradeTypeCode(),rebootPushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REBOOT_CODE );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
-            ChannelResponseCallBackMap.remove( rebootPushRequest.getPileNo(),rebootPushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove( rebootPushRequest.getTradeTypeCode(),rebootPushRequest.getPileNo(),rebootPushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

@@ -1,7 +1,8 @@
 package com.piles.setting.entity;
 
+import com.piles.common.entity.ChannelEntity;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import io.netty.channel.Channel;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -29,14 +30,14 @@ public class UpdatePackageRequest implements Serializable
      * @return
      */
     public static UpdatePackageRequest packEntity(byte[] msg, Channel income){
-        String pileNoTemp=ChannelMap.getChannel(income);
-        if (StringUtils.isEmpty(pileNoTemp)){
+        ChannelEntity pileNoTemp=ChannelMapByEntity.getChannel(income);
+        if (null==pileNoTemp){
             return null;
         }
         UpdatePackageRequest request=new UpdatePackageRequest();
 
         request.setIndex(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,0,2),10)));
-        request.setPileNo(pileNoTemp);
+        request.setPileNo(pileNoTemp.getPileNo());
         return request;
     }
 

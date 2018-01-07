@@ -1,7 +1,7 @@
 package socket;
 
 import com.alibaba.fastjson.JSON;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
 import com.piles.control.service.IRemoteClosePushService;
@@ -28,7 +28,7 @@ public class ServerTest {
             LOGGER.info("启动成功");
 
             while (true){
-                Channel channel=ChannelMap.getChannel("1000025484561835");
+                Channel channel=ChannelMapByEntity.getChannel(1,"1000025484561835");
                 if (null!=channel){
 //                    IRemoteClosePushService service= context.getBean( IRemoteClosePushService.class );
 //                    RemoteClosePushRequest remoteClosePushRequest= new RemoteClosePushRequest();

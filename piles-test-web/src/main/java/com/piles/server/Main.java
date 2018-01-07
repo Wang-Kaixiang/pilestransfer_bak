@@ -2,7 +2,7 @@ package com.piles.server;
 
 
 import com.alibaba.fastjson.JSON;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.RemoteStartPushRequest;
 import com.piles.control.service.IRemoteStartPushService;
 import io.netty.channel.Channel;

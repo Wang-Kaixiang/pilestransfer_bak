@@ -2,9 +2,11 @@ package com.piles.record.business.impl;
 
 
 import com.piles.common.business.BaseBusiness;
+import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.ECommandCode;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
 import io.netty.channel.Channel;
@@ -25,6 +27,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
 
 
     private static SimpleDateFormat sdf = new SimpleDateFormat( "yyMMddHHmmss" );
+    private static final TradeType TRADE_TYPE=TradeType.WEI_JING;
 
     @Resource
     IHeartBeatService heartBeatService;
@@ -35,19 +38,20 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
         //依照报文体规则解析报文
         HeartBeatRequest heartBeatRequest = HeartBeatRequest.packEntity( bodyBytes );
         log.info( "接收到充电桩心跳报文:{}", heartBeatRequest.toString() );
-        String pileNo=ChannelMap.getChannel( incoming );
-        if (StringUtils.isEmpty( pileNo )){
+        ChannelEntity channelEntity=ChannelMapByEntity.getChannel( incoming );
+        if (null==channelEntity){
             return null;
         }
-        heartBeatRequest.setPileNo( pileNo );
-        Channel channelNow=ChannelMap.getChannel( pileNo );
+        heartBeatRequest.setPileNo( channelEntity.getPileNo() );
+        Channel channelNow=ChannelMapByEntity.getChannel( channelEntity.getTradeType().getCode(),channelEntity.getPileNo() );
         if (null!=channelNow&&channelNow!=incoming){
             log.error( "--------------------充电桩通道变更 原来是" + channelNow.remoteAddress() + "现在的：" + incoming.remoteAddress() );
-            ChannelMap.removeChannel( heartBeatRequest.getPileNo() );
+            ChannelMapByEntity.removeChannel( TRADE_TYPE.getCode(),heartBeatRequest.getPileNo() );
         }
-        if (null == ChannelMap.getChannel( heartBeatRequest.getPileNo() )) {
-            ChannelMap.addChannel( heartBeatRequest.getPileNo(), incoming );
-            ChannelMap.addChannel( incoming, heartBeatRequest.getPileNo() );
+        if (null == ChannelMapByEntity.getChannel( TRADE_TYPE.getCode(),heartBeatRequest.getPileNo() )) {
+            ChannelEntity channelEntity1=new ChannelEntity(heartBeatRequest.getPileNo(),TradeType.fromCode(TRADE_TYPE.getCode()));
+            ChannelMapByEntity.addChannel( channelEntity1, incoming );
+            ChannelMapByEntity.addChannel( incoming, channelEntity1);
         }
         // 不需要接调用底层接口
         Date date = heartBeatService.heartBeat( heartBeatRequest );

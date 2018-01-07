@@ -3,7 +3,7 @@ package com.piles.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.piles.common.entity.BasePushCallBackResponse;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.RemoteStartPushRequest;
 import com.piles.control.entity.RemoteStartRequest;
 import com.piles.control.service.IRemoteStartPushService;
@@ -100,7 +100,7 @@ public class ChargeController {
             return map;
         }
         //获取连接channel 获取不到无法推送
-        Channel channel = ChannelMap.getChannel(remoteStartRequest.getPileNo());
+        Channel channel = ChannelMapByEntity.getChannel(remoteStartRequest.getTradeTypeCode(),remoteStartRequest.getPileNo());
         if (null == channel) {
             map.put("status", "400");
             map.put("msg", "充电桩链接不可用");
@@ -110,6 +110,7 @@ public class ChargeController {
 
 
         RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
+        remoteStartPushRequest.setTradeTypeCode(remoteStartRequest.getTradeTypeCode());
         remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
@@ -211,7 +212,7 @@ public class ChargeController {
         }
 
         //获取连接channel 获取不到无法推送
-        Channel channel = ChannelMap.getChannel(remoteStartRequest.getPileNo());
+        Channel channel = ChannelMapByEntity.getChannel(remoteStartRequest.getTradeTypeCode(),remoteStartRequest.getPileNo());
         if (null == channel) {
             map.put("status", "400");
             map.put("msg", "充电桩链接不可用");
@@ -221,6 +222,7 @@ public class ChargeController {
 
 
         RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
+        remoteStartPushRequest.setTradeTypeCode(remoteStartRequest.getTradeTypeCode());
         remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());

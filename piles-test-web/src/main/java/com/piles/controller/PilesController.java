@@ -4,7 +4,7 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.util.FileUtil;
 import com.piles.util.HttpRequest;
 import com.piles.util.Md5Util;
@@ -176,7 +176,8 @@ public class PilesController {
                 break;
             case "8":
                 String pileNo2=request.getParameter("pileNo");
-                Channel channel= ChannelMap.getChannel( pileNo2 );
+                String tradeType=request.getParameter("tradeType");
+                Channel channel= ChannelMapByEntity.getChannel( Integer.parseInt(tradeType),pileNo2 );
                 if (null==channel){
                     return "no connection";
                 }

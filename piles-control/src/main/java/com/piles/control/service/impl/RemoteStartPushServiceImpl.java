@@ -33,14 +33,14 @@ public class RemoteStartPushServiceImpl implements IRemoteStartPushService {
         byte[] pushMsg=RemoteStartPushRequest.packBytes(remoteStartPushRequest);
         BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse=new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteStartPushRequest.getSerial() );
-        boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
+        boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getTradeTypeCode(),remoteStartPushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
-            ChannelResponseCallBackMap.remove( remoteStartPushRequest.getPileNo(),remoteStartPushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove( remoteStartPushRequest.getTradeTypeCode(),remoteStartPushRequest.getPileNo(),remoteStartPushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

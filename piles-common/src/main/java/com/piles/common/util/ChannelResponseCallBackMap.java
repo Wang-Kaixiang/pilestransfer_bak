@@ -63,8 +63,8 @@ public class ChannelResponseCallBackMap  {
      * @param serial
      * @return
      */
-    public static void remove(String pileNo, Integer serial){
-        Channel channel=ChannelMap.getChannel( pileNo );
+    public static void remove(int tradeTypeCode,String pileNo, Integer serial){
+        Channel channel=ChannelMapByEntity.getChannel( tradeTypeCode,pileNo );
         if (null!=channel) {
             ConcurrentHashMap<Integer, BasePushCallBackResponse> temp = map.get( channel );
             if (null != temp&& temp.contains( serial )) {

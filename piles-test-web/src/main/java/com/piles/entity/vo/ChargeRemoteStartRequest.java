@@ -46,4 +46,8 @@ public class ChargeRemoteStartRequest {
      * 流水号
      */
     private String serial;
+    /**
+     * 对应厂商类型  1:蔚景 2: 循道
+     */
+    private int tradeTypeCode;
 }

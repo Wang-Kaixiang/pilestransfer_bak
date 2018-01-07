@@ -16,4 +16,8 @@ public class BasePushRequest {
      * 默认必填流水号
      */
     private int serial;
+    /**
+     * 对应厂商类型  1:蔚景 2: 循道
+     */
+    private int tradeTypeCode;
 }

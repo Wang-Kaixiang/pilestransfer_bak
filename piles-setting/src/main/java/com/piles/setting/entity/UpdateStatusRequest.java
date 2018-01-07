@@ -1,7 +1,8 @@
 package com.piles.setting.entity;
 
+import com.piles.common.entity.ChannelEntity;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import io.netty.channel.Channel;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -40,8 +41,8 @@ public class UpdateStatusRequest implements Serializable {
      * @return
      */
     public static UpdateStatusRequest packEntity(byte[] msg, Channel income) {
-        String pileNoTemp = ChannelMap.getChannel(income);
-        if (StringUtils.isEmpty(pileNoTemp)) {
+        ChannelEntity channelEntity = ChannelMapByEntity.getChannel(income);
+        if (null==channelEntity) {
             return null;
         }
         UpdateStatusRequest request = new UpdateStatusRequest();
@@ -51,7 +52,7 @@ public class UpdateStatusRequest implements Serializable {
                 Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 2, 1), 10)));
         request.setProtocolVersion("V" + Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 3, 1), 10)) + "." +
                 Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 4, 1), 10)));
-        request.setPileNo(pileNoTemp);
+        request.setPileNo(channelEntity.getPileNo());
         return request;
     }
 

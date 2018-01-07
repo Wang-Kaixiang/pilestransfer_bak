@@ -1,6 +1,6 @@
 package socket;
 
-import com.piles.common.util.ChannelMap;
+import com.piles.common.util.ChannelMapByEntity;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class ServerTest {
             LOGGER.info( "启动成功" );
 
             while (true) {
-                Channel channel = ChannelMap.getChannel( "1000025484561835" );
+                Channel channel = ChannelMapByEntity.getChannel( 1,"1000025484561835" );
                 if (null != channel) {
 
 //

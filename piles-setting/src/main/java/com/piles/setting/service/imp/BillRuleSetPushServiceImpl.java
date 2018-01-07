@@ -36,14 +36,14 @@ public class BillRuleSetPushServiceImpl implements IBillRuleSetPushService {
         byte[] pushMsg = BillRuleSetPushRequest.packBytes( billRuleSetPushRequest );
         BasePushCallBackResponse<BillRuleSetRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( billRuleSetPushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, billRuleSetPushRequest.getPileNo(), basePushCallBackResponse , ECommandCode.BILL_RULE_SET_CODE);
+        boolean flag = pushBusiness.push( pushMsg, billRuleSetPushRequest.getTradeTypeCode(),billRuleSetPushRequest.getPileNo(), basePushCallBackResponse , ECommandCode.BILL_RULE_SET_CODE);
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
-            ChannelResponseCallBackMap.remove( billRuleSetPushRequest.getPileNo(),billRuleSetPushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove( billRuleSetPushRequest.getTradeTypeCode(),billRuleSetPushRequest.getPileNo(),billRuleSetPushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );

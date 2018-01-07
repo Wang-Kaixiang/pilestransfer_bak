@@ -37,14 +37,14 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService {
         byte[] pushMsg = RemoteUpdatePushRequest.packBytes( remoteUpdatePushRequest );
         BasePushCallBackResponse<RemoteUpdateRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteUpdatePushRequest.getSerial() );
-        boolean flag = pushBusiness.push( pushMsg, remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REMOTE_UPDATE_CODE );
+        boolean flag = pushBusiness.push( pushMsg,remoteUpdatePushRequest.getTradeTypeCode(), remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse  , ECommandCode.REMOTE_UPDATE_CODE );
         if (!flag) {
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await( timeout, TimeUnit.MILLISECONDS );
-            ChannelResponseCallBackMap.remove( remoteUpdatePushRequest.getPileNo(),remoteUpdatePushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove( remoteUpdatePushRequest.getTradeTypeCode(),remoteUpdatePushRequest.getPileNo(),remoteUpdatePushRequest.getSerial() );
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(), e );
