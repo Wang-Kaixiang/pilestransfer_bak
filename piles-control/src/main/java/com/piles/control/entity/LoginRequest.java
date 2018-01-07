@@ -77,7 +77,7 @@ public class LoginRequest implements Serializable
      */
     public static LoginRequest packEntityXundao(byte[] msg){
         LoginRequest request=new LoginRequest();
-        request.setPileNo(BytesUtil.bcd2Strlittle(BytesUtil.copyBytes(msg,3,8)));
+        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg,3,8)));
         request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,2,1),10)));
 
 
