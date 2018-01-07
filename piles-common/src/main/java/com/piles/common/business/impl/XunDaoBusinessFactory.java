@@ -71,10 +71,12 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==53) {
                     return SpringContextUtil.getBean("xunDaoUploadUpdateResultBusiness");
                 }
-//            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6, 1));
-                //下发数据项
-            case RE_START_OR_STOP:
-                return SpringContextUtil.getBean("xunDaoStartOrStopBusiness");
+                //充电 回复 or 停止 回复
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==28) {
+                    return SpringContextUtil.getBean("xunDaoStartOrStopBusiness");
+                }
+//            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6,
+            case SEND_DATA_CODE:
             //监控数据项
             case MONITOR_DATA_CODE:
                 //充电过程实时监测数据
