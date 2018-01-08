@@ -20,6 +20,7 @@ public class UploadRecordService implements IUploadRecordService {
         jsonObject.put("serial",uploadRecord.getSerial());
         jsonObject.put("endReason",uploadRecord.getEndReason());
         jsonObject.put("totalAmmeterDegree",uploadRecord.getTotalAmmeterDegree());
+        jsonObject.put( "tradeTypeCode",uploadRecord.getTradeTypeCode() );
 
 //        http://tox.tunnel.qydev.com/order/powerEnd
         Map<String,JSONObject> map= new HashedMap();
