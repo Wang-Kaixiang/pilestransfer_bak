@@ -1,8 +1,12 @@
 package com.piles.record.business.impl;
 
+import com.google.common.primitives.Bytes;
 import com.piles.common.business.IBusiness;
+import com.piles.common.util.BytesUtil;
+import com.piles.common.util.CRC16Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,15 +16,35 @@ import org.springframework.stereotype.Component;
 @Component("xunDaoLockSyncBusiness")
 public class XunDaoLockSyncBusinessImpl implements IBusiness {
 
-    private static final byte[] msgRet = new byte[]{0x68, 0x04, (byte) 0x83, 0x00, 0x00, 0x00};
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        log.info( "接收到循道心跳请求报文" );
+        log.info("接收到循道心跳请求报文");
         //依照报文体规则解析报文
+        DateTime dateTime = new DateTime();
+        int ms = dateTime.getMillisOfSecond();
+        int min = dateTime.getMinuteOfHour();
+        int hour = dateTime.getHourOfDay();
+        int day = dateTime.getDayOfMonth();
+        int month = dateTime.getMonthOfYear();
+        int year = dateTime.getYear() - 2000;
+        byte[] data = Bytes.concat(BytesUtil.intToBytes(ms), BytesUtil.intToBytes(min, 1), BytesUtil.intToBytes(hour),
+                BytesUtil.intToBytes(day), BytesUtil.intToBytes(month), BytesUtil.intToBytes(year));
+
+        byte[] head = new byte[]{0x68};
+        byte[] length = new byte[]{0x20};
+        byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
+        byte[] type = new byte[]{(byte) 0x103};
+        byte[] beiyong = new byte[]{0x00};
+        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] crc = CRC16Util.getXunDaoCRC(data);
+        byte[] addr = new byte[]{0x00, 0x00, 0x00};
+
+
+        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
 
         //组装返回报文体
 
-        return msgRet;
+        return temp;
     }
 }
