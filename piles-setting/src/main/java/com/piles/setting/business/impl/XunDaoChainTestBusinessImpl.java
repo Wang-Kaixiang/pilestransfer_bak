@@ -16,8 +16,8 @@ import javax.annotation.Resource;
  * 链路测试帧(U 格式)(双向 交直流共用) 充电桩  运营管理系统
  */
 @Slf4j
-@Service("xunDaoChainTestsBusiness")
-public class XunDaoChainTestsBusinessImpl implements IBusiness {
+@Service("xunDaoChainTestBusiness")
+public class XunDaoChainTestBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {

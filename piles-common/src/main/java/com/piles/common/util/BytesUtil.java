@@ -321,9 +321,20 @@ public class BytesUtil {
             int targetIndex = startIndex+i;
             target[targetIndex] = replace[i];
         }
-
     }
 
+    public static byte[] rightPadBytes(byte[] target,int len,byte b){
+        int length = target.length;
+        if(len <= length){
+            return target;
+        }
+        int addedLen = len - length;
+        byte[] added = new byte[addedLen];
+        for(int i =0;i<addedLen;i++){
+            added[i] = b;
+        }
+        return Bytes.concat(target,added);
+    }
 
     public static void main(String[] args) {
         int i = bytesToInt("f".getBytes(), 0);
