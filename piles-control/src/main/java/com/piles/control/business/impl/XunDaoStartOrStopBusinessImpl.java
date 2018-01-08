@@ -15,15 +15,12 @@ import org.springframework.stereotype.Service;
 public class XunDaoStartOrStopBusinessImpl implements IBusiness {
 
 
-
-
-
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        String order="";//TODO 流水号
+        String order = "";//TODO 流水号
         //依照报文体规则解析报文
-        RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntityXunDao(msg);
-        ChannelResponseCallBackMap.callBack(incoming, String.valueOf(order), remoteCloseRequest);
+        RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntityXunDao( msg );
+        ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), remoteCloseRequest );
         return null;
     }
 }
