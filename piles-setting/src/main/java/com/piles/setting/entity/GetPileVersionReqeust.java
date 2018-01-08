@@ -42,4 +42,15 @@ public class GetPileVersionReqeust extends BasePushResponse {
         request.setTradeType(TradeType.XUN_DAO);
         return request;
     }
+    /**
+     * 解析报文并封装request体
+     *
+     * @param getPileVersionReqeusts
+     * @return
+     */
+    public static byte[]  packBytes(GetPileVersionReqeust getPileVersionReqeusts) {
+        //TODO 解析参数
+
+        return new byte[]{};
+    }
 }

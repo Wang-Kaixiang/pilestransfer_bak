@@ -43,7 +43,7 @@ public class ServerTest {
                     remoteClosePushRequest.setGunNo( 1 );
                     remoteClosePushRequest.setOrderNo( 123456L );
                     remoteClosePushRequest.setPileNo( "1000025484561835" );
-                    remoteClosePushRequest.setSerial( 0 );
+                    remoteClosePushRequest.setSerial( "0" );
                     remoteClosePushRequest.setChargeData( new BigDecimal( 1 ) );
                     remoteClosePushRequest.setChargeModel( 1 );
                     remoteClosePushRequest.setChargeStopCode( "646444" );

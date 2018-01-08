@@ -65,7 +65,7 @@ public class PilesController {
                 remoteStartPushRequest.setGunNo(1);
                 remoteStartPushRequest.setOrderNo(Long.valueOf( orderNo ));
                 remoteStartPushRequest.setPileNo("0000000080000004");
-                remoteStartPushRequest.setSerial(0);
+                remoteStartPushRequest.setSerial("0");
                 remoteStartPushRequest.setChargeData(BigDecimal.valueOf(Double.valueOf(data)));
                 remoteStartPushRequest.setChargeModel(Integer.parseInt( modle ));
                 remoteStartPushRequest.setChargeStopCode("6464");
@@ -76,7 +76,7 @@ public class PilesController {
                 remoteClosePushRequest.setGunNo(1);
                 remoteClosePushRequest.setOrderNo(123456L);
                 remoteClosePushRequest.setPileNo("0000000080000004");
-                remoteClosePushRequest.setSerial(0);
+                remoteClosePushRequest.setSerial("0");
                 log.info("远程结束充电请求返回报文:{}", JSON.toJSONString(remoteClosePushService.doPush(remoteClosePushRequest)));
 
                 break;
@@ -91,7 +91,7 @@ public class PilesController {
                 }
                 RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
                 remoteUpdatePushRequest.setPileNo(pileNo);
-                remoteUpdatePushRequest.setSerial(0);
+                remoteUpdatePushRequest.setSerial("0");
                 try {
                     remoteUpdatePushRequest.setMd5( Md5Util.getMd5ByFile( file ));
                 } catch (FileNotFoundException e) {
@@ -117,7 +117,7 @@ public class PilesController {
 
                 VerifyTimePushRequest verifyTimePushRequest = new VerifyTimePushRequest();
                 verifyTimePushRequest.setPileNo("0000000080000004");
-                verifyTimePushRequest.setSerial(0);
+                verifyTimePushRequest.setSerial("0");
                 Date dt= new Date(  );
                 SimpleDateFormat simpleDateFormat=new SimpleDateFormat( "yyMMddHHmmss" );
 
@@ -128,7 +128,7 @@ public class PilesController {
             case "5":
                 RebootPushRequest rebootPushRequest = new RebootPushRequest();
                 rebootPushRequest.setPileNo("0000000080000004");
-                rebootPushRequest.setSerial(0);
+                rebootPushRequest.setSerial("0");
 
                 log.info("重启请求返回报文:{}", JSON.toJSONString(rebootPushService.doPush(rebootPushRequest)));
 
@@ -136,7 +136,7 @@ public class PilesController {
             case "6":
                 BillRuleSetPushRequest billRuleSetPushRequest = new BillRuleSetPushRequest();
                 billRuleSetPushRequest.setPileNo("0000000080000004");
-                billRuleSetPushRequest.setSerial(0);
+                billRuleSetPushRequest.setSerial("0");
                 billRuleSetPushRequest.setBillingRuleId(4);
                 billRuleSetPushRequest.setBillingRuleVersion(0);
                 billRuleSetPushRequest.setEffectiveTime("171109160712");
@@ -168,7 +168,7 @@ public class PilesController {
                 remoteStartPushRequest2.setGunNo(1);
                 remoteStartPushRequest2.setOrderNo(123457L);
                 remoteStartPushRequest2.setPileNo("0000000080000004");
-                remoteStartPushRequest2.setSerial(0);
+                remoteStartPushRequest2.setSerial("0");
                 remoteStartPushRequest2.setChargeData(new BigDecimal(2));
                 remoteStartPushRequest2.setChargeModel(5);
                 remoteStartPushRequest2.setChargeStopCode("6565");
