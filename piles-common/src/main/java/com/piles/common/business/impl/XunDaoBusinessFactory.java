@@ -60,27 +60,28 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
             //充电桩消费记录数据
             case EXPENSE_RECORD_CODE:
                 //离线交易上线后上传交易记录数据(充电桩后台 交直流 共用)
-                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==3) {
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==3) {
                     return SpringContextUtil.getBean("xunDaoUnploadTradeDataBusiness");
                 }
                 //获取充电桩软件版本上行数据(充电桩后台 交直流共 用)
-                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==31) {
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==31) {
                     return SpringContextUtil.getBean("xunDaoGetPileVersionBusiness");
                 }
                 //远程升级后充电桩升级结果及当前版本上送(充电桩后台 交直流共用)
-                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==53) {
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==53) {
                     return SpringContextUtil.getBean("xunDaoUpdateStatusBusiness");
                 }
                 //充电 回复 or 停止 回复
-                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==28) {
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==28) {
                     return SpringContextUtil.getBean("xunDaoStartOrStopBusiness");
                 }
 //            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6,
             case SEND_DATA_CODE:
+
             //监控数据项
             case MONITOR_DATA_CODE:
                 //充电过程实时监测数据
-                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,7,1))==1) {
+                if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==1) {
                     return SpringContextUtil.getBean("xunDaoUploadChargeMonitorBusiness");
                 }
             default:

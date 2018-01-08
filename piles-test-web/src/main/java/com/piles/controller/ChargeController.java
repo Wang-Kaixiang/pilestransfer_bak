@@ -69,7 +69,7 @@ public class ChargeController {
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
 //        remoteStartPushRequest.setPileNo("0000000080000004");
-        remoteStartPushRequest.setSerial(Integer.parseInt(remoteStartRequest.getSerial()));
+        remoteStartPushRequest.setSerial(remoteStartRequest.getSerial());
         remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
         remoteStartPushRequest.setChargeModel(remoteStartRequest.getChargeModel());
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
@@ -135,7 +135,7 @@ public class ChargeController {
         remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
         remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
         remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
-        remoteStartPushRequest.setSerial(Integer.parseInt(remoteStartRequest.getSerial()));
+        remoteStartPushRequest.setSerial(remoteStartRequest.getSerial());
         remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
         remoteStartPushRequest.setChargeModel(5);
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());

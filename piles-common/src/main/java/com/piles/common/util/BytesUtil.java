@@ -322,6 +322,19 @@ public class BytesUtil {
             target[targetIndex] = replace[i];
         }
     }
+    /**
+     * 创建数组
+
+     * @param bytes 用于替换的数组
+     */
+    public static byte[] createByteArray(byte ... bytes){
+        byte[] temp=new byte[bytes.length];
+        for (int i=0;i<bytes.length;i++){
+            temp[i]=bytes[i];
+        }
+        return temp;
+
+    }
 
     public static byte[] rightPadBytes(byte[] target,int len,byte b){
         int length = target.length;
