@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * 远程升级 给充电桩发送消息实现类
  */
 @Slf4j
-@Service
+@Service("xunDaoGetPileVersionPushServiceImpl_2")
 public class XunDaoGetPileVersionPushServiceImpl implements IGetPileVersionPushService {
 
     @Resource(name = "xunDaoPushBusinessImpl")
