@@ -26,7 +26,6 @@ public class RemoteCloseBusinessImpl extends BaseBusiness {
 
     @Override
     public ECommandCode getReponseCode() {
-        //TODO 设置返回码
         return null;
     }
 }

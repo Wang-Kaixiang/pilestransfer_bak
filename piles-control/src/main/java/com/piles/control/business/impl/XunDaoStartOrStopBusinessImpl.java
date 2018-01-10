@@ -1,6 +1,7 @@
 package com.piles.control.business.impl;
 
 import com.piles.common.business.IBusiness;
+import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.control.entity.RemoteCloseRequest;
 import io.netty.channel.Channel;
@@ -17,10 +18,10 @@ public class XunDaoStartOrStopBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        String order = "";//TODO 流水号
+        String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
         //依照报文体规则解析报文
         RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntityXunDao( msg );
-        ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), remoteCloseRequest );
+        ChannelResponseCallBackMap.callBack(incoming, order, remoteCloseRequest);
         return null;
     }
 }

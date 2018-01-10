@@ -28,8 +28,7 @@ public class XundaoRemoteStartPushServiceImpl implements IRemoteStartPushService
 
     @Override
     public BasePushCallBackResponse<RemoteStartRequest> doPush(RemoteStartPushRequest remoteStartPushRequest) {
-        //TODO 数据封装要改
-        byte[] pushMsg=RemoteStartPushRequest.packBytes(remoteStartPushRequest);
+        byte[] pushMsg = RemoteStartPushRequest.packBytesXunDao(remoteStartPushRequest);
         BasePushCallBackResponse<RemoteStartRequest> basePushCallBackResponse=new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteStartPushRequest.getSerial() );
         boolean flag= pushBusiness.push(pushMsg,remoteStartPushRequest.getTradeTypeCode(),remoteStartPushRequest.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);

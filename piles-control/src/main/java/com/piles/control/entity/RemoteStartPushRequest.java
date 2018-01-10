@@ -72,6 +72,36 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
         return Bytes.concat(gunNoBytes,chargeModelBytes,chargeDataBytes,chargeStopCodeBytes,orderNoBytes);
     }
 
+    /**
+     * 封装报文体
+     *
+     * @param request
+     * @return
+     */
+    public static byte[] packBytesXunDao(RemoteStartPushRequest request) {
+        //TODO 封装循道的push报文
+        int gunNo = request.getGunNo();
+        int chargeModel = request.getChargeModel();
+        BigDecimal chargeData = request.getChargeData();
+        String chargeStopCode = request.getChargeStopCode();
+        long orderNo = request.getOrderNo();
+        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo, 1);
+        byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel, 1);
+        BigDecimal chargeDataInt = request.getChargeData();
+        if (chargeModel == 2 || chargeModel == 4 || chargeModel == 5) {
+            BigDecimal chargeDataVal = chargeData.multiply(BigDecimal.valueOf(1000));
+            chargeDataInt = chargeDataVal;
+        } else if (chargeModel == 3) {
+            chargeDataInt = chargeData;
+        }
+        byte[] chargeDataBytes = BytesUtil.intToBytes(chargeDataInt.intValue(), 4);
+        byte[] chargeStopCodeBytes = BytesUtil.str2Bcd(chargeStopCode);
+        if (chargeStopCodeBytes.length == 1) {
+            chargeStopCodeBytes = Bytes.concat(new byte[]{0}, chargeStopCodeBytes);
+        }
+        byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
+        return Bytes.concat(gunNoBytes, chargeModelBytes, chargeDataBytes, chargeStopCodeBytes, orderNoBytes);
+    }
 
     public static void main(String[] args) {
         RemoteStartPushRequest request = new RemoteStartPushRequest();

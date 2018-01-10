@@ -33,8 +33,7 @@ public class XundaoRemoteStopPushServiceImpl implements IRemoteClosePushService 
 
     @Override
     public BasePushCallBackResponse<RemoteCloseRequest> doPush(RemoteClosePushRequest remoteClosePushRequest) {
-        //TODO 数据封装要改
-        byte[] pushMsg = RemoteClosePushRequest.packBytes( remoteClosePushRequest );
+        byte[] pushMsg = RemoteClosePushRequest.packBytesXundao(remoteClosePushRequest);
         BasePushCallBackResponse<RemoteCloseRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( remoteClosePushRequest.getSerial() );
         boolean flag = pushBusiness.push( pushMsg, remoteClosePushRequest.getTradeTypeCode(), remoteClosePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE );

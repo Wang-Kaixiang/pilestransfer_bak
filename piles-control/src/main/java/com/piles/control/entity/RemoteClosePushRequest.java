@@ -35,6 +35,21 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
         return Bytes.concat(gunNoBytes,orderNoBytes);
     }
 
+    /**
+     * 封装报文体
+     *
+     * @param request
+     * @return
+     */
+    public static byte[] packBytesXundao(RemoteClosePushRequest request) {
+        //TODO 封装循道报文
+        int gunNo = request.getGunNo();
+        long orderNo = request.getOrderNo();
+        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo, 1);
+        byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
+        return Bytes.concat(gunNoBytes, orderNoBytes);
+    }
+
 
     public static void main(String[] args) {
         RemoteClosePushRequest remoteCloseResponse = new RemoteClosePushRequest();
