@@ -36,8 +36,7 @@ public class XunDaoGetPileVersionPushServiceImpl implements IGetPileVersionPushS
 
     @Override
     public BasePushCallBackResponse<GetPileVersionReqeust> doPush(GetPileVersionReqeust getPileVersionReqeust) {
-        //TODO 数据封装要改
-        byte[] pushMsg=GetPileVersionReqeust.packBytes(getPileVersionReqeust);
+        byte[] pushMsg = GetPileVersionReqeust.packBytesXunDao(getPileVersionReqeust);
         BasePushCallBackResponse<GetPileVersionReqeust> basePushCallBackResponse=new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( getPileVersionReqeust.getSerial() );
         boolean flag= pushBusiness.push(pushMsg,getPileVersionReqeust.getTradeType().getCode(),getPileVersionReqeust.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);

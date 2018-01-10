@@ -23,7 +23,7 @@ public class XundaoGetPileVersionBusinessImpl implements IBusiness {
         //依照报文体规则解析报文
         GetPileVersionReqeust getPileVersionReqeust = GetPileVersionReqeust.packEntityXunDao(msg);
         getPileVersionReqeust.setSerial(order);
-        ChannelResponseCallBackMap.callBack(incoming, String.valueOf(order), getPileVersionReqeust);
+        ChannelResponseCallBackMap.callBack(incoming, order, getPileVersionReqeust);
         return null;
     }
 }

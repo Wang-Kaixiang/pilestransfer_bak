@@ -28,6 +28,7 @@ public class XunDaoLoginBusinessImpl implements IBusiness {
         log.info("接收到登录请求报文");
         //依照报文体规则解析报文
         LoginRequest loginRequest = LoginRequest.packEntityXundao(msg);
+        loginRequest.setTradeType(TradeType.XUN_DAO);
         log.info("接收到登录请求报文:{}", loginRequest.toString());
         //调用底层接口
         boolean flag = loginService.login(loginRequest);

@@ -11,7 +11,6 @@ public class Demo {
         String keySplit = " ";
         String requestBody = "68 01 00 00 00 1D 10 00 02 54 84 56 18 35 02 02 00 00 00 00 00 00 00 01 00 01 02 00 00 00 04 00 00 00 01 2B D9";
         if(StringUtils.isBlank(requestBody)){
-            //TODO　返回错误报文
         }
 
         String[] requestArray = StringUtils.split(requestBody, keySplit);

@@ -48,7 +48,7 @@ public class GetPileVersionReqeust extends BasePushResponse {
      * @param getPileVersionReqeusts
      * @return
      */
-    public static byte[]  packBytes(GetPileVersionReqeust getPileVersionReqeusts) {
+    public static byte[] packBytesXunDao(GetPileVersionReqeust getPileVersionReqeusts) {
         //TODO 解析参数
 
         return new byte[]{};

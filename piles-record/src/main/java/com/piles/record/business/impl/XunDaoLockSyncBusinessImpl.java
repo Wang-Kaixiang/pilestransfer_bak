@@ -19,7 +19,7 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        log.info("接收到循道时钟同步请求报文");
+        log.info("接收到循道心跳请求报文");
         //依照报文体规则解析报文
         DateTime dateTime = new DateTime();
         int ms = dateTime.getMillisOfSecond();
@@ -28,8 +28,8 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
         int day = dateTime.getDayOfMonth();
         int month = dateTime.getMonthOfYear();
         int year = dateTime.getYear() - 2000;
-        byte[] data = Bytes.concat(BytesUtil.intToBytes(ms), BytesUtil.intToBytes(min, 1), BytesUtil.intToBytes(hour),
-                BytesUtil.intToBytes(day), BytesUtil.intToBytes(month), BytesUtil.intToBytes(year));
+        byte[] data = Bytes.concat(BytesUtil.intToBytesLittle(ms), BytesUtil.intToBytes(min, 1), BytesUtil.intToBytes(hour, 1),
+                BytesUtil.intToBytes(day, 1), BytesUtil.intToBytes(month, 1), BytesUtil.intToBytes(year, 1));
 
         byte[] head = new byte[]{0x68};
         byte[] length = new byte[]{0x20};
