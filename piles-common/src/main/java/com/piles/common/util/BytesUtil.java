@@ -226,6 +226,20 @@ public class BytesUtil {
     }
 
     /**
+     * @函数功能: 10进制串转为BCD码
+     * @输入参数: 10进制串
+     * @输出结果: BCD码
+     */
+    public static byte[] str2BcdLittle(String asc) {
+        byte[] temp = str2Bcd(asc);
+        byte[] ret = new byte[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            ret[temp.length - i - 1] = temp[i];
+        }
+        return ret;
+    }
+
+    /**
      * 将int转为byte 小端模式
      * @param value int值
      * @return
@@ -381,8 +395,14 @@ public class BytesUtil {
     }
 
     public static void main(String[] args) {
-        int i = bytesToInt("f".getBytes(), 0);
-        System.out.println(i);
+        byte[] bytes = new byte[]{0x04, 0x28, 0x00, 0x00, 0x00, 0x30, 0x40, 0x31};
+
+        System.out.println(bcd2StrLittle(bytes));
+        for (byte b : str2BcdLittle("3140300000002804")) {
+            System.out.println(Integer.toHexString((int) b));
+        }
+//        int i = bytesToInt("f".getBytes(), 0);
+//        System.out.println(i);
 //        System.out.println(3 << 1);
 //        byte[] bytes = intToBytes(3,4);
 //        byte[] bytes1 = intToBytesLittle(232424244,4);
