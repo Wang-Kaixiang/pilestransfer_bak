@@ -18,6 +18,7 @@ public class XundaoGetPileVersionBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
+        log.info( "接收到循道获取升级软件版本号返回报文" );
         String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
         //依照报文体规则解析报文
         GetPileVersionReqeust getPileVersionReqeust = GetPileVersionReqeust.packEntityXunDao(msg);

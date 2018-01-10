@@ -85,11 +85,11 @@ public class XunDaoUploadRecordRequest implements Serializable {
         //处理每半个小时 共12小时 24个
         List<BigDecimal> list = Lists.newArrayList();
         for(int i =0;i<24;i++){
-            list.add( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 )) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
+            list.add( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
             cursor += 2;
         }
         request.setEveryHalfHourDegress(list);
-        request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
         request.setMeasureNumberType( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
         cursor += 2;
@@ -99,7 +99,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         cursor += 4;
         request.setReserved( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         cursor += 4;
-        request.setCurrentExpenseAmount( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setCurrentExpenseAmount( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
         request.setTransactionFlag( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;

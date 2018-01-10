@@ -18,10 +18,8 @@ public class XunDaoFtpUpgradeIssueBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-
-        //TODO 流水号
-        int order = 0;
-        log.info( "接收到循道充电桩是否升级报文" );
+        log.info( "接收到循道充电桩是否升级返回报文" );
+        String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
         //依照报文体规则解析报文
         XunDaoFtpUpgradeIssueRequest ftpUpgradeIssueRequest = XunDaoFtpUpgradeIssueRequest.packEntity( dataBytes );

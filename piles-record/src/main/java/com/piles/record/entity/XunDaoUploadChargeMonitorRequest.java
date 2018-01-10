@@ -57,15 +57,15 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     public static XunDaoUploadChargeMonitorRequest packEntity(byte[] msg) {
         XunDaoUploadChargeMonitorRequest request = new XunDaoUploadChargeMonitorRequest();
         int cursor = 0;
-        request.setHighestAllowVoltage( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 1000 ), 1, BigDecimal.ROUND_HALF_UP ) );
+        request.setHighestAllowVoltage( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 10 ), 1, BigDecimal.ROUND_HALF_UP ) );
         cursor += 2;
-        request.setHighestAllowElectricity( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setHighestAllowElectricity( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 2;
         request.setOutputRelayStatus( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
         cursor += 1;
         request.setSwitchStatus( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
         cursor += 1;
-        request.setActivElectricalDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) ).divide( new BigDecimal( 1000 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setActivElectricalDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
         request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
