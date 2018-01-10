@@ -3,6 +3,7 @@ package com.piles.control.entity;
 import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.CRC16Util;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -79,28 +80,49 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
      * @return
      */
     public static byte[] packBytesXunDao(RemoteStartPushRequest request) {
-        //TODO 封装循道的push报文
-        int gunNo = request.getGunNo();
-        int chargeModel = request.getChargeModel();
+        int model = request.getChargeModel();
+
         BigDecimal chargeData = request.getChargeData();
-        String chargeStopCode = request.getChargeStopCode();
-        long orderNo = request.getOrderNo();
-        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo, 1);
-        byte[] chargeModelBytes = BytesUtil.intToBytes(chargeModel, 1);
-        BigDecimal chargeDataInt = request.getChargeData();
-        if (chargeModel == 2 || chargeModel == 4 || chargeModel == 5) {
-            BigDecimal chargeDataVal = chargeData.multiply(BigDecimal.valueOf(1000));
-            chargeDataInt = chargeDataVal;
-        } else if (chargeModel == 3) {
-            chargeDataInt = chargeData;
+        int dataint = 0;
+
+        switch (model) {
+            case 1:
+                //充满
+                model = 0;
+                break;
+            case 2:
+                //定费
+                dataint = chargeData.multiply(new BigDecimal(100)).intValue();
+                model = 1;
+                break;
+            case 4:
+                //定量
+                dataint = chargeData.multiply(new BigDecimal(100)).intValue();
+                model = 2;
+                break;
+
+            case 3:
+                //定时
+                dataint = chargeData.divide(new BigDecimal(60), 0).intValue();
+                model = 3;
+                break;
         }
-        byte[] chargeDataBytes = BytesUtil.intToBytes(chargeDataInt.intValue(), 4);
-        byte[] chargeStopCodeBytes = BytesUtil.str2Bcd(chargeStopCode);
-        if (chargeStopCodeBytes.length == 1) {
-            chargeStopCodeBytes = Bytes.concat(new byte[]{0}, chargeStopCodeBytes);
-        }
-        byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
-        return Bytes.concat(gunNoBytes, chargeModelBytes, chargeDataBytes, chargeStopCodeBytes, orderNoBytes);
+        byte[] data = Bytes.concat(BytesUtil.str2BcdLittle(request.getPileNo()), new byte[]{0x01}, BytesUtil.intToBytes(model, 1), BytesUtil.intToBytesLittle(dataint, 4));
+        byte[] head = new byte[]{0x68};
+        byte[] length = new byte[]{0x25};
+        byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
+        byte[] type = new byte[]{(byte) 0x133};
+        byte[] beiyong = new byte[]{0x00};
+        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] crc = CRC16Util.getXunDaoCRC(data);
+        byte[] addr = new byte[]{0x28};
+
+
+        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
+
+        //组装返回报文体
+
+        return temp;
     }
 
     public static void main(String[] args) {

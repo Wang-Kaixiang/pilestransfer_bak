@@ -3,9 +3,11 @@ package com.piles.control.entity;
 import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.CRC16Util;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 远程结束充电
@@ -42,12 +44,23 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
      * @return
      */
     public static byte[] packBytesXundao(RemoteClosePushRequest request) {
-        //TODO 封装循道报文
-        int gunNo = request.getGunNo();
-        long orderNo = request.getOrderNo();
-        byte[] gunNoBytes = BytesUtil.intToBytes(gunNo, 1);
-        byte[] orderNoBytes = BytesUtil.long2Byte(orderNo);
-        return Bytes.concat(gunNoBytes, orderNoBytes);
+
+        byte[] data = Bytes.concat(BytesUtil.str2BcdLittle(request.getPileNo()), new byte[]{0x02}, BytesUtil.intToBytes(0, 1), BytesUtil.intToBytesLittle(0, 4));
+        byte[] head = new byte[]{0x68};
+        byte[] length = new byte[]{0x25};
+        byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
+        byte[] type = new byte[]{(byte) 0x133};
+        byte[] beiyong = new byte[]{0x00};
+        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] crc = CRC16Util.getXunDaoCRC(data);
+        byte[] addr = new byte[]{0x28};
+
+
+        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
+
+        //组装返回报文体
+
+        return temp;
     }
 
 
