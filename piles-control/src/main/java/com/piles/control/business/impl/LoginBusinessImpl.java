@@ -38,6 +38,7 @@ public class LoginBusinessImpl extends BaseBusiness{
         log.info( "接收到登录请求报文" );
         //依照报文体规则解析报文
         LoginRequest loginRequest = LoginRequest.packEntity(bodyBytes);
+        loginRequest.setTradeType(TradeType.WEI_JING);
         log.info( "接收到登录请求报文:{}", loginRequest.toString() );
         //调用底层接口
         boolean flag = loginService.login(loginRequest);
