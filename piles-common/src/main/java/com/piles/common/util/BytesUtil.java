@@ -349,6 +349,16 @@ public class BytesUtil {
         return Bytes.concat(target,added);
     }
 
+    /**
+     * 获取循道默认控制域
+     *
+     * @return
+     */
+    public static byte[] xundaoControl() {
+
+        return createByteArray((byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01);
+    }
+
     public static void main(String[] args) {
         int i = bytesToInt("f".getBytes(), 0);
         System.out.println(i);
