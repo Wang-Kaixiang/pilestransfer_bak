@@ -51,8 +51,7 @@ public class XunDaoFtpUpgradeIssuePushRequest extends BasePushRequest implements
      */
     public static byte[] packBytes(XunDaoFtpUpgradeIssuePushRequest request){
         byte[] result = new byte[0];
-        //TODO str2BcdLittle未实现
-        result = Bytes.concat(result,BytesUtil.str2Bcd(request.getPileNo()));
+        result = Bytes.concat(result,BytesUtil.str2BcdLittle(request.getPileNo()));
         result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerIp().getBytes(),20,(byte)0x00));
         result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerPort().getBytes(),5,(byte)0x00));
         result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getUserName().getBytes(),20,(byte)0x00));
