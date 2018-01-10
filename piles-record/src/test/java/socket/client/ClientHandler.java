@@ -20,7 +20,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<byte[]> {
             case (byte)0x8C :
                 testHearBeatResponse( bytes);
         }
-        //TODO 获取到server端返回值
 
     }
 
