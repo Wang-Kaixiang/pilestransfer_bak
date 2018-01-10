@@ -1,6 +1,7 @@
 package com.piles.setting.business.impl;
 
 import com.piles.common.business.IBusiness;
+import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.setting.entity.GetPileVersionReqeust;
 import io.netty.channel.Channel;
@@ -17,7 +18,8 @@ public class XundaoGetPileVersionBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        String order = "";//TODO 流水号
+        log.info( "接收到循道获取升级软件版本号返回报文" );
+        String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
         //依照报文体规则解析报文
         GetPileVersionReqeust getPileVersionReqeust = GetPileVersionReqeust.packEntityXunDao(msg);
         getPileVersionReqeust.setSerial(order);

@@ -40,6 +40,9 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
 //        uploadRecordRequest.setSerial(order);
         log.info( "接收到循道充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
         UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest);
+        //添加serial
+        int serial = BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4));
+        uploadRecord.setSerial(serial);
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord( uploadRecord );
 //        byte[] orderNo = BytesUtil.copyBytes( bodyBytes, 1, 8 );
@@ -74,6 +77,7 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
         uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
+
         //TODO  Serial
 //        uploadRecord.setSerial(uploadRecordRequest.getOrderNo());
         //TODO 错误编码能匹配上吗

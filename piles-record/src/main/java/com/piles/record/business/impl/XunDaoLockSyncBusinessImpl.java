@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 /**
- * 登录接口逻辑
+ * 循道时钟同步接口逻辑
  */
 @Slf4j
 @Component("xunDaoLockSyncBusiness")
@@ -19,7 +19,7 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
-        log.info("接收到循道心跳请求报文");
+        log.info("接收到循道时钟同步请求报文");
         //依照报文体规则解析报文
         DateTime dateTime = new DateTime();
         int ms = dateTime.getMillisOfSecond();
