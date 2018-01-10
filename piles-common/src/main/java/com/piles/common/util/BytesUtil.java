@@ -3,6 +3,7 @@ package com.piles.common.util;
 import com.google.common.primitives.Bytes;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -232,11 +233,7 @@ public class BytesUtil {
      */
     public static byte[] str2BcdLittle(String asc) {
         byte[] temp = str2Bcd(asc);
-        byte[] ret = new byte[temp.length];
-        for (int i = 0; i < temp.length; i++) {
-            ret[temp.length - i - 1] = temp[i];
-        }
-        return ret;
+        return revert(temp);
     }
 
     /**
@@ -392,6 +389,50 @@ public class BytesUtil {
 
 
         return bytesToInt(copyBytes(control, 0, 2), 0);
+    }
+
+    public static String ascii2StrLittle(byte[] ascs) {
+        byte[] data = revert(ascs);
+        String asciiStr = null;
+        try {
+            asciiStr = new String(data, "ISO8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return asciiStr;
+    }
+
+    public static String ascii2Str(byte[] ascs) {
+        byte[] data = ascs;
+        String asciiStr = null;
+        try {
+            asciiStr = new String(data, "ISO8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return asciiStr;
+    }
+
+    public static byte[] str2AscLittle(String str) {
+        return revert(str2Asc(str));
+    }
+
+    public static byte[] str2Asc(String str) {
+        byte[] bytes = null;
+        try {
+            bytes = str.getBytes("ISO8859-1");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return bytes;
+    }
+
+    public static byte[] revert(byte[] temp) {
+        byte[] ret = new byte[temp.length];
+        for (int i = 0; i < temp.length; i++) {
+            ret[temp.length - i - 1] = temp[i];
+        }
+        return ret;
     }
 
     public static void main(String[] args) {

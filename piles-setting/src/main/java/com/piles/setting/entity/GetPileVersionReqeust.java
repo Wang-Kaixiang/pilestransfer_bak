@@ -39,10 +39,9 @@ public class GetPileVersionReqeust extends BasePushResponse {
      */
     public static GetPileVersionReqeust packEntityXunDao(byte[] msg) {
         GetPileVersionReqeust request = new GetPileVersionReqeust();
-        //TODO 解析参数
-        request.setPileNo("");
-        request.setSoftVersion("");
-        request.setMerchantNo("");
+        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, 13, 8)));
+        request.setSoftVersion(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(msg, 21, 20)));
+        request.setMerchantNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(msg, 41, 20)));
         request.setTradeType(TradeType.XUN_DAO);
         return request;
     }
