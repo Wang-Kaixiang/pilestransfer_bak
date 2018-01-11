@@ -35,9 +35,6 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
 
             if(checkIfChainTestMsg(msg)){
                 return SpringContextUtil.getBean("xunDaoChainTestBusiness");
-                //TODO 解析定长报文
-            }else if(2==2){
-                //TODO 解析定长报文
             }else{
                 log.error("无法识别的报文：{}",msg);
                 return null;
