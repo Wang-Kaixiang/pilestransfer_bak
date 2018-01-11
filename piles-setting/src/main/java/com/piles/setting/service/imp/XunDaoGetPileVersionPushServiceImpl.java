@@ -6,6 +6,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.setting.entity.GetPileVersionPushReqeust;
+import com.piles.setting.entity.GetPileVersionReqeust;
 import com.piles.setting.service.IGetPileVersionPushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,18 +33,18 @@ public class XunDaoGetPileVersionPushServiceImpl implements IGetPileVersionPushS
 
 
     @Override
-    public BasePushCallBackResponse<GetPileVersionPushReqeust> doPush(GetPileVersionPushReqeust getPileVersionPushReqeust) {
+    public BasePushCallBackResponse<GetPileVersionReqeust> doPush(GetPileVersionPushReqeust getPileVersionPushReqeust) {
         byte[] pushMsg = GetPileVersionPushReqeust.packBytesXunDao(getPileVersionPushReqeust);
-        BasePushCallBackResponse<GetPileVersionPushReqeust> basePushCallBackResponse = new BasePushCallBackResponse();
+        BasePushCallBackResponse<GetPileVersionReqeust> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial(getPileVersionPushReqeust.getSerial());
-        boolean flag = pushBusiness.push(pushMsg, getPileVersionPushReqeust.getTradeType().getCode(), getPileVersionPushReqeust.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
+        boolean flag = pushBusiness.push(pushMsg, getPileVersionPushReqeust.getTradeTypeCode(), getPileVersionPushReqeust.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
-            ChannelResponseCallBackMap.remove(getPileVersionPushReqeust.getTradeType().getCode(), getPileVersionPushReqeust.getPileNo(), getPileVersionPushReqeust.getSerial());
+            ChannelResponseCallBackMap.remove(getPileVersionPushReqeust.getTradeTypeCode(), getPileVersionPushReqeust.getPileNo(), getPileVersionPushReqeust.getSerial());
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

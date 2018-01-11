@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * 远程关闭充电给充电桩发送消息实现类
  */
 @Slf4j
-@Service
+@Service("remoteClosePushServiceImpl_1")
 public class RemoteClosePushServiceImpl implements IRemoteClosePushService {
 
     @Resource(name = "pushBusinessImpl")

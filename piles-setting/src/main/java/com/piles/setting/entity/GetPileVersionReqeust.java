@@ -1,11 +1,8 @@
 package com.piles.setting.entity;
 
-import com.google.common.primitives.Bytes;
-import com.piles.common.entity.BasePushRequest;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.CRC16Util;
 import lombok.Data;
 
 /**
@@ -18,15 +15,15 @@ public class GetPileVersionReqeust extends BasePushResponse {
      */
     private String pileNo;
     /**
-     *厂商类型
+     * 厂商类型
      */
     private TradeType tradeType;
     /**
-     *厂商编号
+     * 厂商编号
      */
     private String merchantNo;
     /**
-     *软件版本号
+     * 软件版本号
      */
     private String softVersion;
 

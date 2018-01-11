@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  * 远程升级 给充电桩发送消息实现类
  */
 @Slf4j
-@Service
+@Service("remoteUpdatePushServiceImpl_1")
 public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService {
 
     @Resource(name = "pushBusinessImpl")

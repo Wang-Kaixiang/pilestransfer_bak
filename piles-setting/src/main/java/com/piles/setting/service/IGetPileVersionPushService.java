@@ -2,6 +2,7 @@ package com.piles.setting.service;
 
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.setting.entity.GetPileVersionPushReqeust;
+import com.piles.setting.entity.GetPileVersionReqeust;
 
 /**
  * 获取充电桩版本 运营中心主动调用服务
@@ -14,5 +15,5 @@ public interface IGetPileVersionPushService {
      * @param getPileVersionPushReqeust
      * @return
      */
-    BasePushCallBackResponse<GetPileVersionPushReqeust> doPush(GetPileVersionPushReqeust getPileVersionPushReqeust);
+    BasePushCallBackResponse<GetPileVersionReqeust> doPush(GetPileVersionPushReqeust getPileVersionPushReqeust);
 }
