@@ -4,11 +4,9 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
-import com.piles.util.FileUtil;
-import com.piles.util.HttpRequest;
-import com.piles.util.Md5Util;
-import com.piles.util.Util;
+import com.piles.util.*;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.control.entity.RemoteClosePushRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
@@ -18,7 +16,6 @@ import com.piles.setting.entity.*;
 import com.piles.setting.service.*;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,7 +28,6 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Controller
@@ -69,6 +65,7 @@ public class PilesController {
                 remoteStartPushRequest.setChargeData(BigDecimal.valueOf(Double.valueOf(data)));
                 remoteStartPushRequest.setChargeModel(Integer.parseInt( modle ));
                 remoteStartPushRequest.setChargeStopCode("6464");
+                remoteStartPushRequest.setTradeTypeCode(1);
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
                 break;
             case "2":
@@ -188,25 +185,64 @@ public class PilesController {
         return "{\"status\":\"200\"}";
     }
 
+    /**
+     * 循道远程开启充电
+     *
+     * @param remoteStartRequest
+     * @return
+     */
     @RequestMapping("/test2")
     @ResponseBody
-    public boolean  test2(HttpServletRequest request) {
-        String type = request.getParameter("type");
-        JSONObject jsonObject= new JSONObject();
-        jsonObject.put("orderNo",123455);
-        jsonObject.put("pileNo","0000000080000004");
-        jsonObject.put("serial",123);
-        jsonObject.put("endReason",type);
-        jsonObject.put("totalAmmeterDegree",0.2);
+    public String test2(RemoteStartPushRequest remoteStartRequest) {
+        IRemoteStartPushService iRemoteStartPushService = serviceFactoryUtil.getService(TradeType.XUN_DAO.getCode(), IRemoteStartPushService.class);
 
-//        http://tox.tunnel.qydev.com/order/powerEnd
-        Map<String,JSONObject> map= new HashedMap();
-        map.put("args",jsonObject);
-
-        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/Tox_Elec/order/powerEnd");
-
-        return flag;
+        return JSONObject.toJSONString(iRemoteStartPushService.doPush(remoteStartRequest));
     }
+
+    /**
+     * 循道远程结束充电
+     *
+     * @param remoteStartRequest
+     * @return
+     */
+    @RequestMapping("/test3")
+    @ResponseBody
+    public String test3(RemoteClosePushRequest remoteStartRequest) {
+        IRemoteClosePushService iRemoteStartPushService = serviceFactoryUtil.getService(TradeType.XUN_DAO.getCode(), IRemoteClosePushService.class);
+
+        return JSONObject.toJSONString(iRemoteStartPushService.doPush(remoteStartRequest));
+    }
+
+    /**
+     * 循道获取当前软件版本号
+     *
+     * @param remoteStartRequest
+     * @return
+     */
+    @RequestMapping("/test4")
+    @ResponseBody
+    public String test4(GetPileVersionPushReqeust remoteStartRequest) {
+        IGetPileVersionPushService iRemoteStartPushService = serviceFactoryUtil.getService(TradeType.XUN_DAO.getCode(), IGetPileVersionPushService.class);
+
+        return JSONObject.toJSONString(iRemoteStartPushService.doPush(remoteStartRequest));
+    }
+
+    /**
+     * 循道远程结束充电
+     *
+     * @param remoteStartRequest
+     * @return
+     */
+    @RequestMapping("/test5")
+    @ResponseBody
+    public String test5(XunDaoFtpUpgradeIssuePushRequest remoteStartRequest) {
+        IXunDaoFtpUpgradeIssueService iRemoteStartPushService = serviceFactoryUtil.getService(TradeType.XUN_DAO.getCode(), IXunDaoFtpUpgradeIssueService.class);
+
+        return JSONObject.toJSONString(iRemoteStartPushService.doPush(remoteStartRequest));
+    }
+
+    @Resource
+    ServiceFactoryUtil serviceFactoryUtil;
 
     public static void main(String[] args) {
         String data="0.1";

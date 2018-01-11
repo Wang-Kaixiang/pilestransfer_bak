@@ -43,7 +43,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
     @Override
     public BasePushCallBackResponse<XunDaoFtpUpgradeIssueRequest> doPush(XunDaoFtpUpgradeIssuePushRequest xunDaoFtpUpgradeIssuePushRequest) {
         byte[] pushMsg = XunDaoFtpUpgradeIssuePushRequest.packBytes( xunDaoFtpUpgradeIssuePushRequest );
-        pushMsg = buildHead(pushMsg);
+        pushMsg = buildHead(pushMsg, xunDaoFtpUpgradeIssuePushRequest);
         BasePushCallBackResponse<XunDaoFtpUpgradeIssueRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial( xunDaoFtpUpgradeIssuePushRequest.getSerial() );
         boolean flag = pushBusiness.push( pushMsg, xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE );
@@ -62,10 +62,9 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
     }
 
     //添加报文头
-    private byte[] buildHead(byte[] dataMsg) {
+    private byte[] buildHead(byte[] dataMsg, XunDaoFtpUpgradeIssuePushRequest request) {
         byte[] result = Bytes.concat(new byte[]{0x68}, BytesUtil.intToBytesLittle(184,1));
-        //TODO 添加控制域
-        result = Bytes.concat(result,new byte[4]);
+        result = Bytes.concat(result, BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial())));
         //添加类型标识
         result = Bytes.concat(result,BytesUtil.intToBytesLittle(typeCode,1));
         //添加备用

@@ -5,11 +5,8 @@ import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.common.util.ChannelResponseCallBackMap;
-import com.piles.setting.entity.GetPileVersionReqeust;
-import com.piles.setting.entity.RemoteUpdatePushRequest;
-import com.piles.setting.entity.RemoteUpdateRequest;
+import com.piles.setting.entity.GetPileVersionPushReqeust;
 import com.piles.setting.service.IGetPileVersionPushService;
-import com.piles.setting.service.IRemoteUpdatePushService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,18 +32,18 @@ public class XunDaoGetPileVersionPushServiceImpl implements IGetPileVersionPushS
 
 
     @Override
-    public BasePushCallBackResponse<GetPileVersionReqeust> doPush(GetPileVersionReqeust getPileVersionReqeust) {
-        byte[] pushMsg = GetPileVersionReqeust.packBytesXunDao(getPileVersionReqeust);
-        BasePushCallBackResponse<GetPileVersionReqeust> basePushCallBackResponse=new BasePushCallBackResponse();
-        basePushCallBackResponse.setSerial( getPileVersionReqeust.getSerial() );
-        boolean flag= pushBusiness.push(pushMsg,getPileVersionReqeust.getTradeType().getCode(),getPileVersionReqeust.getPileNo(),basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
+    public BasePushCallBackResponse<GetPileVersionPushReqeust> doPush(GetPileVersionPushReqeust getPileVersionPushReqeust) {
+        byte[] pushMsg = GetPileVersionPushReqeust.packBytesXunDao(getPileVersionPushReqeust);
+        BasePushCallBackResponse<GetPileVersionPushReqeust> basePushCallBackResponse = new BasePushCallBackResponse();
+        basePushCallBackResponse.setSerial(getPileVersionPushReqeust.getSerial());
+        boolean flag = pushBusiness.push(pushMsg, getPileVersionPushReqeust.getTradeType().getCode(), getPileVersionPushReqeust.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag){
             basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
             return basePushCallBackResponse;
         }
         try {
             basePushCallBackResponse.getCountDownLatch().await(timeout, TimeUnit.MILLISECONDS);
-            ChannelResponseCallBackMap.remove( getPileVersionReqeust.getTradeType().getCode(),getPileVersionReqeust.getPileNo(),getPileVersionReqeust.getSerial() );
+            ChannelResponseCallBackMap.remove(getPileVersionPushReqeust.getTradeType().getCode(), getPileVersionPushReqeust.getPileNo(), getPileVersionPushReqeust.getSerial());
         } catch (InterruptedException e) {
             e.printStackTrace();
             log.error( e.getMessage(),e );

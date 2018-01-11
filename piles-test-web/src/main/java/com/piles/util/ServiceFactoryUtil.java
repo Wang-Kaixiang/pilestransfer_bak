@@ -33,4 +33,21 @@ public class ServiceFactoryUtil {
         }
         return (IRemoteStartPushService) services.get("IRemoteStartPushService"+tradeTypeCode);
     }
+
+    /**
+     * 获取serve
+     *
+     * @param tradeTypeCode
+     * @return
+     */
+    public <T> T getService(int tradeTypeCode, Class<T> tClass) {
+        if (!services.containsKey(tClass.getName() + tradeTypeCode)) {
+            String[] names = springBeanFactoryUtils.getBeanNames(tClass);
+            for (String name : names) {
+                String code = name.split("_")[1];
+                services.put(tClass.getName() + code, springBeanFactoryUtils.getBean(name));
+            }
+        }
+        return (T) services.get(tClass.getName() + tradeTypeCode);
+    }
 }
