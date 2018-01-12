@@ -33,13 +33,13 @@ public class GetPileVersionPushReqeust extends BasePushRequest {
     public static byte[] packBytesXunDao(GetPileVersionPushReqeust getPileVersionPushReqeusts) {
         byte[] data = BytesUtil.str2BcdLittle(getPileVersionPushReqeusts.getPileNo());
         byte[] head = new byte[]{0x68};
-        byte[] length = new byte[]{0x19};
+        byte[] length = new byte[]{0x13};
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(getPileVersionPushReqeusts.getSerial()));
-        byte[] type = new byte[]{(byte) 0x133};
+        byte[] type = new byte[]{(byte) 0x85};
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = new byte[]{0x03, 0x00};
         byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x31};
+        byte[] addr = new byte[]{0x1F};
 
 
         byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
