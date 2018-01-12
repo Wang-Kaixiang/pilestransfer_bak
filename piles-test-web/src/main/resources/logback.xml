@@ -2,7 +2,6 @@
 <configuration debug="false">
 	<property name="LOG_HOME" value="/piletransfer/logs/" />
 	<property name="FILE_NAME" value="piles" />
-	<property name="XUNDAO_NAME" value="xundao" />
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,从左显示5个字符宽度;%msg:日志消息;%n:换行符 -->
@@ -24,25 +23,7 @@
 			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
 		</encoder>
 	</appender>
-	<!-- 按照每天生成日志文件 -->
-	<appender name="xunDaoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_HOME}/${FILE_NAME}.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-			<!--日志文件输出的文件名 -->
-			<fileNamePattern>${LOG_HOME}/${XUNDAO_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-			<!--日志文件保留天数 -->
-			<maxFileSize>500MB</maxFileSize>
-			<maxHistory>30</maxHistory>
-		</rollingPolicy>
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<!--格式化输出,%d:日期;%thread:线程名;%-5level：级别,从左显示5个字符宽度;%msg:日志消息;%n:换行符 -->
-			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-		</encoder>
-	</appender>
 
-	<logger name="com.piles.**.xundao.*" level="INFO" additivity="false">
-		<appender-ref ref="xunDaoAppender" />
-	</logger>
 
 	<!-- 日志输出级别 -->
 	<root level="INFO">
