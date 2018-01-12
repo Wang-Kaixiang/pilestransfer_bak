@@ -34,10 +34,7 @@ import java.util.List;
 @RequestMapping("/piles")
 public class PilesController {
 
-//    @Resource
-//    private IRemoteStartPushService remoteStartPushService;
-//    @Resource(name="remoteClosePushService_1")
-    private IRemoteClosePushService remoteClosePushService;
+
     @Resource
     private IRemoteUpdatePushService remoteUpdatePushService;
     @Resource
@@ -76,7 +73,7 @@ public class PilesController {
                 remoteClosePushRequest.setOrderNo(123456L);
                 remoteClosePushRequest.setPileNo("0000000080000004");
                 remoteClosePushRequest.setSerial("0");
-//                RemoteClosePushService remoteClosePushService = serviceFactoryUtil.getService(TradeType.WEI_JING.getCode(), IRemoteStartPushService.class);
+                IRemoteClosePushService remoteClosePushService = serviceFactoryUtil.getService(TradeType.WEI_JING.getCode(), IRemoteClosePushService.class);
 
                 log.info("远程结束充电请求返回报文:{}", JSON.toJSONString(remoteClosePushService.doPush(remoteClosePushRequest)));
 
