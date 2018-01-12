@@ -28,7 +28,7 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
         for (byte b : msg) {
             temp += " " + Integer.toHexString(Byte.toUnsignedInt(b));
         }
-        logger.info("[" + incoming.remoteAddress() + "]发送请求信息:" + temp);
+        logger.info("[" + incoming.remoteAddress() + "]循道发送请求信息:" + temp);
         byte[] response = xunDaoBusinessHandler.process(msg, incoming);
         if (response != null) {
             ctx.writeAndFlush(response);
@@ -36,7 +36,7 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
             for (byte b : response) {
                 temp += " " + Integer.toHexString(Byte.toUnsignedInt(b));
             }
-            logger.info("[" + incoming.remoteAddress() + "]返回结果信息:" + temp);
+            logger.info("[" + incoming.remoteAddress() + "]循道返回结果信息:" + temp);
         }
         //包装
 
@@ -45,13 +45,13 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception { // (2)
         Channel incoming = ctx.channel();
-        logger.info("add connect:" + incoming.remoteAddress());
+        logger.info("循道add connect:" + incoming.remoteAddress());
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception { // (3)
         Channel incoming = ctx.channel();
-        logger.info("remove connect:" + incoming.remoteAddress());
+        logger.info("循道remove connect:" + incoming.remoteAddress());
         ChannelMapByEntity.removeChannel(incoming);
 //		ChannelMap.removeChannel(incoming);
     }
@@ -70,7 +70,7 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         Channel incoming = ctx.channel();
-        logger.info("channelActive:" + incoming.remoteAddress() + "在线");
+        logger.info("循道channelActive:" + incoming.remoteAddress() + "在线");
         super.channelActive(ctx);
     }
 
@@ -80,7 +80,7 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception { // (6)
         Channel incoming = ctx.channel();
-        logger.info("channelInactive:" + incoming.remoteAddress() + "掉线");
+        logger.info("循道channelInactive:" + incoming.remoteAddress() + "掉线");
         incoming.close();
         ctx.close();
     }
@@ -95,7 +95,7 @@ public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]
         //出现异常只打印日志
 //		Channel incoming = ctx.channel();
 //		ctx.close();
-        logger.error("exceptioncaught," + ctx.channel().remoteAddress(), cause);
+        logger.error("循道exceptioncaught," + ctx.channel().remoteAddress(), cause);
 //		ChannelMap.removeChannel(incoming);
     }
 }
