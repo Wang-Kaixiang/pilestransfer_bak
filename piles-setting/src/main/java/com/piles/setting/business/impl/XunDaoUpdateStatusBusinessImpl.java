@@ -47,22 +47,19 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
 
     //封装返回报文
     private byte[] buildReponse(byte[] msg) {
-        //消息头
-        byte[] bytes = BytesUtil.copyBytes(msg, 0, 13);
-        //设置类型标识
-        BytesUtil.replaceBytes(bytes,6,BytesUtil.intToBytesLittle(XunDaoTypeCode.SEND_DATA_CODE.getCode(),1));
-        //替换记录类型
-        BytesUtil.replaceBytes(bytes,12,BytesUtil.intToBytesLittle(recordType,1));
+        byte[] data= BytesUtil.copyBytes( msg,13,8 );
+        byte[] head = new byte[]{0x68};
+        byte[] length = new byte[]{0x19};
+        byte[] contrl = BytesUtil.copyBytes( msg,2,4 );
+        byte[] type = new byte[]{(byte) 0x130};
+        byte[] beiyong = new byte[]{0x00};
+        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] crc = CRC16Util.getXunDaoCRC(data);
+        byte[] addr = new byte[]{0x53};
 
-        //终端机器编码
-        byte[] dataBytes = BytesUtil.copyBytes(msg, 13, 8);
-        Bytes.concat(bytes,dataBytes);
-        byte[] xunDaoCRC = CRC16Util.getXunDaoCRC(dataBytes);
-        //替换crc
-        BytesUtil.replaceBytes(bytes,10,xunDaoCRC);
-        //替换长度
-        BytesUtil.replaceBytes(bytes,1,BytesUtil.intToBytesLittle(bytes.length-2));
-        return bytes;
+
+        byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
+        return temp;
     }
 
     private UpdateStatusReport buildServiceEntity(XunDaoUpdateStatusRequest updatePackageRequest) {
