@@ -36,8 +36,6 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         //依照报文体规则解析报文
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
         XunDaoUploadRecordRequest uploadRecordRequest = XunDaoUploadRecordRequest.packEntity( dataBytes );
-//        uploadRecordRequest.setPileNo( ChannelMapByEntity.getChannel( incoming ).getPileNo() );
-//        uploadRecordRequest.setSerial(order);
         log.info( "接收到循道充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
         UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest);
         //添加serial
@@ -45,8 +43,6 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setSerial(serial);
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord( uploadRecord );
-//        byte[] orderNo = BytesUtil.copyBytes( bodyBytes, 1, 8 );
-//        byte[] responseBody = Bytes.concat( orderNo, result );
         return buildReponse(msg,flag);
     }
 
@@ -59,7 +55,7 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         //替换记录类型
         BytesUtil.replaceBytes(bytes,12,BytesUtil.intToBytesLittle(recordType,1));
 
-        // TODO 失败直接返回的3 0:成功，1:记录格式有误失 败，2:数据重复;3:交易记 录插入数据库失败
+        //失败直接返回的3 0:成功，1:记录格式有误失 败，2:数据重复;3:交易记 录插入数据库失败
         byte[] resultByte = result == true ? new byte[]{0x00} : new byte[]{0x03};
         //加上终端机器编码
         byte[] dataBytes = Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), resultByte);
@@ -77,10 +73,6 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
         uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
-
-        //TODO  Serial
-//        uploadRecord.setSerial(uploadRecordRequest.getOrderNo());
-        //TODO 错误编码能匹配上吗
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getTotalAmmeterDegree());
         return uploadRecord;

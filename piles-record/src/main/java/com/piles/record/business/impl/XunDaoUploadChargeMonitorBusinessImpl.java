@@ -31,7 +31,6 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
 
         //依照报文体规则解析报文
         XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
-//        uploadChargeMonitorRequest.setPileNo( ChannelMapByEntity.getChannel( incoming ).getPileNo() );
         log.info("接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
