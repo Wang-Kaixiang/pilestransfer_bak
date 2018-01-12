@@ -49,13 +49,13 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
     private byte[] buildReponse(byte[] msg) {
         byte[] data= BytesUtil.copyBytes( msg,13,8 );
         byte[] head = new byte[]{0x68};
-        byte[] length = new byte[]{0x19};
+        byte[] length = BytesUtil.intToBytesLittle(19,1);
         byte[] contrl = BytesUtil.copyBytes( msg,2,4 );
-        byte[] type = new byte[]{(byte) 0x130};
+        byte[] type = BytesUtil.intToBytesLittle(133,1);
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = new byte[]{0x03, 0x00};
         byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x53};
+        byte[] addr = BytesUtil.intToBytesLittle(53,1);;
 
 
         byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
