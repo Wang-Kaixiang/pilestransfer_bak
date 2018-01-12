@@ -49,23 +49,41 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
     //封装返回报文
     private byte[] buildReponse(byte[] msg, boolean result) {
         //消息头
-        byte[] bytes = BytesUtil.copyBytes(msg, 0, 13);
-        //设置类型标识
-        BytesUtil.replaceBytes(bytes,6,BytesUtil.intToBytesLittle(XunDaoTypeCode.SEND_DATA_CODE.getCode(),1));
-        //替换记录类型
-        BytesUtil.replaceBytes(bytes,12,BytesUtil.intToBytesLittle(recordType,1));
+//        byte[] bytes = BytesUtil.copyBytes(msg, 0, 13);
+//        //设置类型标识
+//        BytesUtil.replaceBytes(bytes,6,BytesUtil.intToBytesLittle(XunDaoTypeCode.SEND_DATA_CODE.getCode(),1));
+//        //替换记录类型
+//        BytesUtil.replaceBytes(bytes,12,BytesUtil.intToBytesLittle(recordType,1));
+//
+//        //失败直接返回的3 0:成功，1:记录格式有误失 败，2:数据重复;3:交易记 录插入数据库失败
+//        byte[] resultByte = result == true ? new byte[]{0x00} : new byte[]{0x03};
+//        //加上终端机器编码
+//        Bytes.concat(bytes,dataBytes);
+//        byte[] xunDaoCRC = CRC16Util.getXunDaoCRC(dataBytes);
+//        //替换crc
+//        BytesUtil.replaceBytes(bytes,10,xunDaoCRC);
+//        //替换长度
+//        BytesUtil.replaceBytes(bytes,1,BytesUtil.intToBytesLittle(bytes.length-2));
+//
+//        return bytes;
 
-        //失败直接返回的3 0:成功，1:记录格式有误失 败，2:数据重复;3:交易记 录插入数据库失败
-        byte[] resultByte = result == true ? new byte[]{0x00} : new byte[]{0x03};
-        //加上终端机器编码
-        byte[] dataBytes = Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), resultByte);
-        Bytes.concat(bytes,dataBytes);
-        byte[] xunDaoCRC = CRC16Util.getXunDaoCRC(dataBytes);
-        //替换crc
-        BytesUtil.replaceBytes(bytes,10,xunDaoCRC);
-        //替换长度
-        BytesUtil.replaceBytes(bytes,1,BytesUtil.intToBytesLittle(bytes.length-2));
-        return bytes;
+
+        byte[] head = new byte[]{0x68};
+        byte[] length = BytesUtil.intToBytesLittle(20,1);
+        byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
+
+        byte[] type = BytesUtil.intToBytesLittle(XunDaoTypeCode.SEND_DATA_CODE.getCode(),1);
+        byte[] beiyong = new byte[]{0x00};
+        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] recordType = BytesUtil.intToBytesLittle(this.recordType,1);
+        byte[] data = BytesUtil.copyBytes(msg, 13, 8);
+        byte[] resultByte = result == true ? new byte[]{0x00} : BytesUtil.intToBytesLittle(3,1);
+        data = Bytes.concat(data,resultByte);
+        byte[] crc = CRC16Util.getXunDaoCRC(data);
+
+        return Bytes.concat(head, length, contrl, type, beiyong, reason, crc, recordType, data);
+
+
     }
 
     private UploadRecord buildServiceEntity(XunDaoUploadRecordRequest uploadRecordRequest){

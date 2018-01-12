@@ -58,6 +58,8 @@ public class XunDaoUploadRecordRequest implements Serializable {
     // 停止充电原因 BIN 码 1Byte 0x01-余额不足 0x02-定费用到 0x03-定电量到 0x04-定时间到 0x05-汽车主动停止
     // 0x06-人工正常停止 0x07-输出失败 0x08-系统故障 0x09-未结账 0x0A-CP 异常 0x0B-意外断电
     private int stopChargeReason;
+    //订单号 ascii 32位小端
+    private String subscriptionNo;
 
     /**
      * 解析报文并封装request体
@@ -108,6 +110,8 @@ public class XunDaoUploadRecordRequest implements Serializable {
         request.setEndSoc( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
         request.setStopChargeReason( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        cursor += 1;
+        request.setSubscriptionNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes( msg, cursor, 32 )));
         return request;
     }
 
@@ -142,6 +146,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
 //        return responseBytes;
 //    }
 
+
     @Override
     public String toString() {
         return "XunDaoUploadRecordRequest{" +
@@ -163,6 +168,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
                 ", beginSoc=" + beginSoc +
                 ", endSoc=" + endSoc +
                 ", stopChargeReason=" + stopChargeReason +
+                ", subscriptionNo='" + subscriptionNo + '\'' +
                 '}';
     }
 
