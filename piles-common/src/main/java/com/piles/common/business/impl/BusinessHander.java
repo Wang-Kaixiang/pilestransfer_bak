@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 
 
 @Slf4j
-@Component
+@Component("businessHandler")
 public  class BusinessHander implements IBusinessHandler {
 
     @Resource(name="businessFactory")

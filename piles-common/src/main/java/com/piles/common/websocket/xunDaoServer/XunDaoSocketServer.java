@@ -10,10 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -30,14 +30,14 @@ public class XunDaoSocketServer implements InitializingBean, DisposableBean {
 	//存放桩编号和ip
 	public static ConcurrentHashMap<Integer,Channel> clientMap = new ConcurrentHashMap<>();
 
-	@Autowired
-	private XunDaoServerChannelInitializer serverChannelInitializer;
+	@Resource
+	private XunDaoServerChannelInitializer xunDaoServerChannelInitializer;
 
 	public void start(int port) {
 		bossGroup = new NioEventLoopGroup(1);
 		workerGroup = new NioEventLoopGroup();
 		ServerBootstrap b = new ServerBootstrap();
-		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(serverChannelInitializer)
+		b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(xunDaoServerChannelInitializer)
 				.option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 
 		try {

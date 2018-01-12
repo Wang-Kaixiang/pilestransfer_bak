@@ -19,5 +19,7 @@
 		</property>
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
+	<bean class="com.piles.util.SpringBeanFactoryUtils"/>
+
 	<!--<bean class="com.piles.common.websocket.server.SocketServer"/>-->
 </beans>

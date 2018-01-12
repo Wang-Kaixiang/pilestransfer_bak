@@ -2,22 +2,22 @@ package com.piles.common.websocket.server;
 
 import com.piles.common.business.IBusinessHandler;
 import com.piles.common.util.ChannelMapByEntity;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+import javax.annotation.Resource;
+
+@Component("baseChannelHandler")
 @Sharable
 public class BaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
+	@Resource(name="businessHandler")
 	private IBusinessHandler businessHandler;
 
 	@Override

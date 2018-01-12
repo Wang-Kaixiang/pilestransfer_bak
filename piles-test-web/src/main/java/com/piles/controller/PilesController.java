@@ -34,9 +34,9 @@ import java.util.List;
 @RequestMapping("/piles")
 public class PilesController {
 
-    @Resource
-    private IRemoteStartPushService remoteStartPushService;
-    @Resource
+//    @Resource
+//    private IRemoteStartPushService remoteStartPushService;
+//    @Resource(name="remoteClosePushService_1")
     private IRemoteClosePushService remoteClosePushService;
     @Resource
     private IRemoteUpdatePushService remoteUpdatePushService;
@@ -66,6 +66,8 @@ public class PilesController {
                 remoteStartPushRequest.setChargeModel(Integer.parseInt( modle ));
                 remoteStartPushRequest.setChargeStopCode("6464");
                 remoteStartPushRequest.setTradeTypeCode(1);
+                IRemoteStartPushService remoteStartPushService = serviceFactoryUtil.getService(TradeType.WEI_JING.getCode(), IRemoteStartPushService.class);
+
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest)));
                 break;
             case "2":
@@ -74,6 +76,8 @@ public class PilesController {
                 remoteClosePushRequest.setOrderNo(123456L);
                 remoteClosePushRequest.setPileNo("0000000080000004");
                 remoteClosePushRequest.setSerial("0");
+//                RemoteClosePushService remoteClosePushService = serviceFactoryUtil.getService(TradeType.WEI_JING.getCode(), IRemoteStartPushService.class);
+
                 log.info("远程结束充电请求返回报文:{}", JSON.toJSONString(remoteClosePushService.doPush(remoteClosePushRequest)));
 
                 break;
@@ -169,6 +173,8 @@ public class PilesController {
                 remoteStartPushRequest2.setChargeData(new BigDecimal(2));
                 remoteStartPushRequest2.setChargeModel(5);
                 remoteStartPushRequest2.setChargeStopCode("6565");
+                remoteStartPushService = serviceFactoryUtil.getService(TradeType.WEI_JING.getCode(), IRemoteStartPushService.class);
+
                 log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartPushService.doPush(remoteStartPushRequest2)));
                 break;
             case "8":

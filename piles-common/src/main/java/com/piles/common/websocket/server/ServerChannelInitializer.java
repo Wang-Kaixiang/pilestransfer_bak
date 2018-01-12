@@ -15,9 +15,11 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 
+import javax.annotation.Resource;
+
 @Service
 public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> {
-	@Autowired
+	@Resource
 	BaseChannelHandler baseChannelHandler;
 	
 	@Override

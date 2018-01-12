@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
-@Component
+@Component("xunDaoBaseChannelHandler")
 @Sharable
 public class XunDaoBaseChannelHandler extends SimpleChannelInboundHandler<byte[]> {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Resource
+    @Resource(name="xunDaoBusinessHandler")
     private IBusinessHandler xunDaoBusinessHandler;
 
     @Override
