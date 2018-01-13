@@ -2,7 +2,6 @@ package com.piles.record.entity;
 
 import com.google.common.collect.Lists;
 import com.piles.common.util.BytesUtil;
-import com.sun.deploy.util.StringUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -68,7 +67,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
     public static XunDaoUploadRecordRequest packEntity(byte[] msg) {
         XunDaoUploadRecordRequest request = new XunDaoUploadRecordRequest();
         int cursor = 0;
-        request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
         cursor += 8;
         byte[] serials = BytesUtil.copyBytes(msg, cursor, 16);
         int i = 0;
@@ -77,42 +76,42 @@ public class XunDaoUploadRecordRequest implements Serializable {
         }
         request.setSerial(new String(BytesUtil.copyBytes(serials, 0, i)));
         cursor += 16;
-        request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setPhysicCardNo(BytesUtil.byte2LongLittle(BytesUtil.copyBytes(msg, cursor, 8)));
         cursor += 8;
-        request.setUserCardNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setUserCardNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
         cursor += 8;
-        request.setSubTimeBillFlag( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setSubTimeBillFlag(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setStartTime( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 7 ) ) );
+        request.setStartTime(BytesUtil.byte2LongLittle(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 7;
-        request.setEndTime( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 7 ) ) );
+        request.setEndTime(BytesUtil.byte2LongLittle(BytesUtil.copyBytes(msg, cursor, 7)));
         cursor += 7;
         //处理每半个小时 共12小时 24个
         List<BigDecimal> list = Lists.newArrayList();
         for (i = 0; i < 48; i++) {
-            list.add( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
+            list.add(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
             cursor += 2;
         }
         request.setEveryHalfHourDegress(list);
-        request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setTotalAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
-        request.setMeasureNumberType( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
+        request.setMeasureNumberType(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
-        request.setBizType( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
+        request.setBizType(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
-        request.setEWalletBalance( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
+        request.setEWalletBalance(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
-        request.setReserved( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
+        request.setReserved(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
-        request.setCurrentExpenseAmount( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setCurrentExpenseAmount(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
-        request.setTransactionFlag( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setTransactionFlag(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setBeginSoc( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setBeginSoc(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setEndSoc( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setEndSoc(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setStopChargeReason( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setStopChargeReason(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
         byte[] orderNos = BytesUtil.copyBytes(msg, cursor, 32);
         i = 0;
