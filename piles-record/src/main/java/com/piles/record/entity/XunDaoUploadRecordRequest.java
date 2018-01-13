@@ -74,7 +74,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         while (serials[i] != 0x00) {
             i++;
         }
-        request.setSerial(String.valueOf(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(serials, 0, i))));
+        request.setSerial(new String(BytesUtil.copyBytes(serials, 0, i)));
         cursor += 16;
         request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
@@ -118,7 +118,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         while (orderNos[i] != 0x00) {
             i++;
         }
-        request.setOrderNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(orderNos, 0, i)));
+        request.setOrderNo(new String(BytesUtil.copyBytes(orderNos, 0, i)));
         return request;
     }
 
