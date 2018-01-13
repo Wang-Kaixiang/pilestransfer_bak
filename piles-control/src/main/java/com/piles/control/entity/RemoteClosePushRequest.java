@@ -50,13 +50,13 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
         byte[] orderNo = BytesUtil.rightPadBytes(String.valueOf(request.getOrderNo()).getBytes(), 32, (byte) 0x00);
         data = Bytes.concat(data, serial, orderNo);
         byte[] head = new byte[]{0x68};
-        byte[] length = new byte[]{0x25};
+        byte[] length = new byte[]{0x49};
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
-        byte[] type = new byte[]{(byte) 0x133};
+        byte[] type = new byte[]{(byte) 0x85};
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = new byte[]{0x03, 0x00};
         byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x28};
+        byte[] addr = new byte[]{0x1C};
 
 
         byte[] temp = Bytes.concat(head, length, contrl, type, beiyong, reason, crc, addr, data);
