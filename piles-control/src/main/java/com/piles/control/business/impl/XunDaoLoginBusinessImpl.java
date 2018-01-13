@@ -34,6 +34,7 @@ public class XunDaoLoginBusinessImpl implements IBusiness {
         boolean flag = loginService.login(loginRequest);
         if (flag) {
             ChannelEntity channelEntity = new ChannelEntity(loginRequest.getPileNo(), TradeType.fromCode(TradeType.XUN_DAO.getCode()));
+            ChannelMapByEntity.removeChannel(channelEntity);
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
