@@ -108,6 +108,9 @@ public class RemoteStartPushRequest extends BasePushRequest implements Serializa
                 break;
         }
         byte[] data = Bytes.concat(BytesUtil.str2BcdLittle(request.getPileNo()), new byte[]{0x01}, BytesUtil.intToBytes(model, 1), BytesUtil.intToBytesLittle(dataint, 4));
+        byte[] serial = BytesUtil.rightPadBytes(BytesUtil.intToBytes(Integer.parseInt(request.getSerial()), 2), 20, (byte) 0x00);
+        byte[] orderNo = BytesUtil.rightPadBytes(String.valueOf(request.getOrderNo()).getBytes(), 32, (byte) 0x00);
+        data = Bytes.concat(data, serial, orderNo);
         byte[] head = new byte[]{0x68};
         byte[] length = new byte[]{0x49};
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
