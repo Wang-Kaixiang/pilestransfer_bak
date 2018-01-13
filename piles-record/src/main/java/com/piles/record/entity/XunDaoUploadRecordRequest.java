@@ -69,7 +69,12 @@ public class XunDaoUploadRecordRequest implements Serializable {
         int cursor = 0;
         request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setSerial(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 16)));
+        byte[] serials = BytesUtil.copyBytes(msg, cursor, 16);
+        int i = 0;
+        while (serials[i] != 0xFF) {
+            i++;
+        }
+        request.setSerial(String.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(serials, 0, i))));
         cursor += 16;
         request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
@@ -83,7 +88,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         cursor += 7;
         //处理每半个小时 共12小时 24个
         List<BigDecimal> list = Lists.newArrayList();
-        for(int i =0;i<24;i++){
+        for (i = 0; i < 24; i++) {
             list.add( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 )) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
             cursor += 2;
         }
@@ -108,7 +113,12 @@ public class XunDaoUploadRecordRequest implements Serializable {
         cursor += 1;
         request.setStopChargeReason( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
-        request.setOrderNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(msg, cursor, 32)));
+        byte[] orderNos = BytesUtil.copyBytes(msg, cursor, 32);
+        i = 0;
+        while (orderNos[i] != 0xFF) {
+            i++;
+        }
+        request.setOrderNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(orderNos, 0, i)));
         return request;
     }
 
