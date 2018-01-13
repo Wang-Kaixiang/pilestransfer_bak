@@ -37,11 +37,8 @@ public class XunDaoUpdateStatusRequest implements Serializable {
      * @param msg
      * @return
      */
-    public static XunDaoUpdateStatusRequest packEntity(byte[] msg, Channel income) {
-        ChannelEntity channelEntity = ChannelMapByEntity.getChannel(income);
-        if (null==channelEntity) {
-            return null;
-        }
+    public static XunDaoUpdateStatusRequest packEntity(byte[] msg) {
+
         int cursor = 0;
         XunDaoUpdateStatusRequest request = new XunDaoUpdateStatusRequest();
         request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );

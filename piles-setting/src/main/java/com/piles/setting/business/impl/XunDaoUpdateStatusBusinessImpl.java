@@ -35,7 +35,7 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
 
         //依照报文体规则解析报文
-        XunDaoUpdateStatusRequest updatePackageRequest = XunDaoUpdateStatusRequest.packEntity(dataBytes, incoming);
+        XunDaoUpdateStatusRequest updatePackageRequest = XunDaoUpdateStatusRequest.packEntity(dataBytes);
         log.info( "接收到循道充电桩升级结果汇报报文:{}", updatePackageRequest.toString() );
         UpdateStatusReport uploadRecord = buildServiceEntity(updatePackageRequest);
 
