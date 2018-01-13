@@ -1,14 +1,11 @@
 package com.piles.record.entity;
 
 import com.google.common.collect.Lists;
-import com.google.common.primitives.Bytes;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,7 +19,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
      */
     private String pileNo;
     //交易流水号	BCD 码16Byte
-    private String orderNo;
+    private String serial;
     //物理卡号 BIN 码 8Byte
     private long physicCardNo;
     //用户卡号 BCD 码 8Byte
@@ -59,7 +56,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
     // 0x06-人工正常停止 0x07-输出失败 0x08-系统故障 0x09-未结账 0x0A-CP 异常 0x0B-意外断电
     private int stopChargeReason;
     //订单号 ascii 32位小端
-    private String subscriptionNo;
+    private String orderNo;
 
     /**
      * 解析报文并封装request体
@@ -72,7 +69,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         int cursor = 0;
         request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setOrderNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 16 ) ) );
+        request.setSerial(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 16)));
         cursor += 16;
         request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
@@ -111,7 +108,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
         cursor += 1;
         request.setStopChargeReason( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
-        request.setSubscriptionNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes( msg, cursor, 32 )));
+        request.setOrderNo(BytesUtil.ascii2StrLittle(BytesUtil.copyBytes(msg, cursor, 32)));
         return request;
     }
 
@@ -119,7 +116,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
 //    public static byte[] packBytes(XunDaoUploadRecordRequest request) {
 //        byte[] responseBytes = new byte[]{};
 //        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getGunNo(), 1 ) );
-//        responseBytes = Bytes.concat( responseBytes, BytesUtil.long2Byte( request.getOrderNo() ) );
+//        responseBytes = Bytes.concat( responseBytes, BytesUtil.long2Byte( request.getSerial() ) );
 //        responseBytes = Bytes.concat( responseBytes, BytesUtil.intToBytes( request.getChargeModel(), 1 ) );
 //        responseBytes = Bytes.concat( responseBytes, BytesUtil.str2Bcd( request.getCardNo() ) );
 //        responseBytes = Bytes.concat( responseBytes, request.getVin().getBytes() );
@@ -151,7 +148,7 @@ public class XunDaoUploadRecordRequest implements Serializable {
     public String toString() {
         return "XunDaoUploadRecordRequest{" +
                 "pileNo='" + pileNo + '\'' +
-                ", orderNo='" + orderNo + '\'' +
+                ", serial='" + serial + '\'' +
                 ", physicCardNo=" + physicCardNo +
                 ", userCardNo='" + userCardNo + '\'' +
                 ", subTimeBillFlag='" + subTimeBillFlag + '\'' +
@@ -168,22 +165,16 @@ public class XunDaoUploadRecordRequest implements Serializable {
                 ", beginSoc=" + beginSoc +
                 ", endSoc=" + endSoc +
                 ", stopChargeReason=" + stopChargeReason +
-                ", subscriptionNo='" + subscriptionNo + '\'' +
+                ", orderNo='" + orderNo + '\'' +
                 '}';
     }
 
     public static void main(String[] args) {
-        XunDaoUploadRecordRequest bean = new XunDaoUploadRecordRequest();
-        Class clazz = XunDaoUploadRecordRequest.class;
-        Method[] methods = clazz.getDeclaredMethods();
-        for (int i = 0; i < methods.length; i++) {
-            String methodName = methods[i].getName();
+        byte[] bytes2 = BytesUtil.rightPadBytes(String.valueOf("1234").getBytes(), 16, (byte) 0x00);
+        System.out.println(BytesUtil.bcd2StrLittle(bytes2));
+        byte[] bytes = new byte[]{0x1, 0x0, 0x0, 0x20, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x4, (byte) 0xd2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (byte) 0xb8, (byte) 0x88, 0x6, 0xe, 0xd, 0x1, 0x12, (byte) 0xc8, 0x32, 0x7, 0xe, 0xd, 0x1, 0x12, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x0, 0x0, 0x0, 0x2, 0x0, 0x11, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x11, 0x0, 0x0, 0x6, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x31, 0x32, 0x33, 0x34, 0x35, 0x35, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 
-            if (methodName.indexOf( "set" ) == 0) {
-                System.out.println( "request." + methods[i].getName() + "(new BigDecimal(" + i + "));" );
-            }
-        }
-
+        XunDaoUploadRecordRequest.packEntity(bytes);
     }
 
 }
