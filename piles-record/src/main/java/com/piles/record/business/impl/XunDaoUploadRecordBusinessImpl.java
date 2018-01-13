@@ -39,8 +39,6 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         log.info( "接收到循道充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
         UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest);
         //添加serial
-        int serial = BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4));
-        uploadRecord.setSerial(serial);
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord( uploadRecord );
         return buildReponse(msg,flag);

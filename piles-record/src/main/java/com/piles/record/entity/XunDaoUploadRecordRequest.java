@@ -2,6 +2,7 @@ package com.piles.record.entity;
 
 import com.google.common.collect.Lists;
 import com.piles.common.util.BytesUtil;
+import com.sun.deploy.util.StringUtils;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -118,7 +119,11 @@ public class XunDaoUploadRecordRequest implements Serializable {
         while (orderNos[i] != 0x00) {
             i++;
         }
-        request.setOrderNo(new String(BytesUtil.copyBytes(orderNos, 0, i)));
+        String orderNo = new String(BytesUtil.copyBytes(orderNos, 0, i));
+        if ('\u0006' == orderNo.charAt(0)) {
+            orderNo = orderNo.substring(1);
+        }
+        request.setOrderNo(orderNo);
         return request;
     }
 
