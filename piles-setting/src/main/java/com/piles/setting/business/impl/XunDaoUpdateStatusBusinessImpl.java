@@ -66,7 +66,7 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
         UpdateStatusReport updateStatusReport = new UpdateStatusReport();
         updateStatusReport.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         updateStatusReport.setPileNo(updatePackageRequest.getPileNo());
-        updateStatusReport.setProtocolVersion(updatePackageRequest.getSoftVersion());
+        updateStatusReport.setSoftVersion(updatePackageRequest.getSoftVersion());
         updateStatusReport.setStatus(updatePackageRequest.getStatus());
 //        updateStatusReport.setProtocolVersion();
         return updateStatusReport;
