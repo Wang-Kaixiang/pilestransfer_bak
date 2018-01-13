@@ -14,15 +14,6 @@ import lombok.Data;
 @Data
 public class GetPileVersionPushReqeust extends BasePushRequest {
 
-    /**
-     * 厂商编号
-     */
-    private String merchantNo;
-    /**
-     * 软件版本号
-     */
-    private String softVersion;
-
 
     /**
      * 解析报文并封装request体

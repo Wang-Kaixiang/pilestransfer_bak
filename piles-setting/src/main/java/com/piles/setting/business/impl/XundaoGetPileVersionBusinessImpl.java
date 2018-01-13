@@ -3,7 +3,6 @@ package com.piles.setting.business.impl;
 import com.piles.common.business.IBusiness;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelResponseCallBackMap;
-import com.piles.setting.entity.GetPileVersionPushReqeust;
 import com.piles.setting.entity.GetPileVersionReqeust;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
