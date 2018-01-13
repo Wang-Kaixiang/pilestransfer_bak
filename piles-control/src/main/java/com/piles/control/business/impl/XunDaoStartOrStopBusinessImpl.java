@@ -18,9 +18,11 @@ public class XunDaoStartOrStopBusinessImpl implements IBusiness {
 
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
+
         String order = String.valueOf(BytesUtil.xundaoControlByte2Int(BytesUtil.copyBytes(msg, 2, 4)));
         //依照报文体规则解析报文
         RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntityXunDao( msg );
+        log.info("接收到循道充电或停止命令" + remoteCloseRequest.toString());
         ChannelResponseCallBackMap.callBack(incoming, order, remoteCloseRequest);
         return null;
     }
