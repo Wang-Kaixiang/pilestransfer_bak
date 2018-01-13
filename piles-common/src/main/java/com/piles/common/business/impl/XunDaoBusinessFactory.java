@@ -89,15 +89,15 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
     }
     //校验是否是登录报文
     private boolean checkIfLoginMsg(byte[] msg){
-//        起始域 协议类型 连接类型   设备编号    站地址
-//         1字节   1字节  1字节   8字节BCD码   2字节
-//         0x68    0x01
+//        起始域  长度 协议类型 连接类型   设备编号    站地址
+//         1字节  1字节 1字节  1字节   8字节BCD码   2字节
+//         0x68         0x01
         int length = msg.length;
-        //登录报文为13
-        if(length != 13){
+        //登录报文为14
+        if(length != 14){
             return false;
         }
-        if(0x01 != msg[1]){
+        if(0x01 != msg[2]){
             return false;
         }
         return true;

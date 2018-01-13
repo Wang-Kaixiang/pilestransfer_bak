@@ -79,9 +79,11 @@ public class LoginRequest implements Serializable
      * @return
      */
     public static LoginRequest packEntityXundao(byte[] msg){
+        //        起始域  长度 协议类型 连接类型   设备编号    站地址
+        //         1字节  1字节 1字节  1字节   8字节BCD码   2字节
         LoginRequest request=new LoginRequest();
-        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg,3,8)));
-        request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,2,1),10)));
+        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg,4,8)));
+        request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,3,1),10)));
 
 
         return request;
