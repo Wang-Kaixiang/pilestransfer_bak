@@ -3,10 +3,11 @@ package com.piles.common.websocket.xunDaoServer;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.bytes.ByteArrayDecoder;
 import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,10 +30,12 @@ public class XunDaoServerChannelInitializer extends ChannelInitializer<SocketCha
 //		pipeline.addLast("decoder", new ObjectDecoder(1024*1024, ClassResolvers.cacheDisabled(null)));
 //		pipeline.addLast("encoder", new ObjectEncoder());
 
+		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 1, 1, 0, 0));
 		pipeline.addLast("decoder", new ByteArrayDecoder());
 		pipeline.addLast("encoder", new ByteArrayEncoder());
 		pipeline.addLast( new ReadTimeoutHandler(60*5  ) );
 
 		pipeline.addLast("handler", xunDaoBaseChannelHandler);
 	}
+
 }

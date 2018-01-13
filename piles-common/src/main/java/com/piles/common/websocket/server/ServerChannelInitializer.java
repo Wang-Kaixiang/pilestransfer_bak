@@ -34,6 +34,9 @@ public class ServerChannelInitializer extends ChannelInitializer<SocketChannel> 
 //		pipeline.addLast("decoder", new ObjectDecoder(1024*1024, ClassResolvers.cacheDisabled(null)));
 //		pipeline.addLast("encoder", new ObjectEncoder());
 
+		//需要处理拆包粘包问题时放开
+//		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 4, 2, 0, 0));
+
 		pipeline.addLast("decoder", new ByteArrayDecoder());
 		pipeline.addLast("encoder", new ByteArrayEncoder());
 		pipeline.addLast( new ReadTimeoutHandler(60*5  ) );
