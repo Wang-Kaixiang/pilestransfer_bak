@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class BytesUtil {
@@ -435,7 +436,30 @@ public class BytesUtil {
         return ret;
     }
 
+    /**
+     * cp56time2a 格式转date格式
+     */
+    public static Date byteCp2Date(byte[] bytes) {
+        if(bytes == null || bytes.length!=7){
+            return null;
+        }
+        int ms = bytesToIntLittle(copyBytes(bytes, 0, 2));
+        int min = bytesToIntLittle(copyBytes(bytes, 2, 1));
+        int hour = bytesToIntLittle(copyBytes(bytes, 3, 1));
+        int day = bytesToIntLittle(copyBytes(bytes, 4, 1));
+        int month = bytesToIntLittle(copyBytes(bytes, 5, 1));
+        int year = bytesToIntLittle(copyBytes(bytes, 6, 1));
+
+        LocalDateTime localDateTime = LocalDateTime.of(year + 2000, month, day, hour, min, ms / 1000);
+        Date date = JdkDateUtil.localDateTime2Date(localDateTime);
+        return date;
+    }
+
     public static void main(String[] args) {
+
+        byte[] concat = Bytes.concat(intToBytesLittle(20000, 2), intToBytesLittle(25, 1), intToBytesLittle(12, 1), intToBytesLittle(3, 1), intToBytesLittle(11, 1), intToBytesLittle(18, 1));
+        Date date = byteCp2Date(concat);
+        System.out.println(date);
         byte[] bytes = new byte[]{0x04, 0x28, 0x00, 0x00, 0x00, 0x30, 0x40, 0x31};
 
         System.out.println(bcd2StrLittle(bytes));
