@@ -76,6 +76,8 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
         //添加记录类型
         result = Bytes.concat(result,BytesUtil.intToBytesLittle(recordType,1));
 
+        result = Bytes.concat(result, dataMsg);
+
         return result;
     }
 }
