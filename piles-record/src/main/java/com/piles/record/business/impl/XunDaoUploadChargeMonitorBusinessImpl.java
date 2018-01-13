@@ -35,11 +35,14 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
         log.info("接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         ChannelEntity channel = ChannelMapByEntity.getChannel(incoming);
-        if (null == channel) {
+
+        if (null == channel || !uploadChargeMonitorRequest.getPileNo().equals(channel.getPileNo())) {
+            log.info("--------循道充电桩连接改变" + incoming.remoteAddress());
             ChannelEntity channelEntity = new ChannelEntity(uploadChargeMonitorRequest.getPileNo(), TradeType.fromCode(TradeType.XUN_DAO.getCode()));
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
+
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
