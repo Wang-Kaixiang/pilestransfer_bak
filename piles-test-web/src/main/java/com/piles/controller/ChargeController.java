@@ -51,6 +51,7 @@ public class ChargeController {
         if (null!=map){
             return map;
         }
+        map = new HashedMap();
         if (!(1 == remoteStartRequest.getChargeModel()
                 || 2 == remoteStartRequest.getChargeModel()
                 || 3 == remoteStartRequest.getChargeModel()
@@ -124,6 +125,7 @@ public class ChargeController {
         if (null!=map){
             return map;
         }
+        map = new HashedMap();
         if (TradeType.XUN_DAO.getCode()==remoteStartRequest.getTradeTypeCode()){
             map.put("status", "-1");
             map.put("msg", "充电桩不支持追加电量");
