@@ -1,7 +1,6 @@
 package com.piles.record.business.impl;
 
 
-import com.alibaba.fastjson.JSON;
 import com.piles.common.business.IBusiness;
 import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
@@ -36,7 +35,10 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
         log.info("接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         ChannelEntity channel = ChannelMapByEntity.getChannel(incoming);
-        Channel channel1 = ChannelMapByEntity.getChannel(channel);
+        Channel channel1 = null;
+        if (null != channel) {
+            channel1 = ChannelMapByEntity.getChannel(channel);
+        }
 
         if (null == channel || !uploadChargeMonitorRequest.getPileNo().equals(channel.getPileNo())
                 || (null != channel1 && !incoming.remoteAddress().equals(channel1.remoteAddress()))) {
@@ -46,6 +48,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
+
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
