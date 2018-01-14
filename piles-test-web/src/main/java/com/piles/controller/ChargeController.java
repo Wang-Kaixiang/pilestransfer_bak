@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.piles.common.entity.type.EPushResponseCode.READ_OK;
+import static com.piles.common.entity.type.EPushResponseCode.*;
 
 @Slf4j
 @Controller
@@ -81,20 +81,21 @@ public class ChargeController {
         }
         log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
 
-        map.put("status", remoteStartRequestBasePushCallBackResponse.getCode().getCode());
 
-        switch (remoteStartRequestBasePushCallBackResponse.getCode().getCode()) {
-            case 200:
+        switch (remoteStartRequestBasePushCallBackResponse.getCode()) {
+            case READ_OK:
+                map.put("status", READ_OK.getCode());
                 map.put("msg", "启动充电发送命令成功,详细结果见结果");
                 map.put("data", remoteStartRequestBasePushCallBackResponse.getObj());
                 Util.chargePushOrderOk.put(String.valueOf(remoteStartPushRequest.getSerial()), remoteStartRequestBasePushCallBackResponse.getObj());
                 break;
-            case 300:
-            case 100:
+            case TIME_OUT:
+            case WRITE_OK:
                 map.put("status", 300);
                 map.put("msg", "请求超时");
                 break;
-            case 400:
+            case CONNECT_ERROR:
+                map.put("status", CONNECT_ERROR.getCode());
                 map.put("msg", "充电桩链接不可用");
                 break;
             default:
@@ -156,19 +157,20 @@ public class ChargeController {
 
         map.put("status", remoteStartRequestBasePushCallBackResponse.getCode().getCode());
 
-        switch (remoteStartRequestBasePushCallBackResponse.getCode().getCode()) {
-            case 200:
-                map.put("msg", "追加充电发送命令成功,详细结果见结果");
+        switch (remoteStartRequestBasePushCallBackResponse.getCode()) {
+            case READ_OK:
+                map.put("status", READ_OK.getCode());
+                map.put("msg", "启动充电发送命令成功,详细结果见结果");
                 map.put("data", remoteStartRequestBasePushCallBackResponse.getObj());
                 Util.chargePushOrderOk.put(String.valueOf(remoteStartPushRequest.getSerial()), remoteStartRequestBasePushCallBackResponse.getObj());
-
                 break;
-            case 300:
-            case 100:
+            case TIME_OUT:
+            case WRITE_OK:
                 map.put("status", 300);
                 map.put("msg", "请求超时");
                 break;
-            case 400:
+            case CONNECT_ERROR:
+                map.put("status", CONNECT_ERROR.getCode());
                 map.put("msg", "充电桩链接不可用");
                 break;
             default:
