@@ -46,7 +46,7 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     //充电时长 BIN 2 字节 分
     private int chargeDuration;
     //本次充电电量 BIN 4 字节
-    private int currentChargeQuantity;
+    private BigDecimal currentChargeQuantity;
 
     /**
      * 解析报文并封装request体
@@ -77,7 +77,7 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         cursor += 1;
         request.setChargeDuration( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ));
         cursor += 2;
-        request.setCurrentChargeQuantity( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ));
+        request.setCurrentChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
 
         return request;
     }
