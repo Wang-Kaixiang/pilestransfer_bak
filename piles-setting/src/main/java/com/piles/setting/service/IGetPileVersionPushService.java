@@ -10,7 +10,7 @@ import com.piles.setting.entity.GetPileVersionReqeust;
 
 public interface IGetPileVersionPushService {
     /**
-     * 远程升级 推送消息
+     * 循道获取软件版本号
      *
      * @param getPileVersionPushReqeust
      * @return

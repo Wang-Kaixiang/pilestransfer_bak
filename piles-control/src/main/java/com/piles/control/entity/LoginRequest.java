@@ -50,7 +50,9 @@ public class LoginRequest implements Serializable
      * 计费规则版本号 4位 BIN 首次登录填0，后续登录填桩当前正在使用的计费规则版本号
      */
     private int billingRuleVersion;
-
+    /**
+     * 厂商编码
+     */
     private TradeType tradeType;
 
     /**
