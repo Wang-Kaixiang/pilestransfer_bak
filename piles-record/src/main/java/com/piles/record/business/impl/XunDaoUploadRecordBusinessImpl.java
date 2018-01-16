@@ -91,7 +91,7 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getTotalAmmeterDegree());
-        uploadRecord.setSerial(uploadRecord.getSerial());
+        uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
         return uploadRecord;
     }
 }
