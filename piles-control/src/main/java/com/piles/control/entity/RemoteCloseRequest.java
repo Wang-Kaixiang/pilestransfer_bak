@@ -1,5 +1,6 @@
 package com.piles.control.entity;
 
+import com.alibaba.fastjson.JSON;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
@@ -41,13 +42,14 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
      */
     public static RemoteCloseRequest packEntityXunDao(byte[] msg) {
         RemoteCloseRequest request = new RemoteCloseRequest();
-        request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 9, 1 ), 10 ) ) );
+        request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 22, 1 ), 10 ) ) );
         return request;
     }
 
     public static void main(String[] args) {
-//        byte[] msg= new byte[]{0x10,0x00,0x02,0x54,(byte)0x84,0x56,0x18,0x35,0x02,0x02,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01,0x00,0x01,0x02,0x00,0x00,0x00,0x04,0x00,0x00,0x00,0x01};
+        byte[] msg= new byte[]{ 0x68,0x15,0x4,(byte)0xd4,0x4,(byte)0xd4,(byte)0x82,0x0,0x3,0x0,(byte)0x88,0x0,0x1c,0x0,0x6,0x0,(byte)0x80,0x0,0x0,0x0,0x0,0x1,0x1};
 //        packEntity(msg);
+        System.out.println( JSON.toJSONString( packEntityXunDao( msg ) ));
 
     }
 
