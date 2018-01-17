@@ -30,19 +30,19 @@ public class FunctionController {
     /**
      * 查询链接是否可用
      *
-     * @param remoteStartRequest
+     * @param checkConnectionRequest
      * @return
      */
     @RequestMapping(value = "/connection", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> charge(CheckConnectionRequest remoteStartRequest) {
-        log.info( "查询链接是否可用信息:" + JSON.toJSONString( remoteStartRequest ) );
+    public Map<String, Object> charge(CheckConnectionRequest checkConnectionRequest) {
+        log.info( "查询链接是否可用信息:" + JSON.toJSONString( checkConnectionRequest ) );
         Map<String, Object> map = new HashedMap();
-        map = checkParams( remoteStartRequest );
+        map = checkParams( checkConnectionRequest );
         if (MapUtils.isNotEmpty( map )) {
             return map;
         }
-        Channel channel = ChannelMapByEntity.getChannel( remoteStartRequest.getTradeTypeCode(), remoteStartRequest.getPileNo() );
+        Channel channel = ChannelMapByEntity.getChannel( checkConnectionRequest.getTradeTypeCode(), checkConnectionRequest.getPileNo() );
         if (null == channel) {
             map.put( "status", ResponseCode.CONNECNTION_ERROR.getCode() );
             map.put( "msg", ResponseCode.CONNECNTION_ERROR.getMsg() );
@@ -52,6 +52,7 @@ public class FunctionController {
             map.put( "msg", ResponseCode.OK.getMsg() );
             map.put( "data", data );
             data.put( "connection", channel.remoteAddress().toString() );
+            data.put( "tradeTypeCode", String.valueOf( checkConnectionRequest.getTradeTypeCode() ));
         }
         log.info( "return查询链接是否可用信息:" + JSON.toJSONString( map ) );
         return map;
