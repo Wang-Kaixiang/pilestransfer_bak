@@ -39,7 +39,7 @@ public class FunctionController {
         log.info( "查询链接是否可用信息:" + JSON.toJSONString( remoteStartRequest ) );
         Map<String, Object> map = new HashedMap();
         map = checkParams( remoteStartRequest );
-        if (MapUtils.isEmpty( map )) {
+        if (MapUtils.isNotEmpty( map )) {
             return map;
         }
         Channel channel = ChannelMapByEntity.getChannel( remoteStartRequest.getTradeTypeCode(), remoteStartRequest.getPileNo() );
