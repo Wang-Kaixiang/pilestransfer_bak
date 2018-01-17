@@ -52,7 +52,6 @@ public class FunctionController {
             map.put( "msg", ResponseCode.OK.getMsg() );
             map.put( "data", data );
             data.put( "connection", channel.remoteAddress().toString() );
-            data.put( "tradeTypeCode", String.valueOf( checkConnectionRequest.getTradeTypeCode() ));
         }
         log.info( "return查询链接是否可用信息:" + JSON.toJSONString( map ) );
         return map;

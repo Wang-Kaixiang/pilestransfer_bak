@@ -17,5 +17,5 @@ public class CheckConnectionRequest {
     /**
      * 对应厂商类型  1:蔚景 2: 循道
      */
-    private int tradeTypeCode;
+    private Integer tradeTypeCode;
 }
