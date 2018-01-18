@@ -28,7 +28,7 @@ public class PushBusinessImpl implements IPushBusiness {
             ChannelResponseCallBackMap.add(channel,  basePushRequest.getSerial(),basePushRequest);
             //拼接报文
             byte[] start=new byte[]{0x68};
-            byte[] command=new byte[]{(byte)((XunDaoTypeCode)commandCode).getCode()};
+            byte[] command=new byte[]{(byte)((ECommandCode)commandCode).getCode()};
             byte[] serial= BytesUtil.intToBytes( Integer.parseInt(basePushRequest.getSerial()));
             byte[] length=BytesUtil.intToBytes( msg.length );
             byte[] temp= Bytes.concat( command,serial,length,msg );
