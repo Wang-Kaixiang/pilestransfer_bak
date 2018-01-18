@@ -18,6 +18,7 @@ public class RemoteStartBusinessImpl extends BaseBusiness {
 
     @Override
     protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
+        log.info("接收到蔚景启动充电返回报文");
         //依照报文体规则解析报文
         RemoteStartRequest remoteStartRequest = RemoteStartRequest.packEntity( bodyBytes );
         //调用底层接口

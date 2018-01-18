@@ -18,6 +18,7 @@ public class RemoteCloseBusinessImpl extends BaseBusiness {
 
     @Override
     protected byte[] processBody(byte[] bodyBytes, Channel incoming, int order) {
+        log.info("接收到蔚景停止充电返回报文");
         //依照报文体规则解析报文
         RemoteCloseRequest remoteCloseRequest = RemoteCloseRequest.packEntity( bodyBytes );
         ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), remoteCloseRequest );
