@@ -44,6 +44,7 @@ public class UploadRecordBusinessImpl extends BaseBusiness {
         BeanUtils.copyProperties(uploadRecordRequest,uploadRecord);
         //设置厂商编码
         uploadRecord.setTradeTypeCode(TradeType.WEI_JING.getCode());
+        uploadRecord.setOrderNo( String.valueOf(  uploadRecordRequest.getOrderNo()) );
         boolean flag = uploadRecordService.uploadRecord( uploadRecord );
         byte[] orderNo = BytesUtil.copyBytes( bodyBytes, 1, 8 );
         byte[] result = flag == true ? new byte[]{0x00} : new byte[]{0x01};
