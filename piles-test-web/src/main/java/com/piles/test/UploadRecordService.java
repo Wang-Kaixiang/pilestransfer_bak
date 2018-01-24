@@ -26,7 +26,7 @@ public class UploadRecordService implements IUploadRecordService {
         Map<String,JSONObject> map= new HashedMap();
         map.put("args",jsonObject);
 
-        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/Tox_Elec/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/ToxElec_2/order/powerEnd");
 
         return flag;
     }
