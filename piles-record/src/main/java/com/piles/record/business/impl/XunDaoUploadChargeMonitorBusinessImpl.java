@@ -6,6 +6,7 @@ import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelMapByEntity;
+import com.piles.common.util.GunStatusMapUtil;
 import com.piles.record.domain.UploadChargeMonitor;
 import com.piles.record.entity.XunDaoUploadChargeMonitorRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
@@ -48,7 +49,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
-
+        GunStatusMapUtil.put( uploadChargeMonitorRequest.getPileNo(),TradeType.XUN_DAO,Integer.parseInt( uploadChargeMonitorRequest.getWorkStatus() ));
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口

@@ -8,7 +8,9 @@ import lombok.Data;
  */
 public enum ResponseCode {
     OK( 200, "成功" ),
-    CONNECNTION_ERROR( 10001, "无链接" ),;
+    CONNECNTION_ERROR( 10001, "无链接" ),
+    NO_STATUS(10002,"没有获取到状态"),
+    ;
 
     private int code;
     private String msg;

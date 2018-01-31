@@ -7,6 +7,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelMapByEntity;
+import com.piles.common.util.GunStatusMapUtil;
 import com.piles.record.entity.HeartBeatRequest;
 import com.piles.record.service.IHeartBeatService;
 import io.netty.channel.Channel;
@@ -53,6 +54,7 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
             ChannelMapByEntity.addChannel( channelEntity1, incoming );
             ChannelMapByEntity.addChannel( incoming, channelEntity1);
         }
+        GunStatusMapUtil.put( heartBeatRequest.getPileNo(),TradeType.WEI_JING,heartBeatRequest.getStatus()[0] );
         // 不需要接调用底层接口
         Date date = heartBeatService.heartBeat( heartBeatRequest );
         byte[] responseBody = BytesUtil.str2Bcd( sdf.format( date ) );

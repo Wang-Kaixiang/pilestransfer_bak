@@ -2,9 +2,12 @@ package com.piles.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
+import com.piles.common.util.GunStatusMapUtil;
 import com.piles.entity.enums.ResponseCode;
 import com.piles.entity.vo.CheckConnectionRequest;
+import com.piles.entity.vo.PileStatusRequest;
 import com.piles.util.ServiceFactoryUtil;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +60,52 @@ public class FunctionController {
         return map;
 
     }
+    /**
+     * 查询枪状态是否可用
+     *
+     * @param pileStatusRequest
+     * @return
+     */
+    @RequestMapping(value = "/pileStatus", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> status(PileStatusRequest pileStatusRequest) {
+        log.info( "查询枪状态是否可用信息:" + JSON.toJSONString( pileStatusRequest ) );
+        Map<String, Object> map = new HashedMap();
+        map = checkParams( pileStatusRequest );
+        if (MapUtils.isNotEmpty( map )) {
+            log.info( "return请求充电请求fan:" + JSON.toJSONString( map ) );
+            return map;
+        }
+        Integer status=GunStatusMapUtil.get( pileStatusRequest.getPileNo(),pileStatusRequest.getTradeTypeCode() );
+        if (null == status) {
+            map.put( "status", ResponseCode.NO_STATUS.getCode() );
+            map.put( "msg", ResponseCode.NO_STATUS.getMsg() );
+        } else {
+            Map<String, Object> data = new HashedMap();
+            map.put( "status", ResponseCode.OK.getCode() );
+            map.put( "msg", ResponseCode.OK.getMsg() );
+            map.put( "data", data );
+            boolean canCharged=false;
+
+            switch (pileStatusRequest.getTradeTypeCode()){
+                case 1:
+                    if (status==0){
+                        canCharged=true;
+                    }
+                    break;
+                case 2:
+                    if (status==2){
+                        canCharged=true;
+                    }
+                    break;
+            }
+            data.put( "canCharged", canCharged );
+            data.put( "gunStatus",status );
+        }
+        log.info( "return查询枪状态是否可用信息:" + JSON.toJSONString( map ) );
+        return map;
+
+    }
 
 
     private Map<String, Object> checkParams(CheckConnectionRequest checkConnectionRequest) {
@@ -79,5 +128,33 @@ public class FunctionController {
         return map;
 
     }
+    private Map<String, Object> checkParams(PileStatusRequest pileStatusRequest) {
+        Map<String, Object> map = new HashedMap();
+        //check 参数
+
+        if (StringUtils.isEmpty( pileStatusRequest.getTradeTypeCode() )) {
+            map.put( "status", "-1" );
+            map.put( "msg", "充电桩厂商类型为空" );
+            return map;
+        }
+        if (StringUtils.isEmpty( pileStatusRequest.getPileNo() )) {
+            map.put( "status", "-1" );
+            map.put( "msg", "充电桩编号为空" );
+
+            return map;
+        }
+        //获取连接channel 获取不到无法推送
+        Channel channel = ChannelMapByEntity.getChannel(pileStatusRequest.getTradeTypeCode(),pileStatusRequest.getPileNo());
+        if (null == channel) {
+            map.put("status", "400");
+            map.put("msg", "充电桩不在线");
+            return map;
+        }
+
+
+        return map;
+
+    }
+
 
 }
