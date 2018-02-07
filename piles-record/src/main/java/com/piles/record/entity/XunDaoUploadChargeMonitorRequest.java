@@ -82,25 +82,27 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         request.setChargeDuration( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ));
         cursor += 2;
         request.setCurrentChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
-        if (msg.length>25) {
-            cursor += 2;
-            byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
-            int i = 0;
-            while (serials[i] != 0x00) {
-                i++;
+        if (request.getSwitchStatus()==1&&request.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
+            if (msg.length > 25) {
+                cursor += 2;
+                byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
+                int i = 0;
+                while (serials[i] != 0x00) {
+                    i++;
+                }
+                request.setSerial( new String( BytesUtil.copyBytes( serials, 0, i ) ) );
+                cursor += 16;
+                byte[] orderNos = BytesUtil.copyBytes( msg, cursor, 32 );
+                i = 0;
+                while (orderNos[i] != 0x00) {
+                    i++;
+                }
+                String orderNo = new String( BytesUtil.copyBytes( orderNos, 0, i ) );
+                if ('\u0006' == orderNo.charAt( 0 )) {
+                    orderNo = orderNo.substring( 1 );
+                }
+                request.setOrderNo( orderNo );
             }
-            request.setSerial( new String( BytesUtil.copyBytes( serials, 0, i ) ) );
-            cursor += 16;
-            byte[] orderNos = BytesUtil.copyBytes( msg, cursor, 32 );
-            i = 0;
-            while (orderNos[i] != 0x00) {
-                i++;
-            }
-            String orderNo = new String( BytesUtil.copyBytes( orderNos, 0, i ) );
-            if ('\u0006' == orderNo.charAt( 0 )) {
-                orderNo = orderNo.substring( 1 );
-            }
-            request.setOrderNo( orderNo );
         }
 
         return request;
@@ -112,19 +114,7 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     }
 
 
-    public static void main(String[] args) {
-        XunDaoUploadChargeMonitorRequest bean = new XunDaoUploadChargeMonitorRequest();
-        Class clazz = XunDaoUploadChargeMonitorRequest.class;
-        Method[] methods = clazz.getDeclaredMethods();
-        for (int i = 0; i < methods.length; i++) {
-            String methodName = methods[i].getName();
 
-            if (methodName.indexOf( "set" ) == 0) {
-                System.out.println( "request." + methods[i].getName() + "(new BigDecimal(" + i + "));" );
-            }
-        }
-
-    }
 
     @Override
     public String toString() {
@@ -141,5 +131,13 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
                 ", chargeDuration=" + chargeDuration +
                 ", currentChargeQuantity=" + currentChargeQuantity +
                 '}';
+    }
+
+    public static void main(String[] args) {
+        byte[] bytes=new byte[]{68,0x56,0xc,0x0,0x6,0x0,(byte)0x86,0x0,0x3,0x0,(byte)0x83,0x0,0x1,(byte)0xe5,0x8,0x0,0x0,0x0,0x2,0x0,0x0,0x0,0x0,0x1,0x0,0x0,(byte)0x90,0x0,0x0,0x0,0x0,0x1,0x2,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0};
+        byte[] dataBytes = BytesUtil.copyBytes(bytes, 13, (bytes.length - 13));
+
+        //依照报文体规则解析报文
+        XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
     }
 }
