@@ -5,12 +5,18 @@ import com.piles.record.domain.UploadRecord;
 import com.piles.record.service.IUploadRecordService;
 import com.piles.util.HttpRequest;
 import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
 public class UploadRecordService implements IUploadRecordService {
+    /**
+     * 默认1分钟超时
+     */
+    @Value("${upload_record_ADDR}")
+    private String url;
     @Override
     public boolean uploadRecord(UploadRecord uploadRecord) {
         //请求一个接口
@@ -26,7 +32,7 @@ public class UploadRecordService implements IUploadRecordService {
         Map<String,JSONObject> map= new HashedMap();
         map.put("args",jsonObject);
 
-        boolean flag=HttpRequest.httpPostWithJson(map,"http://elec.toxchina.com/ToxElec_2/order/powerEnd");
+        boolean flag=HttpRequest.httpPostWithJson(map,url);
 
         return flag;
     }
