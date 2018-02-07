@@ -1,5 +1,6 @@
 package com.piles.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -26,6 +27,7 @@ public class HttpRequest {
 
     public static boolean httpPostWithJson(Map<String,JSONObject> map, String url){
         boolean isSuccess = false;
+        log.info("请求信息:"+url+ JSON.toJSONString( map ));
 
         HttpPost post = null;
         try {
@@ -62,7 +64,7 @@ public class HttpRequest {
                 return true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("请求信息:"+url+ JSON.toJSONString( map ),e);
             isSuccess = false;
         }finally{
             if(post != null){
