@@ -1,6 +1,7 @@
 package com.piles.record.business.impl;
 
 
+import com.alibaba.fastjson.JSON;
 import com.piles.common.business.IBusiness;
 import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
@@ -8,13 +9,17 @@ import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.GunStatusMapUtil;
 import com.piles.record.domain.UploadChargeMonitor;
+import com.piles.record.domain.UploadRecord;
 import com.piles.record.entity.XunDaoUploadChargeMonitorRequest;
+import com.piles.record.entity.XunDaoUploadRecordRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
+import com.piles.record.service.IUploadRecordService;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 
 /**
  * 上传充电过程监测数据 接口实现
@@ -25,6 +30,8 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
 
     @Resource
     private IUploadChargeMonitorService uploadChargeMonitorService;
+    @Resource
+    private IUploadRecordService uploadRecordService;
 
 
     @Override
@@ -54,6 +61,14 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
+        if (uploadChargeMonitorRequest.getSwitchStatus()==1&&uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
+
+            UploadRecord uploadRecord = buildUploadRecordServiceEntity( uploadChargeMonitorRequest );
+            log.info("循道充电状态上传账单"+ JSON.toJSONString( uploadRecord ));
+            //添加serial
+            //调用底层接口
+            boolean flag = uploadRecordService.uploadRecord( uploadRecord );
+        }
         //组装返回报文体
         return null;
     }
@@ -65,6 +80,18 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         //TODO 封装实体
 //        updateStatusReport.setProtocolVersion();
         return updateStatusReport;
+    }
+
+    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest){
+        UploadRecord uploadRecord = new UploadRecord();
+        uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
+        uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
+        uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
+        //99 标志监控状态上传
+        uploadRecord.setEndReason(99);
+        uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getCurrentChargeQuantity());
+        uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
+        return uploadRecord;
     }
 
 

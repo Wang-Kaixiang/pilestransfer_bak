@@ -47,6 +47,10 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     private int chargeDuration;
     //本次充电电量 BIN 4 字节
     private BigDecimal currentChargeQuantity;
+    //交易流水号	BCD 码16Byte
+    private String serial;
+    //订单号 ascii 32位小端
+    private String orderNo;
 
     /**
      * 解析报文并封装request体
@@ -78,6 +82,26 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         request.setChargeDuration( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ));
         cursor += 2;
         request.setCurrentChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        if (msg.length>25) {
+            cursor += 2;
+            byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
+            int i = 0;
+            while (serials[i] != 0x00) {
+                i++;
+            }
+            request.setSerial( new String( BytesUtil.copyBytes( serials, 0, i ) ) );
+            cursor += 16;
+            byte[] orderNos = BytesUtil.copyBytes( msg, cursor, 32 );
+            i = 0;
+            while (orderNos[i] != 0x00) {
+                i++;
+            }
+            String orderNo = new String( BytesUtil.copyBytes( orderNos, 0, i ) );
+            if ('\u0006' == orderNo.charAt( 0 )) {
+                orderNo = orderNo.substring( 1 );
+            }
+            request.setOrderNo( orderNo );
+        }
 
         return request;
     }
