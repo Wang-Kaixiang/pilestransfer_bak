@@ -26,7 +26,7 @@ public class UploadRecord {
     /**
      * 序号
      */
-    private int serial;
+    private Integer serial;
     /**
      * 结束原因
      */

@@ -90,7 +90,12 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         //99 标志监控状态上传
         uploadRecord.setEndReason(99);
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getCurrentChargeQuantity());
-        uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
+        try {
+
+            uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
+        }catch (NumberFormatException e){
+
+        }
         return uploadRecord;
     }
 
