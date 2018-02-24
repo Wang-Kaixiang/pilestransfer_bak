@@ -23,7 +23,7 @@ public class UploadRecordService implements IUploadRecordService {
         JSONObject jsonObject= new JSONObject();
         jsonObject.put("orderNo",uploadRecord.getOrderNo());
         jsonObject.put("pileNo",uploadRecord.getPileNo());
-        jsonObject.put("serial",uploadRecord.getSerial());
+        jsonObject.put("serial",null==uploadRecord.getSerial()?"":uploadRecord.getSerial());
         jsonObject.put("endReason",uploadRecord.getEndReason());
         jsonObject.put("totalAmmeterDegree",uploadRecord.getTotalAmmeterDegree());
         jsonObject.put( "tradeTypeCode",uploadRecord.getTradeTypeCode() );
