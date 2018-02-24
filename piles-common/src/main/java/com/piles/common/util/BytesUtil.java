@@ -449,6 +449,9 @@ public class BytesUtil {
         int day = bytesToIntLittle(copyBytes(bytes, 4, 1));
         int month = bytesToIntLittle(copyBytes(bytes, 5, 1));
         int year = bytesToIntLittle(copyBytes(bytes, 6, 1));
+        if (month==0||day==0||year==0){
+            return null;
+        }
 
         LocalDateTime localDateTime = LocalDateTime.of(year + 2000, month, day, hour, min, ms / 1000);
         Date date = JdkDateUtil.localDateTime2Date(localDateTime);
