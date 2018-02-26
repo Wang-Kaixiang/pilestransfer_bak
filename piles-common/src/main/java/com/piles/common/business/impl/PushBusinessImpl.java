@@ -51,7 +51,7 @@ public class PushBusinessImpl implements IPushBusiness {
             } );
             return true;
         }else {
-            log.error(pileNo+"无法获取到长连接,请检查充电桩连接状态");
+            log.error("厂商类型:{},桩号:{} 无法获取到长连接,请检查充电桩连接状态",tradeTypeCode,pileNo);
             return false;
         }
     }
