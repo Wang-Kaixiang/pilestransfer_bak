@@ -5,6 +5,7 @@ import com.piles.setting.entity.RemoteUpdatePushRequest;
 import com.piles.setting.entity.RemoteUpdateRequest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 远程升级 运营中心主动调用服务
@@ -24,5 +25,5 @@ public interface IRemoteUpdatePushService {
      * @param remoteUpdatePushRequestList
      * @return
      */
-    BasePushCallBackResponse<RemoteUpdateRequest> doBatchPush(List<RemoteUpdatePushRequest> remoteUpdatePushRequestList);
+    List<Map>  doBatchPush(List<RemoteUpdatePushRequest> remoteUpdatePushRequestList);
 }

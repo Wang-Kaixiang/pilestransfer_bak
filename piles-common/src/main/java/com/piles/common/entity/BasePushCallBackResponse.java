@@ -26,4 +26,8 @@ public class BasePushCallBackResponse<C extends BasePushResponse> {
      *读取到的消息
      */
     private C obj;
+    /**
+     * 桩号 可为空
+     */
+    private String pileNo;
 }

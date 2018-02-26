@@ -1,5 +1,7 @@
 package com.piles.setting.service.imp;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
@@ -16,10 +18,9 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * 远程升级 给充电桩发送消息实现类
@@ -47,6 +48,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
         byte[] pushMsg = RemoteUpdatePushRequest.packBytes(remoteUpdatePushRequest);
         BasePushCallBackResponse<RemoteUpdateRequest> basePushCallBackResponse = new BasePushCallBackResponse();
         basePushCallBackResponse.setSerial(remoteUpdatePushRequest.getSerial());
+        basePushCallBackResponse.setPileNo(remoteUpdatePushRequest.getPileNo());
         boolean flag = pushBusiness.push(pushMsg, remoteUpdatePushRequest.getTradeTypeCode(), remoteUpdatePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_UPDATE_CODE);
         if (!flag) {
             basePushCallBackResponse.setCode(EPushResponseCode.CONNECT_ERROR);
@@ -66,24 +68,55 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
         return basePushCallBackResponse;
     }
 
-    /**
-     * 远程升级 推送消息
-     *
-     * @param remoteUpdatePushRequestList
-     * @return
-     */
     @Override
-    public BasePushCallBackResponse<RemoteUpdateRequest> doBatchPush(List<RemoteUpdatePushRequest> remoteUpdatePushRequestList) {
-        if (CollectionUtils.isNotEmpty(remoteUpdatePushRequestList)) {
-            for (RemoteUpdatePushRequest remoteUpdatePushRequest : remoteUpdatePushRequestList) {
-                executorService.submit(() -> {
-                            doPush(remoteUpdatePushRequest);
-                        }
-                );
+    public List<Map> doBatchPush(List<RemoteUpdatePushRequest> remoteUpdateList) {
+        ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 
+        List<Map> results = Lists.newArrayList();
+        try {
+            if (CollectionUtils.isNotEmpty(remoteUpdateList)) {
+                List<Callable<BasePushCallBackResponse>> callableList = remoteUpdateList.stream().map(s -> {
+                    return new Callable<BasePushCallBackResponse>() {
+                        @Override
+                        public BasePushCallBackResponse call() throws Exception {
+                            return doPush(s);
+                        }
+                    };
+                }).collect(Collectors.toList());
+
+                List<Future<BasePushCallBackResponse>> futureList = executorService.invokeAll(callableList);
+                for (Future<BasePushCallBackResponse> future : futureList) {
+                    Map map = Maps.newHashMap();
+                    results.add(map);
+                    //比countdownlatch多10秒超时
+                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.SECONDS);
+                    map.put("pileNo", basePushCallBackResponse.getPileNo());
+                    switch (basePushCallBackResponse.getCode()) {
+                        case READ_OK:
+                            map.put("status", EPushResponseCode.READ_OK.getCode());
+                            map.put("msg", "远程升级发送命令成功,详细结果见结果");
+                            map.put("data", basePushCallBackResponse.getObj());
+                            break;
+                        case TIME_OUT:
+                        case WRITE_OK:
+                            map.put("status", 300);
+                            map.put("msg", "请求超时");
+                            break;
+                        case CONNECT_ERROR:
+                            map.put("status", EPushResponseCode.CONNECT_ERROR.getCode());
+                            map.put("msg", "充电桩链接不可用");
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
         }
-        return null;
+        return results;
     }
 
     @Override
