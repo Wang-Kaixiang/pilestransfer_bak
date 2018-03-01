@@ -60,6 +60,9 @@ public class RemoteUpdatePushRequest extends BasePushRequest  implements Seriali
                 protocolVersionBytes= Bytes.concat(protocolVersionBytes,BytesUtil.intToBytes(x,1));
             }
         }
+        if(StringUtils.isEmpty( md5 )){
+            md5 = "";
+        }
         byte[] md5Bytes = md5.getBytes();
         if(StringUtils.isEmpty( url )){
             url = "";

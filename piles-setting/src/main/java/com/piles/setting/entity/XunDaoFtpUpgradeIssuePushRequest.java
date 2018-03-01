@@ -52,12 +52,12 @@ public class XunDaoFtpUpgradeIssuePushRequest extends BasePushRequest implements
     public static byte[] packBytes(XunDaoFtpUpgradeIssuePushRequest request){
         byte[] result = new byte[0];
         result = Bytes.concat(result,BytesUtil.str2BcdLittle(request.getPileNo()));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerIp().getBytes(),20,(byte)0x00));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerPort().getBytes(),5,(byte)0x00));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getUserName().getBytes(),20,(byte)0x00));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getPassword().getBytes(),20,(byte)0x00));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getSoftVersion().getBytes(),20,(byte)0x00));
-        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getDownloadUrl().getBytes(),80,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerIp(),20,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getServerPort(),5,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getUserName(),20,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getPassword(),20,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getSoftVersion(),20,(byte)0x00));
+        result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getDownloadUrl(),80,(byte)0x00));
         return result;
     }
 

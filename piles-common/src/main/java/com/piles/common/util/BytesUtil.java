@@ -1,32 +1,29 @@
 package com.piles.common.util;
 
 import com.google.common.primitives.Bytes;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.Stack;
 
 public class BytesUtil {
     /**
      * 将int数值转换为占两个字节的byte数组，本方法适用于(高位在前，低位在后)的顺序。
      */
-    public static byte[] intToBytes(int value)
-    {
+    public static byte[] intToBytes(int value) {
         //limit 传入2
-        return intToBytes(value,2);
+        return intToBytes(value, 2);
     }
-    public static byte[] intToBytes(int value,int limit)
-    {
+
+    public static byte[] intToBytes(int value, int limit) {
         byte[] src = new byte[limit];
-        for(int i =0;i<limit;i++){
+        for (int i = 0; i < limit; i++) {
             int x = 8 * (limit - i - 1);
-            if(x == 0){
+            if (x == 0) {
                 src[i] = (byte) (value & 0xFF);
-            }else {
+            } else {
                 src[i] = (byte) ((value >> x) & 0xFF);
             }
         }
@@ -38,25 +35,25 @@ public class BytesUtil {
      */
     public static int bytesToInt(byte[] src, int offset) {
 
-        if(src==null){
+        if (src == null) {
             return 0;
         }
-        while(src.length>0&&src[0]==0x00){
-            src = BytesUtil.copyBytes(src,1,src.length-1);
+        while (src.length > 0 && src[0] == 0x00) {
+            src = BytesUtil.copyBytes(src, 1, src.length - 1);
         }
-        if(src.length==0){
+        if (src.length == 0) {
             return 0;
         }
         int len = src.length;
-        if (len==0){
+        if (len == 0) {
             return 0;
         }
         int value = 0;
-        for(int i = 0;i<len;i++){
-            if(i==(len-1)){
+        for (int i = 0; i < len; i++) {
+            if (i == (len - 1)) {
                 value = value | ((src[i] & 0xFF));
             }
-            value = value | ((src[i] & 0xFF) << (8 * (len-i-1)));
+            value = value | ((src[i] & 0xFF) << (8 * (len - i - 1)));
         }
 //        value = (int) (  ((src[offset] & 0xFF)<<8)
 //                |(src[offset+1] & 0xFF));
@@ -69,56 +66,58 @@ public class BytesUtil {
 
     /**
      * long转字节，大端模式
+     *
      * @param number
      * @return
      */
-    public static byte[] long2Byte(long number){
+    public static byte[] long2Byte(long number) {
         long temp = number;
-        byte[] b =new byte[8];
-        for(int i =(b.length-1); i >=0; i--){
-            b[i]=new Long(temp &0xff).byteValue();//
+        byte[] b = new byte[8];
+        for (int i = (b.length - 1); i >= 0; i--) {
+            b[i] = new Long(temp & 0xff).byteValue();//
             //将最低位保存在最低位
-            temp = temp >>8;// 向右移8位
+            temp = temp >> 8;// 向右移8位
         }
         return b;
     }
 
     /**
      * 字节转long 大端模式
+     *
      * @param b
      * @return
      */
-    public static long byte2Long(byte[] b){
-        long s =0;
-        long s0 = b[7]&0xff;
-        long s1 = b[6]&0xff;
-        long s2 = b[5]&0xff;
-        long s3 = b[4]&0xff;
-        long s4 = b[3]&0xff;
-        long s5 = b[2]&0xff;
-        long s6 = b[1]&0xff;
-        long s7 = b[0]&0xff;
+    public static long byte2Long(byte[] b) {
+        long s = 0;
+        long s0 = b[7] & 0xff;
+        long s1 = b[6] & 0xff;
+        long s2 = b[5] & 0xff;
+        long s3 = b[4] & 0xff;
+        long s4 = b[3] & 0xff;
+        long s5 = b[2] & 0xff;
+        long s6 = b[1] & 0xff;
+        long s7 = b[0] & 0xff;
 
         // s0不变
-        s1 <<=8;
-        s2 <<=16;
-        s3 <<=24;
-        s4 <<=8*4;
-        s5 <<=8*5;
-        s6 <<=8*6;
-        s7 <<=8*7;
+        s1 <<= 8;
+        s2 <<= 16;
+        s3 <<= 24;
+        s4 <<= 8 * 4;
+        s5 <<= 8 * 5;
+        s6 <<= 8 * 6;
+        s7 <<= 8 * 7;
         s = s0 | s1 | s2 | s3 | s4 | s5 | s6 | s7;
         return s;
     }
 
     /**
-         * 从一个byte数组中拷贝一部分出来
-         *
-         * @param oriBytes
-         * @param startIndex
-         * @param length
-         * @return
-         */
+     * 从一个byte数组中拷贝一部分出来
+     *
+     * @param oriBytes
+     * @param startIndex
+     * @param length
+     * @return
+     */
     public static byte[] copyBytes(byte[] oriBytes, int startIndex, int length) {
         int endIndex = startIndex + length;
 
@@ -136,45 +135,46 @@ public class BytesUtil {
     }
 
 
-
-
     /**
      * 将byte[]转为各种进制的字符串
+     *
      * @param bytes byte[]
      * @param radix 基数可以转换进制的范围，从Character.MIN_RADIX到Character.MAX_RADIX，超出范围后变为10进制
      * @return 转换后的字符串
      */
-    public static String binary(byte[] bytes, int radix){
+    public static String binary(byte[] bytes, int radix) {
         return new BigInteger(1, bytes).toString(radix);// 这里的1代表正数
     }
-    /** *//**
+    /** */
+    /**
      * @函数功能: BCD码转为10进制串(阿拉伯数据)
      * @输入参数: BCD码
      * @输出结果: 10进制串
      */
-    public static String bcd2Str(byte[] bytes){
-        StringBuffer temp=new StringBuffer(bytes.length*2);
+    public static String bcd2Str(byte[] bytes) {
+        StringBuffer temp = new StringBuffer(bytes.length * 2);
 
-        for(int i=0;i<bytes.length;i++){
-            temp.append((byte)((bytes[i]& 0xf0)>>>4));
-            temp.append((byte)(bytes[i]& 0x0f));
+        for (int i = 0; i < bytes.length; i++) {
+            temp.append((byte) ((bytes[i] & 0xf0) >>> 4));
+            temp.append((byte) (bytes[i] & 0x0f));
         }
         return temp.toString();
     }
-    /** *//**
+    /** */
+    /**
      * @函数功能: BCD码转为10进制串(阿拉伯数据) 小端模式
      * @输入参数: BCD码
      * @输出结果: 10进制串
      */
-    public static String bcd2StrLittle(byte[] bytes){
-        Stack<String> strings=new Stack<>();
-        String temp=bcd2Str(bytes);
-        for (int i=0;i<temp.length();i=i+2){
-            strings.push(temp.substring(i,i+2));
+    public static String bcd2StrLittle(byte[] bytes) {
+        Stack<String> strings = new Stack<>();
+        String temp = bcd2Str(bytes);
+        for (int i = 0; i < temp.length(); i = i + 2) {
+            strings.push(temp.substring(i, i + 2));
 
         }
-        StringBuilder stringBuilder=new StringBuilder();
-        while (!strings.isEmpty()){
+        StringBuilder stringBuilder = new StringBuilder();
+        while (!strings.isEmpty()) {
             stringBuilder.append(strings.pop());
         }
         return stringBuilder.toString();
@@ -186,6 +186,9 @@ public class BytesUtil {
      * @输出结果: BCD码
      */
     public static byte[] str2Bcd(String asc) {
+        if (asc == null) {
+            asc = "";
+        }
         int len = asc.length();
         int mod = len % 2;
 
@@ -203,20 +206,20 @@ public class BytesUtil {
         abt = asc.getBytes();
         int j, k;
 
-        for (int p = 0; p < asc.length()/2; p++) {
-            if ( (abt[2 * p] >= '0') && (abt[2 * p] <= '9')) {
+        for (int p = 0; p < asc.length() / 2; p++) {
+            if ((abt[2 * p] >= '0') && (abt[2 * p] <= '9')) {
                 j = abt[2 * p] - '0';
-            } else if ( (abt[2 * p] >= 'a') && (abt[2 * p] <= 'z')) {
+            } else if ((abt[2 * p] >= 'a') && (abt[2 * p] <= 'z')) {
                 j = abt[2 * p] - 'a' + 0x0a;
             } else {
                 j = abt[2 * p] - 'A' + 0x0a;
             }
 
-            if ( (abt[2 * p + 1] >= '0') && (abt[2 * p + 1] <= '9')) {
+            if ((abt[2 * p + 1] >= '0') && (abt[2 * p + 1] <= '9')) {
                 k = abt[2 * p + 1] - '0';
-            } else if ( (abt[2 * p + 1] >= 'a') && (abt[2 * p + 1] <= 'z')) {
+            } else if ((abt[2 * p + 1] >= 'a') && (abt[2 * p + 1] <= 'z')) {
                 k = abt[2 * p + 1] - 'a' + 0x0a;
-            }else {
+            } else {
                 k = abt[2 * p + 1] - 'A' + 0x0a;
             }
 
@@ -239,28 +242,29 @@ public class BytesUtil {
 
     /**
      * 将int转为byte 小端模式
+     *
      * @param value int值
      * @return
      */
-    public static byte[] intToBytesLittle(int value)
-    {
+    public static byte[] intToBytesLittle(int value) {
         //limit 传入2
-        return intToBytes(value,2);
+        return intToBytes(value, 2);
     }
 
     /**
      * 将int转换byte 小端模式
+     *
      * @param value int值
      * @param limit 保留长度
      * @return
      */
-    public static byte[] intToBytesLittle(int value,int limit) {
+    public static byte[] intToBytesLittle(int value, int limit) {
         byte[] src = new byte[limit];
-        for(int i =0;i<limit;i++){
+        for (int i = 0; i < limit; i++) {
             int x = 8 * i;
-            if(x == 0){
+            if (x == 0) {
                 src[i] = (byte) (value & 0xFF);
-            }else {
+            } else {
                 src[i] = (byte) ((value >> x) & 0xFF);
             }
         }
@@ -273,15 +277,15 @@ public class BytesUtil {
      */
     public static int bytesToIntLittle(byte[] src) {
 
-        if(src==null){
+        if (src == null) {
             return 0;
         }
         int len = src.length;
-        if (len==0){
+        if (len == 0) {
             return 0;
         }
         int value = 0;
-        for(int i = 0;i<len;i++){
+        for (int i = 0; i < len; i++) {
             value = value | ((src[i] & 0xFF) << (8 * i));
         }
         return value;
@@ -289,17 +293,18 @@ public class BytesUtil {
 
     /**
      * long转字节，小端模式
+     *
      * @param number
-     * @param limit 保留字节位
+     * @param limit  保留字节位
      * @return
      */
-    public static byte[] long2ByteLittle(long number,int limit){
+    public static byte[] long2ByteLittle(long number, int limit) {
         long temp = number;
-        byte[] b =new byte[limit];
-        for(int i =0; i < b.length; i++){
-            b[i]=new Long(temp &0xff).byteValue();//
+        byte[] b = new byte[limit];
+        for (int i = 0; i < b.length; i++) {
+            b[i] = new Long(temp & 0xff).byteValue();//
             //将最低位保存在最前面
-            temp = temp >>8;// 向右移8位
+            temp = temp >> 8;// 向右移8位
         }
         return b;
     }
@@ -307,15 +312,16 @@ public class BytesUtil {
 
     /**
      * 字节转long 小端模式
+     *
      * @param src
      * @return
      */
-    public static long byte2LongLittle(byte[] src){
+    public static long byte2LongLittle(byte[] src) {
         long s = 0;
-        for(int i =0; i < src.length; i++){
+        for (int i = 0; i < src.length; i++) {
             //防止转为int
             long si = src[i] & 0xFF;
-            si = si << (8*i);
+            si = si << (8 * i);
             s = s | si;
         }
         return s;
@@ -323,42 +329,52 @@ public class BytesUtil {
 
     /**
      * 使用字节数组替换目标数组从指定位置开始替换字节
-     * @param target 被替换的数组
+     *
+     * @param target     被替换的数组
      * @param startIndex 开始位置
-     * @param replace 用于替换的数组
+     * @param replace    用于替换的数组
      */
-    public static void replaceBytes(byte[] target,int startIndex,byte[] replace){
+    public static void replaceBytes(byte[] target, int startIndex, byte[] replace) {
         //TODO 暂时由外界保证不会出数组越界的异常
         for (int i = 0; i < replace.length; i++) {
-            int targetIndex = startIndex+i;
+            int targetIndex = startIndex + i;
             target[targetIndex] = replace[i];
         }
     }
+
     /**
      * 创建数组
-
+     *
      * @param bytes 用于替换的数组
      */
-    public static byte[] createByteArray(byte ... bytes){
-        byte[] temp=new byte[bytes.length];
-        for (int i=0;i<bytes.length;i++){
-            temp[i]=bytes[i];
+    public static byte[] createByteArray(byte... bytes) {
+        byte[] temp = new byte[bytes.length];
+        for (int i = 0; i < bytes.length; i++) {
+            temp[i] = bytes[i];
         }
         return temp;
 
     }
 
-    public static byte[] rightPadBytes(byte[] target,int len,byte b){
+    public static byte[] rightPadBytes(byte[] target, int len, byte b) {
         int length = target.length;
-        if(len <= length){
+        if (len <= length) {
             return target;
         }
         int addedLen = len - length;
         byte[] added = new byte[addedLen];
-        for(int i =0;i<addedLen;i++){
+        for (int i = 0; i < addedLen; i++) {
             added[i] = b;
         }
-        return Bytes.concat(target,added);
+        return Bytes.concat(target, added);
+    }
+
+    public static byte[] rightPadBytes(String targetStr, int len, byte b) {
+        if (targetStr == null) {
+            targetStr = "";
+        }
+        byte[] target = targetStr.getBytes();
+        return rightPadBytes(target, len, b);
     }
 
     /**
@@ -440,7 +456,7 @@ public class BytesUtil {
      * cp56time2a 格式转date格式
      */
     public static Date byteCp2Date(byte[] bytes) {
-        if(bytes == null || bytes.length!=7){
+        if (bytes == null || bytes.length != 7) {
             return null;
         }
         int ms = bytesToIntLittle(copyBytes(bytes, 0, 2));
@@ -449,7 +465,7 @@ public class BytesUtil {
         int day = bytesToIntLittle(copyBytes(bytes, 4, 1));
         int month = bytesToIntLittle(copyBytes(bytes, 5, 1));
         int year = bytesToIntLittle(copyBytes(bytes, 6, 1));
-        if (month==0||day==0||year==0){
+        if (month == 0 || day == 0 || year == 0) {
             return null;
         }
 
