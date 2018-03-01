@@ -94,7 +94,7 @@ public class FunctionController {
                     }
                     break;
                 case 2:
-                    if (status==2){
+                    if (status==2||status==1){
                         canCharged=true;
                     }
                     break;

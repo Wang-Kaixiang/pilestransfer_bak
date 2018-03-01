@@ -56,7 +56,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
-        GunStatusMapUtil.put( uploadChargeMonitorRequest.getPileNo(),TradeType.XUN_DAO,Integer.parseInt( uploadChargeMonitorRequest.getWorkStatus() ));
+        GunStatusMapUtil.put( uploadChargeMonitorRequest.getPileNo(),TradeType.XUN_DAO,uploadChargeMonitorRequest.getSwitchStatus() );
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
