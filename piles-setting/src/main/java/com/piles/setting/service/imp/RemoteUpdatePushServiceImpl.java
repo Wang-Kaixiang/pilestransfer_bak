@@ -92,7 +92,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
                     Map map = Maps.newHashMap();
                     results.add(map);
                     //比countdownlatch多10秒超时
-                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.SECONDS);
+                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.MILLISECONDS);
                     map.put("pileNo", basePushCallBackResponse.getPileNo());
                     switch (basePushCallBackResponse.getCode()) {
                         case READ_OK:
