@@ -48,7 +48,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
     private long timeout;
 
     //线程池线程数量
-    @Value("${threadNum:10}")
+    @Value("${threadNum:5}")
     private int threadNum;
 
     @Override
