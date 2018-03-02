@@ -1,5 +1,6 @@
 package com.piles.setting.service.imp;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.primitives.Bytes;
@@ -79,6 +80,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
 
     @Override
     public List<Map> doBatchPush(List<XunDaoFtpUpgradeIssuePushRequest> remoteUpdateList) {
+        log.info("进入循道批量更新接口");
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 
         List<Map> results = Lists.newArrayList();
@@ -125,6 +127,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
         } finally {
             executorService.shutdown();
         }
+        log.info("循道批量更新结果为:{}", JSON.toJSONString(results));
         return results;
     }
 

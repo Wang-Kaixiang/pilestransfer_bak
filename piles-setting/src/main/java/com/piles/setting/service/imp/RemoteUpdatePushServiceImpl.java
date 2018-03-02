@@ -1,5 +1,6 @@
 package com.piles.setting.service.imp;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.piles.common.business.IPushBusiness;
@@ -70,6 +71,7 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
 
     @Override
     public List<Map> doBatchPush(List<RemoteUpdatePushRequest> remoteUpdateList) {
+        log.info("进入蔚景批量更新接口");
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 
         List<Map> results = Lists.newArrayList();
@@ -116,6 +118,8 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
         } finally {
             executorService.shutdown();
         }
+        log.info("蔚景批量更新结果为:{}", JSON.toJSONString(results));
+
         return results;
     }
 
