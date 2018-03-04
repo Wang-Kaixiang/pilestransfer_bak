@@ -2,7 +2,6 @@ package com.piles.setting.service.imp;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
@@ -20,7 +19,10 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +66,6 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
             }
             ChannelResponseCallBackMap.remove(remoteUpdatePushRequest.getTradeTypeCode(), remoteUpdatePushRequest.getPileNo(), remoteUpdatePushRequest.getSerial());
         } catch (InterruptedException e) {
-            e.printStackTrace();
             log.error(e.getMessage(), e);
         }
         return basePushCallBackResponse;
@@ -72,47 +73,55 @@ public class RemoteUpdatePushServiceImpl implements IRemoteUpdatePushService, In
 
     @Override
     public List<Map> doBatchPush(List<RemoteUpdatePushRequest> remoteUpdateList) {
-        log.info("进入蔚景批量更新接口");
+        List<String> pileNoList = remoteUpdateList.stream().map(RemoteUpdatePushRequest::getPileNo).collect(Collectors.toList());
+        log.info("进入蔚景批量更新接口,桩号{}",pileNoList);
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 
         List<Map> results = Lists.newArrayList();
         try {
             if (CollectionUtils.isNotEmpty(remoteUpdateList)) {
-                List<Callable<BasePushCallBackResponse>> callableList = remoteUpdateList.stream().map(s -> {
-                    return new Callable<BasePushCallBackResponse>() {
-                        @Override
-                        public BasePushCallBackResponse call() throws Exception {
-                            return doPush(s);
-                        }
-                    };
-                }).collect(Collectors.toList());
 
-                List<Future<BasePushCallBackResponse>> futureList = executorService.invokeAll(callableList);
-                for (Future<BasePushCallBackResponse> future : futureList) {
-                    Map map = Maps.newHashMap();
-                    results.add(map);
-                    //比countdownlatch多10秒超时
-                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.MILLISECONDS);
-                    map.put("pileNo", basePushCallBackResponse.getPileNo());
-                    switch (basePushCallBackResponse.getCode()) {
-                        case READ_OK:
-                            map.put("status", EPushResponseCode.READ_OK.getCode());
-                            map.put("msg", "远程升级发送命令成功,详细结果见结果");
-                            map.put("data", basePushCallBackResponse.getObj());
-                            break;
-                        case TIME_OUT:
-                        case WRITE_OK:
-                            map.put("status", 300);
-                            map.put("msg", "请求超时");
-                            break;
-                        case CONNECT_ERROR:
-                            map.put("status", EPushResponseCode.CONNECT_ERROR.getCode());
-                            map.put("msg", "充电桩链接不可用");
-                            break;
-                        default:
-                            break;
-                    }
+                for (RemoteUpdatePushRequest remoteUpdateRequest : remoteUpdateList) {
+                    executorService.submit(() -> {
+                        doPush(remoteUpdateRequest);
+                    });
                 }
+
+//                List<Callable<BasePushCallBackResponse>> callableList = remoteUpdateList.stream().map(s -> {
+//                    return new Callable<BasePushCallBackResponse>() {
+//                        @Override
+//                        public BasePushCallBackResponse call() throws Exception {
+//                            return doPush(s);
+//                        }
+//                    };
+//                }).collect(Collectors.toList());
+//
+//                List<Future<BasePushCallBackResponse>> futureList = executorService.invokeAll(callableList);
+//                for (Future<BasePushCallBackResponse> future : futureList) {
+//                    Map map = Maps.newHashMap();
+//                    results.add(map);
+//                    //比countdownlatch多10秒超时
+//                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.MILLISECONDS);
+//                    map.put("pileNo", basePushCallBackResponse.getPileNo());
+//                    switch (basePushCallBackResponse.getCode()) {
+//                        case READ_OK:
+//                            map.put("status", EPushResponseCode.READ_OK.getCode());
+//                            map.put("msg", "远程升级发送命令成功,详细结果见结果");
+//                            map.put("data", basePushCallBackResponse.getObj());
+//                            break;
+//                        case TIME_OUT:
+//                        case WRITE_OK:
+//                            map.put("status", 300);
+//                            map.put("msg", "请求超时");
+//                            break;
+//                        case CONNECT_ERROR:
+//                            map.put("status", EPushResponseCode.CONNECT_ERROR.getCode());
+//                            map.put("msg", "充电桩链接不可用");
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();

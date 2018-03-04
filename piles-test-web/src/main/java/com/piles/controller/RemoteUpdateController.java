@@ -3,15 +3,20 @@ package com.piles.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.entity.vo.UpdateRemoteRequest;
 import com.piles.entity.vo.XunDaoUpdateRemoteRequest;
 import com.piles.setting.entity.RemoteUpdatePushRequest;
 import com.piles.setting.entity.XunDaoFtpUpgradeIssuePushRequest;
 import com.piles.setting.service.IRemoteUpdatePushService;
 import com.piles.setting.service.IXunDaoFtpUpgradeIssueService;
+import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +41,14 @@ public class RemoteUpdateController {
     @Resource
     IXunDaoFtpUpgradeIssueService xunDaoFtpUpgradeIssueService;
 
+    @Value("xun.ftp.server.ip")
+    private String serverIp;
+    @Value("xun.ftp.server.port")
+    private String serverPort;
+    @Value("xun.ftp.server.userName")
+    private String serverUserName;
+    @Value("xun.ftp.server.password")
+    private String serverPassword;
 
     /**
      * 蔚景远程升级
@@ -52,21 +65,50 @@ public class RemoteUpdateController {
             return Lists.newArrayList(map);
         }
 
-        String[] pileList = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
-        List<RemoteUpdatePushRequest> remoteUpdateList = Arrays.stream(pileList).map(s -> {
+        List<Map> results = Lists.newArrayList();
+
+        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+        List<String> pileList = Arrays.stream(pileArr).collect(Collectors.toList());
+        List<RemoteUpdatePushRequest> remoteUpdateList = Lists.newArrayList();
+        List<String> noConnectPileNoList = Lists.newArrayList();
+        //已经判断过pileNos是否为空
+        for (String pileNo : pileList) {
+            Map result = Maps.newHashMap();
+            result.put("pileNo", pileNo);
+            //获取连接channel 获取不到无法推送
+            Channel channel = ChannelMapByEntity.getChannel(updateRemoteRequest.getTradeTypeCode(), pileNo);
+            if (null == channel) {
+                result.put("status", "0");
+                result.put("msg", "充电桩链接不可用");
+                results.add(result);
+                log.info("桩号{}在升级的时候链接不可用", pileNo);
+                noConnectPileNoList.add(pileNo);
+                //连接不可用的不进行升级
+                continue;
+            } else {
+                result.put("status", "1");
+                result.put("msg", "充电桩发起升级");
+                results.add(result);
+            }
             RemoteUpdatePushRequest remoteUpdatePushRequest = new RemoteUpdatePushRequest();
             remoteUpdatePushRequest.setTradeTypeCode(updateRemoteRequest.getTradeTypeCode());
-            remoteUpdatePushRequest.setPileNo(s);
+            remoteUpdatePushRequest.setPileNo(pileNo);
             remoteUpdatePushRequest.setSerial(updateRemoteRequest.getSerial());
             remoteUpdatePushRequest.setSoftVersion(updateRemoteRequest.getSoftVersion());
             remoteUpdatePushRequest.setProtocolVersion(updateRemoteRequest.getProtocolVersion());
-            return remoteUpdatePushRequest;
-        }).collect(Collectors.toList());
-        List<Map> maps = remoteUpdatePushService.doBatchPush(remoteUpdateList);
-
-
-        log.info("return请求蔚景远程升级请求结果{}:", JSON.toJSONString(maps));
-        return maps;
+            remoteUpdateList.add(remoteUpdatePushRequest);
+        }
+        if (CollectionUtils.isEmpty(remoteUpdateList)) {
+            log.info("远程升级时所有的桩号都未发现可用链接，不进行升级");
+        } else {
+            remoteUpdatePushService.doBatchPush(remoteUpdateList);
+        }
+        if (CollectionUtils.isNotEmpty(noConnectPileNoList)) {
+            //TODO 是否需要调用没有链接 单独调用后台接口
+        }
+        //只返回请求连接是否存在
+        log.info("return请求蔚景远程升级请求结果{}:", JSON.toJSONString(results));
+        return results;
 
     }
 
@@ -118,6 +160,7 @@ public class RemoteUpdateController {
         return null;
 
     }
+
     /**
      * 循道远程升级
      *
@@ -133,18 +176,52 @@ public class RemoteUpdateController {
             return Lists.newArrayList(map);
         }
 
-        String[] pileList = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
-        List<XunDaoFtpUpgradeIssuePushRequest> remoteupdatelist = Arrays.stream(pileList).map(s -> {
+        List<Map> results = Lists.newArrayList();
+
+        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+
+        List<String> pileList = Arrays.stream(pileArr).collect(Collectors.toList());
+        List<XunDaoFtpUpgradeIssuePushRequest> remoteUpdateList = Lists.newArrayList();
+        List<String> noConnectPileNoList = Lists.newArrayList();
+        //已经判断过pileNos是否为空
+        for (String pileNo : pileList) {
+            Map result = Maps.newHashMap();
+            result.put("pileNo", pileNo);
+            //获取连接channel 获取不到无法推送
+            Channel channel = ChannelMapByEntity.getChannel(updateRemoteRequest.getTradeTypeCode(), pileNo);
+            if (null == channel) {
+                result.put("status", "0");
+                result.put("msg", "充电桩链接不可用");
+                results.add(result);
+                log.info("桩号{}在升级的时候链接不可用", pileNo);
+                noConnectPileNoList.add(pileNo);
+                //连接不可用的不进行升级
+                continue;
+            } else {
+                result.put("status", "1");
+                result.put("msg", "充电桩发起升级");
+                results.add(result);
+            }
+
             XunDaoFtpUpgradeIssuePushRequest remoteUpdate = new XunDaoFtpUpgradeIssuePushRequest();
-            BeanUtils.copyProperties(updateRemoteRequest,remoteUpdate);
-            remoteUpdate.setPileNo(s);
-            return remoteUpdate;
-        }).collect(Collectors.toList());
-        List<Map> maps = xunDaoFtpUpgradeIssueService.doBatchPush(remoteupdatelist);
-
-
-        log.info("return请求远程升级请求结果{}:", JSON.toJSONString(maps));
-        return maps;
+            BeanUtils.copyProperties(updateRemoteRequest, remoteUpdate);
+            remoteUpdate.setServerIp(serverIp);
+            remoteUpdate.setServerPort(serverPort);
+            remoteUpdate.setUserName(serverUserName);
+            remoteUpdate.setPassword(serverPassword);
+            remoteUpdate.setPileNo(pileNo);
+            remoteUpdateList.add(remoteUpdate);
+        }
+        if (CollectionUtils.isEmpty(remoteUpdateList)) {
+            log.info("远程升级时所有的桩号都未发现可用链接，不进行升级");
+        } else {
+            xunDaoFtpUpgradeIssueService.doBatchPush(remoteUpdateList);
+        }
+        if (CollectionUtils.isNotEmpty(noConnectPileNoList)) {
+            //TODO 是否需要调用没有链接 单独调用后台接口
+        }
+        log.info("return请求远程升级请求结果{}:", JSON.toJSONString(results));
+        return results;
 
     }
 
@@ -192,24 +269,24 @@ public class RemoteUpdateController {
             log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
             return map;
         }
-        if (StringUtils.isEmpty(remoteUpdateRequest.getServerIp())) {
-            map.put("status", "-1");
-            map.put("msg", "服务器ip为空");
-            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
-            return map;
-        }
-        if (StringUtils.isEmpty(remoteUpdateRequest.getServerPort())) {
-            map.put("status", "-1");
-            map.put("msg", "服务器端口为空");
-            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
-            return map;
-        }
-        if (StringUtils.isEmpty(remoteUpdateRequest.getUserName())) {
-            map.put("status", "-1");
-            map.put("msg", "用户名为空");
-            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
-            return map;
-        }
+//        if (StringUtils.isEmpty(remoteUpdateRequest.getServerIp())) {
+//            map.put("status", "-1");
+//            map.put("msg", "服务器ip为空");
+//            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
+//            return map;
+//        }
+//        if (StringUtils.isEmpty(remoteUpdateRequest.getServerPort())) {
+//            map.put("status", "-1");
+//            map.put("msg", "服务器端口为空");
+//            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
+//            return map;
+//        }
+//        if (StringUtils.isEmpty(remoteUpdateRequest.getUserName())) {
+//            map.put("status", "-1");
+//            map.put("msg", "用户名为空");
+//            log.info("return请求远程升级请求fan:" + JSON.toJSONString(map));
+//            return map;
+//        }
 
         return null;
 

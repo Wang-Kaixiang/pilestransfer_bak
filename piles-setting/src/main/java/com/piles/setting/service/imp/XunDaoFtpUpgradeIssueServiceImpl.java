@@ -53,74 +53,84 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
 
     @Override
     public BasePushCallBackResponse<XunDaoFtpUpgradeIssueRequest> doPush(XunDaoFtpUpgradeIssuePushRequest xunDaoFtpUpgradeIssuePushRequest) {
-        byte[] pushMsg = XunDaoFtpUpgradeIssuePushRequest.packBytes( xunDaoFtpUpgradeIssuePushRequest );
+        byte[] pushMsg = XunDaoFtpUpgradeIssuePushRequest.packBytes(xunDaoFtpUpgradeIssuePushRequest);
         pushMsg = buildHead(pushMsg, xunDaoFtpUpgradeIssuePushRequest);
         BasePushCallBackResponse<XunDaoFtpUpgradeIssueRequest> basePushCallBackResponse = new BasePushCallBackResponse();
-        basePushCallBackResponse.setSerial( xunDaoFtpUpgradeIssuePushRequest.getSerial() );
+        basePushCallBackResponse.setSerial(xunDaoFtpUpgradeIssuePushRequest.getSerial());
         //设置桩号
         basePushCallBackResponse.setPileNo(xunDaoFtpUpgradeIssuePushRequest.getPileNo());
-        boolean flag = pushBusiness.push( pushMsg, xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE );
+        boolean flag = pushBusiness.push(pushMsg, xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag) {
-            basePushCallBackResponse.setCode( EPushResponseCode.CONNECT_ERROR );
+            basePushCallBackResponse.setCode(EPushResponseCode.CONNECT_ERROR);
             return basePushCallBackResponse;
         }
         try {
             CountDownLatch countDownLatch = basePushCallBackResponse.getCountDownLatch();
-            countDownLatch.await( timeout, TimeUnit.MILLISECONDS );
-            if(countDownLatch.getCount()>0){
-                log.error("远程升级推送失败超时，厂商类型:{},桩号:{}",xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(),xunDaoFtpUpgradeIssuePushRequest.getPileNo());
+            countDownLatch.await(timeout, TimeUnit.MILLISECONDS);
+            if (countDownLatch.getCount() > 0) {
+                log.error("远程升级推送失败超时，厂商类型:{},桩号:{}", xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo());
             }
-            ChannelResponseCallBackMap.remove( xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo(), xunDaoFtpUpgradeIssuePushRequest.getSerial() );
+            ChannelResponseCallBackMap.remove(xunDaoFtpUpgradeIssuePushRequest.getTradeTypeCode(), xunDaoFtpUpgradeIssuePushRequest.getPileNo(), xunDaoFtpUpgradeIssuePushRequest.getSerial());
         } catch (InterruptedException e) {
             e.printStackTrace();
-            log.error( e.getMessage(), e );
+            log.error(e.getMessage(), e);
         }
         return basePushCallBackResponse;
     }
 
     @Override
     public List<Map> doBatchPush(List<XunDaoFtpUpgradeIssuePushRequest> remoteUpdateList) {
-        log.info("进入循道批量更新接口");
+        if (CollectionUtils.isEmpty(remoteUpdateList)) {
+            return null;
+        }
+        List<String> pileNoList = remoteUpdateList.stream().map(XunDaoFtpUpgradeIssuePushRequest::getPileNo).collect(Collectors.toList());
+        log.info("进入循道批量更新接口,桩号{}", pileNoList);
         ExecutorService executorService = Executors.newFixedThreadPool(threadNum);
 
         List<Map> results = Lists.newArrayList();
         try {
             if (CollectionUtils.isNotEmpty(remoteUpdateList)) {
-                List<Callable<BasePushCallBackResponse>> callableList = remoteUpdateList.stream().map(s -> {
-                    return new Callable<BasePushCallBackResponse>() {
-                        @Override
-                        public BasePushCallBackResponse call() throws Exception {
-                            return doPush(s);
-                        }
-                    };
-                }).collect(Collectors.toList());
 
-                List<Future<BasePushCallBackResponse>> futureList = executorService.invokeAll(callableList);
-                for (Future<BasePushCallBackResponse> future : futureList) {
-                    Map map = Maps.newHashMap();
-                    results.add(map);
-                    //比countdownlatch多10秒超时
-                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.MILLISECONDS);
-                    map.put("pileNo", basePushCallBackResponse.getPileNo());
-                    switch (basePushCallBackResponse.getCode()) {
-                        case READ_OK:
-                            map.put("status", EPushResponseCode.READ_OK.getCode());
-                            map.put("msg", "远程升级发送命令成功,详细结果见结果");
-                            map.put("data", basePushCallBackResponse.getObj());
-                            break;
-                        case TIME_OUT:
-                        case WRITE_OK:
-                            map.put("status", 300);
-                            map.put("msg", "请求超时");
-                            break;
-                        case CONNECT_ERROR:
-                            map.put("status", EPushResponseCode.CONNECT_ERROR.getCode());
-                            map.put("msg", "充电桩链接不可用");
-                            break;
-                        default:
-                            break;
-                    }
+                for (XunDaoFtpUpgradeIssuePushRequest remoteUpdateRequest : remoteUpdateList) {
+                    executorService.submit(() -> {
+                        doPush(remoteUpdateRequest);
+                    });
                 }
+//                List<Callable<BasePushCallBackResponse>> callableList = remoteUpdateList.stream().map(s -> {
+//                    return new Callable<BasePushCallBackResponse>() {
+//                        @Override
+//                        public BasePushCallBackResponse call() throws Exception {
+//                            return doPush(s);
+//                        }
+//                    };
+//                }).collect(Collectors.toList());
+//
+//                List<Future<BasePushCallBackResponse>> futureList = executorService.invokeAll(callableList);
+//                for (Future<BasePushCallBackResponse> future : futureList) {
+//                    Map map = Maps.newHashMap();
+//                    results.add(map);
+//                    //比countdownlatch多10秒超时
+//                    BasePushCallBackResponse basePushCallBackResponse = future.get(timeout + 10, TimeUnit.MILLISECONDS);
+//                    map.put("pileNo", basePushCallBackResponse.getPileNo());
+//                    switch (basePushCallBackResponse.getCode()) {
+//                        case READ_OK:
+//                            map.put("status", EPushResponseCode.READ_OK.getCode());
+//                            map.put("msg", "远程升级发送命令成功,详细结果见结果");
+//                            map.put("data", basePushCallBackResponse.getObj());
+//                            break;
+//                        case TIME_OUT:
+//                        case WRITE_OK:
+//                            map.put("status", 300);
+//                            map.put("msg", "请求超时");
+//                            break;
+//                        case CONNECT_ERROR:
+//                            map.put("status", EPushResponseCode.CONNECT_ERROR.getCode());
+//                            map.put("msg", "充电桩链接不可用");
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,18 +143,18 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
 
     //添加报文头
     private byte[] buildHead(byte[] dataMsg, XunDaoFtpUpgradeIssuePushRequest request) {
-        byte[] result = Bytes.concat(new byte[]{0x68}, BytesUtil.intToBytesLittle(184,1));
+        byte[] result = Bytes.concat(new byte[]{0x68}, BytesUtil.intToBytesLittle(184, 1));
         result = Bytes.concat(result, BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial())));
         //添加类型标识
-        result = Bytes.concat(result,BytesUtil.intToBytesLittle(typeCode,1));
+        result = Bytes.concat(result, BytesUtil.intToBytesLittle(typeCode, 1));
         //添加备用
-        result = Bytes.concat(result,BytesUtil.intToBytesLittle(0,1));
+        result = Bytes.concat(result, BytesUtil.intToBytesLittle(0, 1));
         //添加传送原因
-        result = Bytes.concat(result,new byte[]{0x03,0x00});
+        result = Bytes.concat(result, new byte[]{0x03, 0x00});
         //添加crc
         result = Bytes.concat(result, CRC16Util.getXunDaoCRC(dataMsg));
         //添加记录类型
-        result = Bytes.concat(result,BytesUtil.intToBytesLittle(recordType,1));
+        result = Bytes.concat(result, BytesUtil.intToBytesLittle(recordType, 1));
 
         result = Bytes.concat(result, dataMsg);
 
