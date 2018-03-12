@@ -63,13 +63,19 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
-        if (uploadChargeMonitorRequest.getSwitchStatus()==1&&uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
+        BigDecimal highestAllowElectricity = uploadChargeMonitorRequest.getHighestAllowElectricity();
+        if ((highestAllowElectricity != null &&
+                highestAllowElectricity.compareTo(BigDecimal.ZERO) > 0 &&
+                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)&&
+                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
 
             UploadRecord uploadRecord = buildUploadRecordServiceEntity( uploadChargeMonitorRequest );
             log.info("循道充电状态上传账单"+ JSON.toJSONString( uploadRecord ));
             //添加serial
             //调用底层接口
             boolean flag = uploadRecordService.uploadRecord( uploadRecord );
+        }else{
+            log.info("厂商{}桩{}未触发上传账单,输出电流{},本次充电量",TradeType.XUN_DAO,uploadChargeMonitorRequest.getPileNo(),highestAllowElectricity,uploadChargeMonitorRequest.getCurrentChargeQuantity());
         }
         //组装返回报文体
         return null;
