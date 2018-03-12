@@ -57,25 +57,27 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
-        GunStatusMapUtil.put( uploadChargeMonitorRequest.getPileNo(),TradeType.XUN_DAO,uploadChargeMonitorRequest.getSwitchStatus() );
-        GunElecAmountMapUtil.put( uploadChargeMonitorRequest.getPileNo(),TradeType.XUN_DAO,uploadChargeMonitorRequest.getHighestAllowElectricity() );
+        int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
+        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, switchStatus);
+        GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, uploadChargeMonitorRequest.getHighestAllowElectricity());
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
         BigDecimal highestAllowElectricity = uploadChargeMonitorRequest.getHighestAllowElectricity();
-        if ((highestAllowElectricity != null &&
-                highestAllowElectricity.compareTo(BigDecimal.ZERO) > 0 &&
-                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)&&
-                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
 
-            UploadRecord uploadRecord = buildUploadRecordServiceEntity( uploadChargeMonitorRequest );
-            log.info("循道充电状态上传账单"+ JSON.toJSONString( uploadRecord ));
+        if ((switchStatus == 1 || (switchStatus == 2 && (highestAllowElectricity != null &&
+                highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
+                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1))) &&
+                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0) {
+
+            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
+            log.info("循道充电状态上传账单" + JSON.toJSONString(uploadRecord));
             //添加serial
             //调用底层接口
-            boolean flag = uploadRecordService.uploadRecord( uploadRecord );
-        }else{
-            log.info("厂商{}桩{}未触发上传账单,输出电流{},本次充电量",TradeType.XUN_DAO,uploadChargeMonitorRequest.getPileNo(),highestAllowElectricity,uploadChargeMonitorRequest.getCurrentChargeQuantity());
+            boolean flag = uploadRecordService.uploadRecord(uploadRecord);
+        } else {
+            log.info("厂商{}桩{}未触发上传账单,状态:{},输出电流:{},本次充电量:{}", TradeType.XUN_DAO, uploadChargeMonitorRequest.getPileNo(), switchStatus, highestAllowElectricity, uploadChargeMonitorRequest.getCurrentChargeQuantity());
         }
         //组装返回报文体
         return null;
@@ -90,7 +92,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         return updateStatusReport;
     }
 
-    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest){
+    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest) {
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
@@ -100,8 +102,8 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getCurrentChargeQuantity());
         try {
 
-            uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
-        }catch (NumberFormatException e){
+            uploadRecord.setSerial(Integer.parseInt(uploadRecordRequest.getSerial()));
+        } catch (NumberFormatException e) {
 
         }
         return uploadRecord;

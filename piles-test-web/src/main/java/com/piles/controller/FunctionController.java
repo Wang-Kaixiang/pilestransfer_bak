@@ -99,22 +99,20 @@ public class FunctionController {
                 case 2:
                     BigDecimal highestAllowElectricity = GunElecAmountMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode());
                     //当电流存在，并且大于0小于等于1的时候返回true
-                    if (highestAllowElectricity != null &&
-                            highestAllowElectricity.compareTo(BigDecimal.ZERO) > 0 &&
-                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1){
-//                    if (status==1){
-//                    if (status==2||status==1){
+                    if (status == 1 || (status == 2 && (highestAllowElectricity != null &&
+                            highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
+                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1))) {
                         canCharged = true;
                     }
                     break;
             }
-        data.put("canCharged", canCharged);
-        data.put("gunStatus", status);
-    }
-        log.info("return查询枪状态是否可用信息:"+JSON.toJSONString(map ));
+            data.put("canCharged", canCharged);
+            data.put("gunStatus", status);
+        }
+        log.info("return查询枪状态是否可用信息:" + JSON.toJSONString(map));
         return map;
 
-}
+    }
 
 
     private Map<String, Object> checkParams(CheckConnectionRequest checkConnectionRequest) {
