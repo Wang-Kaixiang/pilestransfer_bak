@@ -2,10 +2,10 @@ package com.piles.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.GunElecAmountMapUtil;
 import com.piles.common.util.GunStatusMapUtil;
+import com.piles.common.util.GunWorkStatusMapUtil;
 import com.piles.entity.enums.ResponseCode;
 import com.piles.entity.vo.CheckConnectionRequest;
 import com.piles.entity.vo.PileStatusRequest;
@@ -98,10 +98,12 @@ public class FunctionController {
                     break;
                 case 2:
                     BigDecimal highestAllowElectricity = GunElecAmountMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode());
+                    String workStatus = GunWorkStatusMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode());
                     //当电流存在，并且大于0小于等于1的时候返回true
-                    if (status == 1 || (status == 2 && (highestAllowElectricity != null &&
+                    if (!"01".equals(workStatus) &&
+                            (status == 1 || (status == 2 && (highestAllowElectricity != null &&
                             highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
-                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1))) {
+                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)))) {
                         canCharged = true;
                     }
                     break;

@@ -5,14 +5,10 @@ import com.alibaba.fastjson.JSON;
 import com.piles.common.business.IBusiness;
 import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
-import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMapByEntity;
-import com.piles.common.util.GunElecAmountMapUtil;
-import com.piles.common.util.GunStatusMapUtil;
+import com.piles.common.util.*;
 import com.piles.record.domain.UploadChargeMonitor;
 import com.piles.record.domain.UploadRecord;
 import com.piles.record.entity.XunDaoUploadChargeMonitorRequest;
-import com.piles.record.entity.XunDaoUploadRecordRequest;
 import com.piles.record.service.IUploadChargeMonitorService;
 import com.piles.record.service.IUploadRecordService;
 import io.netty.channel.Channel;
@@ -58,18 +54,21 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(incoming, channelEntity);
         }
         int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
+        BigDecimal highestAllowElectricity = uploadChargeMonitorRequest.getHighestAllowElectricity();
+        String workStatus = uploadChargeMonitorRequest.getWorkStatus();
         GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, switchStatus);
-        GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, uploadChargeMonitorRequest.getHighestAllowElectricity());
+        GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, highestAllowElectricity);
+        GunWorkStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, workStatus);
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
-        BigDecimal highestAllowElectricity = uploadChargeMonitorRequest.getHighestAllowElectricity();
 
-        if ((switchStatus == 1 || (switchStatus == 2 && (highestAllowElectricity != null &&
+        if (!"01".equals(workStatus) &&
+                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0 &&
+                (switchStatus == 1 || (switchStatus == 2 && (highestAllowElectricity != null &&
                 highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
-                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1))) &&
-                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0) {
+                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)))) {
 
             UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
             log.info("循道充电状态上传账单" + JSON.toJSONString(uploadRecord));
