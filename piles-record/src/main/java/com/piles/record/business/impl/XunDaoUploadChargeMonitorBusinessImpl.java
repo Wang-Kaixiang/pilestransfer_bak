@@ -68,7 +68,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
                 uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0 &&
                 (switchStatus == 1 || (switchStatus == 2 && (highestAllowElectricity != null &&
                 highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
-                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)))) {
+                highestAllowElectricity.compareTo(BigDecimal.ONE) <= 0)))) {
 
             UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
             log.info("循道充电状态上传账单" + JSON.toJSONString(uploadRecord));

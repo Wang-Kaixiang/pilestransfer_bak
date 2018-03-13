@@ -82,8 +82,14 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         request.setChargeDuration( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ));
         cursor += 2;
         request.setCurrentChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
-        if (request.getSwitchStatus()==1&&request.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
-            if (msg.length > 25) {
+//        if (request.getSwitchStatus()==1&&request.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
+        if (!"01".equals(request.getWorkStatus()) &&
+                    request.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0 &&
+                    (request.getSwitchStatus() == 1 || (request.getSwitchStatus() == 2 && (request.getHighestAllowElectricity() != null &&
+                            request.getHighestAllowElectricity().compareTo(BigDecimal.ZERO) >= 0 &&
+                            request.getHighestAllowElectricity().compareTo(BigDecimal.ONE) <= 0)))) {
+
+                if (msg.length > 25) {
                 cursor += 4;
                 byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
                 int i = 0;

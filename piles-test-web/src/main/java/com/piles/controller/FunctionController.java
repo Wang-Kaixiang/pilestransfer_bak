@@ -103,7 +103,7 @@ public class FunctionController {
                     if (!"01".equals(workStatus) &&
                             (status == 1 || (status == 2 && (highestAllowElectricity != null &&
                             highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
-                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 1)))) {
+                            highestAllowElectricity.compareTo(BigDecimal.ONE) <= 0)))) {
                         canCharged = true;
                     }
                     break;
