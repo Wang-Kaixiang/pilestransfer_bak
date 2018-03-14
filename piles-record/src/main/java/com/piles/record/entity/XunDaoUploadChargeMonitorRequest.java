@@ -128,6 +128,8 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
                 ", troubleStatus=" + troubleStatus +
                 ", chargeDuration=" + chargeDuration +
                 ", currentChargeQuantity=" + currentChargeQuantity +
+                ", serial=" + serial +
+                ", orderNo=" + orderNo +
                 '}';
     }
 
