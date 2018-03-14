@@ -4,6 +4,7 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.BasePushRequest;
+import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.GunElecAmountMapUtil;
 import com.piles.common.util.GunStatusMapUtil;
@@ -142,6 +143,12 @@ public class FunctionController {
         map = checkParams(pileChargeStatusRequest.getTradeTypeCode(),pileChargeStatusRequest.getPileNo());
         if (MapUtils.isNotEmpty(map)) {
             log.info("return充电桩充电进度fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        if (TradeType.WEI_JING.getCode()==pileChargeStatusRequest.getTradeTypeCode()){
+            map.put("status", "-1");
+            map.put("msg", "充电桩不支持查询充电进度");
+            log.info("return请充电桩充电进度fan:"+JSON.toJSONString(map));
             return map;
         }
         Channel channel = ChannelMapByEntity.getChannel(pileChargeStatusRequest.getTradeTypeCode(), pileChargeStatusRequest.getPileNo());
