@@ -33,14 +33,14 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     private String workStatus;
     /**
      * 故障状态 Bin 码 1Byte 共 8bit
-     *    第 0bit:读卡器状态 0:正常，1 故障
-     *   第 1bit:电表状态 0: 正常，1 故障
-     *   第 2bit:急停状态 0: 正常，1 故障
-     *   第 3bit:过压状态 0: 正常，1 故障
-     *   第 4bit:欠压状态 0: 正常，1 故障
-     *   第 5it:过流状态 0: 正常，1 故障
-     *   第 6bit:充电机状态 0:正常，1 故障
-     *   第 7bit:其它状态 0: 正常，1 故障
+     * 第 0bit:读卡器状态 0:正常，1 故障
+     * 第 1bit:电表状态 0: 正常，1 故障
+     * 第 2bit:急停状态 0: 正常，1 故障
+     * 第 3bit:过压状态 0: 正常，1 故障
+     * 第 4bit:欠压状态 0: 正常，1 故障
+     * 第 5it:过流状态 0: 正常，1 故障
+     * 第 6bit:充电机状态 0:正常，1 故障
+     * 第 7bit:其它状态 0: 正常，1 故障
      */
     private int troubleStatus;
     //充电时长 BIN 2 字节 分
@@ -61,54 +61,48 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     public static XunDaoUploadChargeMonitorRequest packEntity(byte[] msg) {
         XunDaoUploadChargeMonitorRequest request = new XunDaoUploadChargeMonitorRequest();
         int cursor = 0;
-        request.setHighestAllowVoltage( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 10 ), 1, BigDecimal.ROUND_HALF_UP ) );
+        request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setHighestAllowElectricity( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setHighestAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setOutputRelayStatus( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
+        request.setOutputRelayStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setSwitchStatus( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
+        request.setSwitchStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setActivElectricalDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
+        request.setActivElectricalDegree(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
-        request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
+        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
         cursor += 8;
-        request.setConnectBattery( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
+        request.setConnectBattery(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setWorkStatus( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
+        request.setWorkStatus(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setTroubleStatus( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ));
+        request.setTroubleStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setChargeDuration( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ));
+        request.setChargeDuration(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
         request.setCurrentChargeQuantity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
-//        if (request.getSwitchStatus()==1&&request.getCurrentChargeQuantity().compareTo( new BigDecimal( 0 ) )>0) {
-        if (!"01".equals(request.getWorkStatus()) &&
-                    request.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0 &&
-                    (request.getSwitchStatus() == 1 || (request.getSwitchStatus() == 2 && (request.getHighestAllowElectricity() != null &&
-                            request.getHighestAllowElectricity().compareTo(BigDecimal.ZERO) >= 0 &&
-                            request.getHighestAllowElectricity().compareTo(BigDecimal.ONE) <= 0)))) {
 
-                if (msg.length > 25) {
-                cursor += 4;
-                byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
-                int i = 0;
-                while (serials[i] != 0x00) {
-                    i++;
-                }
-                request.setSerial( new String( BytesUtil.copyBytes( serials, 0, i ) ) );
-                cursor += 16;
-                byte[] orderNos = BytesUtil.copyBytes( msg, cursor, 32 );
-                i = 0;
-                while (orderNos[i] != 0x00) {
-                    i++;
-                }
-                String orderNo = new String( BytesUtil.copyBytes( orderNos, 0, i ) );
-                if (orderNo.length()>0&&'\u0006' == orderNo.charAt( 0 )) {
-                    orderNo = orderNo.substring( 1 );
-                }
-                request.setOrderNo( orderNo );
+
+        if (msg.length > 25) {
+            cursor += 4;
+            byte[] serials = BytesUtil.copyBytes(msg, cursor, 16);
+            int i = 0;
+            while (serials[i] != 0x00) {
+                i++;
             }
+            request.setSerial(new String(BytesUtil.copyBytes(serials, 0, i)));
+            cursor += 16;
+            byte[] orderNos = BytesUtil.copyBytes(msg, cursor, 32);
+            i = 0;
+            while (orderNos[i] != 0x00) {
+                i++;
+            }
+            String orderNo = new String(BytesUtil.copyBytes(orderNos, 0, i));
+            if (orderNo.length() > 0 && '\u0006' == orderNo.charAt(0)) {
+                orderNo = orderNo.substring(1);
+            }
+            request.setOrderNo(orderNo);
         }
 
         return request;
@@ -118,8 +112,6 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         byte[] responseBytes = new byte[]{};
         return responseBytes;
     }
-
-
 
 
     @Override
@@ -140,10 +132,10 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
     }
 
     public static void main(String[] args) {
-        byte[] b= new byte[]{0x01};
+        byte[] b = new byte[]{0x01};
         System.out.println(BytesUtil.bcd2StrLittle(b));
         BytesUtil.bcd2StrLittle(b);
-        byte[] bytes=new byte[]{(byte) 0x68,0x26,(byte)0x9a,(byte)0xd0,0x0,0x16,(byte)0x86,0x0,0x3,0x0,0x57,0x0,0x1,0x9,0x9,0x0,0x0,0x0,0x1,(byte)0xfe,0x18,0x0,0x0,0x55,0x0,0x0,(byte)0x80,0x0,0x0,0x0,0x0,0x0,0x3,0x0,0xa,0xa,0x3d,0x5,0x0,0x0};
+        byte[] bytes = new byte[]{(byte) 0x68, 0x26, (byte) 0x9a, (byte) 0xd0, 0x0, 0x16, (byte) 0x86, 0x0, 0x3, 0x0, 0x57, 0x0, 0x1, 0x9, 0x9, 0x0, 0x0, 0x0, 0x1, (byte) 0xfe, 0x18, 0x0, 0x0, 0x55, 0x0, 0x0, (byte) 0x80, 0x0, 0x0, 0x0, 0x0, 0x0, 0x3, 0x0, 0xa, 0xa, 0x3d, 0x5, 0x0, 0x0};
         byte[] dataBytes = BytesUtil.copyBytes(bytes, 13, (bytes.length - 13));
 
         //依照报文体规则解析报文
