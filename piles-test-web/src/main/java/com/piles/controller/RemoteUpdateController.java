@@ -67,7 +67,8 @@ public class RemoteUpdateController {
 
         List<Map> results = Lists.newArrayList();
 
-        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+//        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+        String[] pileArr = updateRemoteRequest.getPileNos().split(",");
         List<String> pileList = Arrays.stream(pileArr).collect(Collectors.toList());
         List<RemoteUpdatePushRequest> remoteUpdateList = Lists.newArrayList();
         List<String> noConnectPileNoList = Lists.newArrayList();
@@ -178,7 +179,8 @@ public class RemoteUpdateController {
 
         List<Map> results = Lists.newArrayList();
 
-        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+//        String[] pileArr = StringUtils.split(updateRemoteRequest.getPileNos(), ",");
+        String[] pileArr = updateRemoteRequest.getPileNos().split(",");
 
         List<String> pileList = Arrays.stream(pileArr).collect(Collectors.toList());
         List<XunDaoFtpUpgradeIssuePushRequest> remoteUpdateList = Lists.newArrayList();
