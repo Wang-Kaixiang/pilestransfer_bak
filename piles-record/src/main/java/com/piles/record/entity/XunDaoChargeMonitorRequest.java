@@ -1,18 +1,17 @@
 package com.piles.record.entity;
 
-import com.google.common.primitives.Bytes;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 
 /**
  * 循道上传充电过程监测数据接口请求实体
  */
 @Data
-public class XunDaoUploadChargeMonitorRequest implements Serializable {
+public class XunDaoChargeMonitorRequest extends BasePushResponse implements Serializable {
 
 
     //充电输出电压(直 流最大输出电压)	BIN	2	精确到小数点后一位
@@ -58,8 +57,8 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
      * @param msg
      * @return
      */
-    public static XunDaoUploadChargeMonitorRequest packEntity(byte[] msg) {
-        XunDaoUploadChargeMonitorRequest request = new XunDaoUploadChargeMonitorRequest();
+    public static XunDaoChargeMonitorRequest packEntity(byte[] msg) {
+        XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
         int cursor = 0;
         request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
@@ -108,7 +107,7 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         return request;
     }
 
-    public static byte[] packBytes(XunDaoUploadChargeMonitorRequest request) {
+    public static byte[] packBytes(XunDaoChargeMonitorRequest request) {
         byte[] responseBytes = new byte[]{};
         return responseBytes;
     }
@@ -141,6 +140,6 @@ public class XunDaoUploadChargeMonitorRequest implements Serializable {
         byte[] dataBytes = BytesUtil.copyBytes(bytes, 13, (bytes.length - 13));
 
         //依照报文体规则解析报文
-        XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
+        XunDaoChargeMonitorRequest uploadChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity(dataBytes);
     }
 }
