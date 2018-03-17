@@ -18,7 +18,7 @@ import java.util.Map;
 @Service
 public class UpdateStatusServiceImpl implements IUpdateStatusService {
 
-    @Value("admin.update.url")
+    @Value("${admin.update.url}")
     private String updateUrl;
 
     @Override
