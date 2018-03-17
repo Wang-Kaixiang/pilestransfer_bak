@@ -28,6 +28,10 @@ public class XunDaoUpdateRemoteRequest {
      * 软件版本号
      */
     private String softVersion;
+    /**
+     * 文件路径
+     */
+    private String filePath;
 //
 //    /**
 //     * 升级服务器IP地址 字符串， 不足尾部补0x00 20长度 字符串 比如:1.23.45.110
