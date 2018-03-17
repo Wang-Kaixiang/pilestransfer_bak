@@ -211,7 +211,7 @@ public class RemoteUpdateController {
             remoteUpdate.setUserName(serverUserName);
             remoteUpdate.setPassword(serverPassword);
             remoteUpdate.setPileNo(pileNo);
-            remoteUpdate.setDownloadUrl(updateRemoteRequest.getFilePath());
+            remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
             remoteUpdate.setSoftVersion(updateRemoteRequest.getSoftVersion());
             remoteUpdateList.add(remoteUpdate);
         }
