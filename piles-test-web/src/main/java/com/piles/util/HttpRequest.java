@@ -96,7 +96,7 @@ public class HttpRequest {
 
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             for (String s : map.keySet()) {
-                nvps.add(new BasicNameValuePair(s, map.get(s)));
+                nvps.add(new BasicNameValuePair(s, String.valueOf(map.get(s))));
             }
             UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(nvps, Charset.forName("UTF-8"));
             post.setEntity(urlEncodedFormEntity);
