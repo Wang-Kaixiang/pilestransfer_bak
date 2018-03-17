@@ -92,7 +92,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
             if (CollectionUtils.isNotEmpty(remoteUpdateList)) {
 
                 for (XunDaoFtpUpgradeIssuePushRequest remoteUpdateRequest : remoteUpdateList) {
-                    log.info("进入循道批量升级信息", JSON.toJSONString(remoteUpdateList));
+                    log.info("进入循道批量升级信息{}", JSON.toJSONString(remoteUpdateList));
                     executorService.submit(() -> {
                         doPush(remoteUpdateRequest);
                     });
