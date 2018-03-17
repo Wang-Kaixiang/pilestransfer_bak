@@ -206,6 +206,7 @@ public class RemoteUpdateController {
             }
 
             XunDaoFtpUpgradeIssuePushRequest remoteUpdate = new XunDaoFtpUpgradeIssuePushRequest();
+            BeanUtils.copyProperties(updateRemoteRequest, remoteUpdate);
             remoteUpdate.setServerIp(serverIp);
             remoteUpdate.setServerPort(serverPort);
             remoteUpdate.setUserName(serverUserName);
