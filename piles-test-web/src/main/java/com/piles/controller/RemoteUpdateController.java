@@ -41,13 +41,13 @@ public class RemoteUpdateController {
     @Resource
     IXunDaoFtpUpgradeIssueService xunDaoFtpUpgradeIssueService;
 
-    @Value("xun.ftp.server.ip")
+    @Value("${xun.ftp.server.ip}")
     private String serverIp;
-    @Value("xun.ftp.server.port")
+    @Value("${xun.ftp.server.port}")
     private String serverPort;
-    @Value("xun.ftp.server.userName")
+    @Value("${xun.ftp.server.userName}")
     private String serverUserName;
-    @Value("xun.ftp.server.password")
+    @Value("${xun.ftp.server.password}")
     private String serverPassword;
 
     /**
