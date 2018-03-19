@@ -8,6 +8,7 @@ import com.piles.setting.entity.UpdateStatusRequest;
 import com.piles.setting.service.IUpdateStatusService;
 import com.piles.util.HttpRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,9 @@ public class UpdateStatusServiceImpl implements IUpdateStatusService {
         log.info("进入升级状态汇报接口" + updateStatusReport.toString());
         UpdateStatusRequest request = new UpdateStatusRequest();
         BeanUtils.copyProperties(updateStatusReport, request);
-        Map params = JSONObject.parseObject(JSON.toJSONString(request, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteMapNullValue));
-        boolean flag = HttpRequest.httpPost(params, updateUrl);
+        Map<String, JSONObject> map = new HashedMap();
+        map.put("result", JSONObject.parseObject(JSON.toJSONString(request, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteMapNullValue)));
+
+        boolean flag = HttpRequest.httpPostWithJson(map, updateUrl);
     }
 }
