@@ -83,6 +83,10 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 if (msg.length >= 8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 12, 1)) == 71) {
                     return SpringContextUtil.getBean("xunDaoModifyIPBusiness");
                 }
+
+                if (msg.length >= 8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 12, 1)) == 72) {
+                    return SpringContextUtil.getBean("xunDaoModifyIPReportBusiness");
+                }
 //            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6,
             case SEND_DATA_CODE:
 
