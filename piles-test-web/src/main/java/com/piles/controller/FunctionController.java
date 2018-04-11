@@ -254,13 +254,13 @@ public class FunctionController {
                 result.put("status", "0");
                 result.put("msg", "充电桩链接不可用");
                 results.add(result);
-                log.info("桩号{}在升级的时候链接不可用", pileNo);
+                log.info("桩号{}在修改ip地址时不可用", pileNo);
                 noConnectPileNoList.add(pileNo);
                 //连接不可用的不进行升级
                 continue;
             } else {
                 result.put("status", "1");
-                result.put("msg", "充电桩发起升级");
+                result.put("msg", "充电桩链接可用");
                 results.add(result);
             }
 
@@ -270,14 +270,14 @@ public class FunctionController {
             modifyIPList.add(pushRequest);
         }
         if (CollectionUtils.isEmpty(modifyIPList)) {
-            log.info("远程升级时所有的桩号都未发现可用链接，不进行升级");
+            log.info("修改ip地址时时所有的桩号都未发现可用链接，不进行修改IP地址");
         } else {
             xunDaoModifyIPeService.doBatchPush(modifyIPList);
         }
         if (CollectionUtils.isNotEmpty(noConnectPileNoList)) {
             //TODO 是否需要调用没有链接 单独调用后台接口
         }
-        log.info("return请求修改ip地址请求结果{}:", JSON.toJSONString(results));
+        log.info("return请求修改IP地址请求结果{}:", JSON.toJSONString(results));
         return results;
 
     }
@@ -291,19 +291,19 @@ public class FunctionController {
         if (StringUtils.isEmpty(request.getTradeTypeCode())) {
             map.put("status", "-1");
             map.put("msg", "充电桩厂商类型为空");
-            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            log.info("return请求修改ip请求,充电桩厂商类型为空:" + JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(request.getPileNos())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");
-            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            log.info("return请求修改ip请求,充电桩编号为空:" + JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(request.getSerial())) {
             map.put("status", "-1");
             map.put("msg", "流水号为空");
-            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            log.info("return请求修改ip请求,流水号为空:" + JSON.toJSONString(map));
             return map;
         }
         try {
@@ -311,22 +311,28 @@ public class FunctionController {
             if (serial > 65535) {
                 map.put("status", "-1");
                 map.put("msg", "流水号不能大于65535");
-                log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+                log.info("return请求修改ip请求,流水号不能大于65535:" + JSON.toJSONString(map));
             }
         } catch (Exception e) {
             map.put("status", "-1");
             map.put("msg", "流水号需要是数字");
-            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            log.info("return请求修改ip请求,流水号需要是数字:" + JSON.toJSONString(map));
             return map;
         }
 
         if (StringUtils.isEmpty(request.getAddr())) {
             map.put("status", "-1");
             map.put("msg", "服务器ip为空");
-            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            log.info("return请求修改ip请求,服务器ip为空:" + JSON.toJSONString(map));
             return map;
         }
 
+        if (request.getAddr().getBytes().length>30) {
+            map.put("status", "-1");
+            map.put("msg", "服务器ip长度太长");
+            log.info("return请求修改ip请求,服务器ip长度太长:" + JSON.toJSONString(map));
+            return map;
+        }
         return null;
 
     }

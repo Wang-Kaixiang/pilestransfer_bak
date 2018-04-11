@@ -29,9 +29,8 @@ public class XunDaoModifyIPRequest extends BasePushResponse implements Serializa
     public static XunDaoModifyIPRequest packEntity(byte[] msg){
         XunDaoModifyIPRequest request=new XunDaoModifyIPRequest();
         request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg,0,8)));
-        request.setResult(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,8,1),10)));
+        request.setResult(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,8,1)));
         return request;
     }
-
 
 }

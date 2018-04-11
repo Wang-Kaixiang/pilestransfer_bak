@@ -1,5 +1,6 @@
 package com.piles.setting.business.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.piles.common.business.IBusiness;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelResponseCallBackMap;
@@ -23,6 +24,7 @@ public class XunDaoModifyIPBusinessImpl implements IBusiness {
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
         //依照报文体规则解析报文
         XunDaoModifyIPRequest xunDaoModifyIPRequest = XunDaoModifyIPRequest.packEntity( dataBytes );
+        log.info( "接收到循道充电桩响应修改ip返回结果:{}", JSON.toJSONString(xunDaoModifyIPRequest) );
         //调用底层接口
         ChannelResponseCallBackMap.callBack( incoming, String.valueOf( order ), xunDaoModifyIPRequest );
         return null;
