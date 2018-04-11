@@ -2,6 +2,8 @@ package com.piles.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.entity.type.TradeType;
@@ -9,21 +11,20 @@ import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.GunElecAmountMapUtil;
 import com.piles.common.util.GunStatusMapUtil;
 import com.piles.common.util.GunWorkStatusMapUtil;
-import com.piles.control.entity.RemoteStartPushRequest;
-import com.piles.control.entity.RemoteStartRequest;
-import com.piles.control.service.IRemoteStartPushService;
 import com.piles.entity.enums.ResponseCode;
-import com.piles.entity.vo.CheckConnectionRequest;
-import com.piles.entity.vo.PileChargeStatusRequest;
-import com.piles.entity.vo.PileStatusRequest;
+import com.piles.entity.vo.*;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
 import com.piles.record.service.IChargeMonitorPushService;
+import com.piles.setting.entity.XunDaoModifyIPPushRequest;
+import com.piles.setting.service.IXunDaoModifyIPeService;
 import com.piles.util.ServiceFactoryUtil;
 import com.piles.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.piles.common.entity.type.EPushResponseCode.CONNECT_ERROR;
 import static com.piles.common.entity.type.EPushResponseCode.READ_OK;
@@ -43,6 +47,9 @@ import static com.piles.common.entity.type.EPushResponseCode.READ_OK;
 public class FunctionController {
     @Resource
     ServiceFactoryUtil serviceFactoryUtil;
+
+    @Resource
+    IXunDaoModifyIPeService xunDaoModifyIPeService;
 
 
     /**
@@ -221,5 +228,106 @@ public class FunctionController {
 
     }
 
+    @RequestMapping(value = "/connectAddress", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Map> connectAddress(ModifyIPRequest request) {
+        log.info("修改ip地址请求信息:" + JSON.toJSONString(request));
+        Map<String, Object> map = checkXunDaoParams(request);
+        if (null != map) {
+            return Lists.newArrayList(map);
+        }
 
+        List<Map> results = Lists.newArrayList();
+
+        String[] pileArr = request.getPileNos().split(",");
+
+        List<String> pileList = Arrays.stream(pileArr).collect(Collectors.toList());
+        List<XunDaoModifyIPPushRequest> modifyIPList = Lists.newArrayList();
+        List<String> noConnectPileNoList = Lists.newArrayList();
+        //已经判断过pileNos是否为空
+        for (String pileNo : pileList) {
+            Map result = Maps.newHashMap();
+            result.put("pileNo", pileNo);
+            //获取连接channel 获取不到无法推送
+            Channel channel = ChannelMapByEntity.getChannel(request.getTradeTypeCode(), pileNo);
+            if (null == channel) {
+                result.put("status", "0");
+                result.put("msg", "充电桩链接不可用");
+                results.add(result);
+                log.info("桩号{}在升级的时候链接不可用", pileNo);
+                noConnectPileNoList.add(pileNo);
+                //连接不可用的不进行升级
+                continue;
+            } else {
+                result.put("status", "1");
+                result.put("msg", "充电桩发起升级");
+                results.add(result);
+            }
+
+            XunDaoModifyIPPushRequest pushRequest = new XunDaoModifyIPPushRequest();
+            BeanUtils.copyProperties(request, pushRequest);
+            pushRequest.setPileNo(pileNo);
+            modifyIPList.add(pushRequest);
+        }
+        if (CollectionUtils.isEmpty(modifyIPList)) {
+            log.info("远程升级时所有的桩号都未发现可用链接，不进行升级");
+        } else {
+            xunDaoModifyIPeService.doBatchPush(modifyIPList);
+        }
+        if (CollectionUtils.isNotEmpty(noConnectPileNoList)) {
+            //TODO 是否需要调用没有链接 单独调用后台接口
+        }
+        log.info("return请求修改ip地址请求结果{}:", JSON.toJSONString(results));
+        return results;
+
+    }
+
+    private Map<String, Object> checkXunDaoParams(ModifyIPRequest request) {
+        Map<String, Object> map = new HashedMap();
+        //check 参数
+        int serial = 0;
+
+
+        if (StringUtils.isEmpty(request.getTradeTypeCode())) {
+            map.put("status", "-1");
+            map.put("msg", "充电桩厂商类型为空");
+            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        if (StringUtils.isEmpty(request.getPileNos())) {
+            map.put("status", "-1");
+            map.put("msg", "充电桩编号为空");
+            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        if (StringUtils.isEmpty(request.getSerial())) {
+            map.put("status", "-1");
+            map.put("msg", "流水号为空");
+            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        try {
+            serial = Integer.parseInt(request.getSerial());
+            if (serial > 65535) {
+                map.put("status", "-1");
+                map.put("msg", "流水号不能大于65535");
+                log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            }
+        } catch (Exception e) {
+            map.put("status", "-1");
+            map.put("msg", "流水号需要是数字");
+            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+
+        if (StringUtils.isEmpty(request.getAddr())) {
+            map.put("status", "-1");
+            map.put("msg", "服务器ip为空");
+            log.info("return请求修改ip请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+
+        return null;
+
+    }
 }
