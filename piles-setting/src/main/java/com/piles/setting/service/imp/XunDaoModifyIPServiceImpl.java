@@ -56,6 +56,7 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
     private int modifyIPThreadNum;
     @Override
     public BasePushCallBackResponse<XunDaoModifyIPRequest> doPush(XunDaoModifyIPPushRequest xunDaoModifyIPPushRequest) {
+        log.info("进入推送修改IP地址接口,参数:{}",JSON.toJSONString(xunDaoModifyIPPushRequest));
         byte[] pushMsg = XunDaoModifyIPPushRequest.packBytes(xunDaoModifyIPPushRequest);
         pushMsg = buildHead(pushMsg, xunDaoModifyIPPushRequest);
         BasePushCallBackResponse<XunDaoModifyIPRequest> basePushCallBackResponse = new BasePushCallBackResponse();
@@ -64,6 +65,7 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
         basePushCallBackResponse.setPileNo(xunDaoModifyIPPushRequest.getPileNo());
         boolean flag = pushBusiness.push(pushMsg, xunDaoModifyIPPushRequest.getTradeTypeCode(), xunDaoModifyIPPushRequest.getPileNo(), basePushCallBackResponse, ECommandCode.REMOTE_CHARGE_CODE);
         if (!flag) {
+            log.error( "推送修改IP地址,厂商类型:{},桩号:{} 无法获取到长连接,请检查充电桩连接状态", xunDaoModifyIPPushRequest.getTradeTypeCode(), xunDaoModifyIPPushRequest.getPileNo() );
             basePushCallBackResponse.setCode(EPushResponseCode.CONNECT_ERROR);
             return basePushCallBackResponse;
         }
@@ -71,11 +73,11 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
             CountDownLatch countDownLatch = basePushCallBackResponse.getCountDownLatch();
             countDownLatch.await(timeout, TimeUnit.MILLISECONDS);
             if (countDownLatch.getCount() > 0) {
-                log.error("修改ip地址推送失败超时，厂商类型:{},桩号:{}", xunDaoModifyIPPushRequest.getTradeTypeCode(), xunDaoModifyIPPushRequest.getPileNo());
+                log.error("修改IP地址推送失败超时，厂商类型:{},桩号:{}", xunDaoModifyIPPushRequest.getTradeTypeCode(), xunDaoModifyIPPushRequest.getPileNo());
             }
             ChannelResponseCallBackMap.remove(xunDaoModifyIPPushRequest.getTradeTypeCode(), xunDaoModifyIPPushRequest.getPileNo(), xunDaoModifyIPPushRequest.getSerial());
         } catch (InterruptedException e) {
-            log.error("修改ip地址推送异常:{}", e);
+            log.error("修改IP地址推送异常:{}", e);
         }
         return basePushCallBackResponse;
     }
@@ -101,11 +103,11 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("批量更新地址后台推送报文时异常:{}",e);
         } finally {
             executorService.shutdown();
         }
-        log.info("循道批量修改ip结果为:{}", JSON.toJSONString(results));
+//        log.info("循道批量修改IP结果为:{}", JSON.toJSONString(results));
         return results;    }
 
     //添加报文头
@@ -127,6 +129,4 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
 
         return result;
     }
-
-
 }

@@ -37,9 +37,11 @@ public class XunDaoModifyIPPushRequest extends BasePushRequest implements Serial
         byte[] result = new byte[0];
         result = Bytes.concat(result,BytesUtil.str2BcdLittle(request.getPileNo()));
         result = Bytes.concat(result,BytesUtil.rightPadBytes(request.getAddr(),30,(byte)0x00));
-        result = Bytes.concat(BytesUtil.intToBytesLittle(request.getPort(),2));
+        result = Bytes.concat(result,BytesUtil.intToBytesLittle(request.getPort(),2));
         return result;
     }
+
+
 
 
 }

@@ -134,7 +134,7 @@ public class XunDaoFtpUpgradeIssueServiceImpl implements IXunDaoFtpUpgradeIssueS
 //                }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("批量升级时后台推送报文时异常:{}",e);
         } finally {
             executorService.shutdown();
         }
