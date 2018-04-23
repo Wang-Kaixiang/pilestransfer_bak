@@ -37,9 +37,9 @@ public class XunDaoModifyIPReportBusinessImpl implements IBusiness {
         boolean flag = ipService.uploadRecord( uploadChageIpRecord );
 
         if (flag) {
-            dataBytes = Bytes.concat( dataBytes, new byte[]{0x00} );
+            dataBytes = Bytes.concat( BytesUtil.copyBytes( msg, 13, 8 ), new byte[]{0x00} );
         } else {
-            dataBytes = Bytes.concat( dataBytes, new byte[]{0x01} );
+            dataBytes = Bytes.concat( BytesUtil.copyBytes( msg, 13, 8 ), new byte[]{0x01} );
         }
         byte[] head = buildHead( dataBytes, BytesUtil.copyBytes( msg, 2, 4 ) );
         return head;
