@@ -47,7 +47,7 @@ public class StartAndLenthFieldFrameDecoder extends ByteToMessageDecoder {
                 // 标记包头开始的index
                 buffer.markReaderIndex();
                 // 读到了协议的开始标志，结束while循环
-                if (buffer.getUnsignedByte( 0 ) == HEAD_DATA) {
+                if (buffer.getUnsignedByte( beginReader ) == HEAD_DATA) {
                     break;
                 }
 
@@ -66,7 +66,7 @@ public class StartAndLenthFieldFrameDecoder extends ByteToMessageDecoder {
 
             // 消息的长度
 
-            int length = buffer.getUnsignedByte( 1 );
+            int length = buffer.getUnsignedByte( beginReader+1 );
             // 判断请求数据包数据是否到齐
             if (buffer.readableBytes() < length) {
                 // 还原读指针
@@ -77,8 +77,8 @@ public class StartAndLenthFieldFrameDecoder extends ByteToMessageDecoder {
             // 读取data数据
             byte[] data = new byte[length];
             buffer.readBytes(data);
-            ByteBuf frame= buffer.retainedSlice(0, length+2);
-            buffer.readerIndex(length + 2);
+            ByteBuf frame= buffer.retainedSlice(beginReader, length+2);
+            buffer.readerIndex(beginReader+length + 2);
             out.add(frame);
         }
     }
