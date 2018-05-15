@@ -1,5 +1,6 @@
 package com.piles.common.websocket.xunDaoServer;
 
+import com.piles.common.websocket.decoder.StartAndLenthFieldFrameDecoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
@@ -30,7 +31,7 @@ public class XunDaoServerChannelInitializer extends ChannelInitializer<SocketCha
 //		pipeline.addLast("decoder", new ObjectDecoder(1024*1024, ClassResolvers.cacheDisabled(null)));
 //		pipeline.addLast("encoder", new ObjectEncoder());
 
-		pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 1, 1, 0, 0));
+		pipeline.addLast("frameDecoder", new StartAndLenthFieldFrameDecoder(0x68));
 		pipeline.addLast("decoder", new ByteArrayDecoder());
 		pipeline.addLast("encoder", new ByteArrayEncoder());
 		pipeline.addLast( new ReadTimeoutHandler(60*5  ) );
