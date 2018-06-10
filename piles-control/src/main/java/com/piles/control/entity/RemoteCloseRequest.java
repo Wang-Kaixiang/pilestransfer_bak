@@ -3,6 +3,7 @@ package com.piles.control.entity;
 import com.alibaba.fastjson.JSON;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.MsgHelper;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -47,8 +48,7 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
     public static RemoteCloseRequest packEntityXunDao(byte[] msg) {
         RemoteCloseRequest request = new RemoteCloseRequest();
         request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 22, 1 ), 10 ) ) );
-        //TODO gunUtile
-        request.setGunNo(1);
+        request.setGunNo(MsgHelper.getGunNo(msg));
         return request;
     }
 

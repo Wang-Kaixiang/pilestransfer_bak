@@ -40,7 +40,7 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = BytesUtil.copyBytes(msg, 8, 2);
         byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x01, 0x00, 0x00};
+        byte[] addr = new byte[]{0x00, 0x00, 0x00};
 
 
 
