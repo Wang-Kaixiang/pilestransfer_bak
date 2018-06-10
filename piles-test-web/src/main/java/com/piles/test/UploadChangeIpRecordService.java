@@ -30,7 +30,6 @@ public class UploadChangeIpRecordService implements IUploadChangeIpService {
         jsonObject.put( "tradeTypeCode",uploadRecord.getTradeTypeCode() );
 
 
-        jsonObject.put("gunNo",uploadRecord.getGunNo());
         jsonObject.put( "pileType",uploadRecord.getPileType() );
 
 //        http://tox.tunnel.qydev.com/order/powerEnd

@@ -31,8 +31,4 @@ public class UploadChageIpRecord {
      * 桩类型
      */
     private int pileType;
-    /**
-     * 枪号
-     */
-    private int gunNo;
 }

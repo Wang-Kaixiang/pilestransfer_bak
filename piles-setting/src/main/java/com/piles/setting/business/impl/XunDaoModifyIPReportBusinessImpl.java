@@ -37,7 +37,6 @@ public class XunDaoModifyIPReportBusinessImpl implements IBusiness {
         UploadChageIpRecord uploadChageIpRecord = JSONObject.parseObject( JSON.toJSONString( xunDaoModifyIPRequest ), UploadChageIpRecord.class );
         uploadChageIpRecord.setTradeTypeCode( TradeType.XUN_DAO.getCode() );
         uploadChageIpRecord.setPileType(ChannelMapByEntity.getPileType(uploadChageIpRecord.getPileNo()));
-        uploadChageIpRecord.setGunNo(MsgHelper.getGunNo(msg));
         boolean flag = ipService.uploadRecord( uploadChageIpRecord );
 
         if (flag) {
