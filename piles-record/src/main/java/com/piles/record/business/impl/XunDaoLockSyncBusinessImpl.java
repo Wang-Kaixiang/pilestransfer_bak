@@ -33,14 +33,14 @@ public class XunDaoLockSyncBusinessImpl implements IBusiness {
                 BytesUtil.intToBytesLittle(day, 1), BytesUtil.intToBytesLittle(month, 1), BytesUtil.intToBytesLittle(year, 1));
 
         byte[] head = new byte[]{0x68};
-        byte[] length = BytesUtil.intToBytesLittle(18, 1);
+        byte[] length = BytesUtil.intToBytesLittle(20, 1);
         byte[] contrl = BytesUtil.copyBytes(msg, 2, 4);
 
         byte[] type = BytesUtil.intToBytesLittle(XunDaoTypeCode.LOCK_SYNC_CODE.getCode(),1);
         byte[] beiyong = new byte[]{0x00};
         byte[] reason = BytesUtil.copyBytes(msg, 8, 2);
         byte[] crc = CRC16Util.getXunDaoCRC(data);
-        byte[] addr = new byte[]{0x01};
+        byte[] addr = new byte[]{0x01, 0x00, 0x00};
 
 
 

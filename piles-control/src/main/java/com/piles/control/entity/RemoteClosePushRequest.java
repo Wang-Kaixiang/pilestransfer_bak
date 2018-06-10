@@ -4,6 +4,7 @@ import com.google.common.primitives.Bytes;
 import com.piles.common.entity.BasePushRequest;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -53,8 +54,8 @@ public class RemoteClosePushRequest extends BasePushRequest implements Serializa
         byte[] length = new byte[]{0x49};
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(request.getSerial()));
         byte[] type = new byte[]{(byte) 0x85};
-        byte[] beiyong = new byte[]{0x00};
-        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] beiyong = 1 == request.getGunNo() ? new byte[]{0x00} : new byte[]{0x01};
+        byte[] reason = ChannelMapByEntity.getPileTypeArr(request.getPileNo());
         byte[] crc = CRC16Util.getXunDaoCRC(data);
         byte[] addr = new byte[]{0x1C};
 

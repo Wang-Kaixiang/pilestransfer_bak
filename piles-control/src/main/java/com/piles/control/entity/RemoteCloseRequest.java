@@ -21,6 +21,10 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
      * 结果 1位 BIN    0: 结束成功 1: 枪被预约 2: 其他原因失败
      */
     private int result;
+    /**
+     * 枪号 0 a枪 1 b枪
+     */
+    private int gunNo;
 
     /**
      * 解析报文并封装request体
@@ -43,6 +47,8 @@ public class RemoteCloseRequest extends BasePushResponse implements Serializable
     public static RemoteCloseRequest packEntityXunDao(byte[] msg) {
         RemoteCloseRequest request = new RemoteCloseRequest();
         request.setResult( Integer.parseInt( BytesUtil.binary( BytesUtil.copyBytes( msg, 22, 1 ), 10 ) ) );
+        //TODO gunUtile
+        request.setGunNo(1);
         return request;
     }
 

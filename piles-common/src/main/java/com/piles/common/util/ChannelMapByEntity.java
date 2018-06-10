@@ -117,4 +117,34 @@ public class ChannelMapByEntity {
         }
         return null;
     }
+
+    /**
+     * 充电桩类型
+     */
+    private static Map<String, byte[]> pileTypeMap2 = new HashedMap();
+
+    /**
+     * 添加充电桩类型
+     *
+     * @param pileNo
+     * @param pileType
+     */
+    public static void addPileType(String pileNo, byte[] pileType) {
+        if (!pileTypeMap2.containsKey(pileNo)) {
+            pileTypeMap2.put(pileNo, pileType);
+        }
+    }
+
+    /**
+     * 获取充电桩类型
+     *
+     * @param pileNo
+     * @return
+     */
+    public static byte[] getPileTypeArr(String pileNo) {
+        if (pileTypeMap2.containsKey(pileNo)) {
+            return pileTypeMap2.get(pileNo);
+        }
+        return null;
+    }
 }

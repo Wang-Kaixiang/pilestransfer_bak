@@ -3,6 +3,7 @@ package com.piles.control.business.impl;
 import com.piles.common.business.IBusiness;
 import com.piles.common.entity.ChannelEntity;
 import com.piles.common.entity.type.TradeType;
+import com.piles.common.util.BytesUtil;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.control.entity.LoginRequest;
 import com.piles.control.service.ILoginService;
@@ -38,6 +39,7 @@ public class XunDaoLoginBusinessImpl implements IBusiness {
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
             ChannelMapByEntity.addPileType(loginRequest.getPileNo(), loginRequest.getPileType());
+            ChannelMapByEntity.addPileType(loginRequest.getPileNo(), BytesUtil.copyBytes(msg, 3, 1));
         }
         //组装返回报文体
 
