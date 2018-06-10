@@ -20,4 +20,8 @@ public class BasePushRequest {
      * 对应厂商类型  1:蔚景 2: 循道
      */
     private int tradeTypeCode;
+    /**
+     * 直流桩单枪:1 直流桩双枪:2 交流桩单枪:3 交流桩双枪:4
+     */
+    private int pileType;
 }

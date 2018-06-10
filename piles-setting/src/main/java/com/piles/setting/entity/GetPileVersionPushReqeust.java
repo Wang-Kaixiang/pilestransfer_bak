@@ -6,6 +6,7 @@ import com.piles.common.entity.BasePushResponse;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
 import lombok.Data;
 
 /**
@@ -28,7 +29,7 @@ public class GetPileVersionPushReqeust extends BasePushRequest {
         byte[] contrl = BytesUtil.xundaoControlInt2Byte(Integer.parseInt(getPileVersionPushReqeusts.getSerial()));
         byte[] type = new byte[]{(byte) 0x85};
         byte[] beiyong = new byte[]{0x00};
-        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] reason = ChannelMapByEntity.getPileTypeArr(getPileVersionPushReqeusts.getPileNo());
         byte[] crc = CRC16Util.getXunDaoCRC(data);
         byte[] addr = new byte[]{0x1F};
 
