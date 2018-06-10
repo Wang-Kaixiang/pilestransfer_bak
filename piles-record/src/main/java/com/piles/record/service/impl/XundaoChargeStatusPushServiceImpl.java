@@ -8,6 +8,7 @@ import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
 import com.piles.record.service.IChargeMonitorPushService;
@@ -68,7 +69,8 @@ public class XundaoChargeStatusPushServiceImpl implements IChargeMonitorPushServ
         byte[] contrl = BytesUtil.xundaoControlInt2Byte( Integer.parseInt( request.getSerial() ) );
         byte[] type = new byte[]{(byte) 0x85};
         byte[] beiyong = new byte[]{0x00};
-        byte[] reason = new byte[]{0x03, 0x00};
+//        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] reason = ChannelMapByEntity.getPileTypeArr(request.getPileNo());
         byte[] crc = CRC16Util.getXunDaoCRC( data );
         byte[] addr = new byte[]{0x46};
 

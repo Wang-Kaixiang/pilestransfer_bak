@@ -3,6 +3,7 @@ package com.piles.record.business.impl;
 
 import com.piles.common.business.IBusiness;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
 import io.netty.channel.Channel;
@@ -23,6 +24,7 @@ public class XunDaoChargeMonitorBusinessImpl implements IBusiness {
         byte[] dataBytes = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
         //依照报文体规则解析报文
         XunDaoChargeMonitorRequest uploadChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity( dataBytes );
+        uploadChargeMonitorRequest.setPileType(ChannelMapByEntity.getPileType(uploadChargeMonitorRequest.getPileNo()));
         log.info( "接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString() );
 
         ChannelResponseCallBackMap.callBack( incoming, order, uploadChargeMonitorRequest );

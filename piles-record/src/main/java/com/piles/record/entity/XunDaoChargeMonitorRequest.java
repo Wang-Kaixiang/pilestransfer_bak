@@ -51,6 +51,9 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     //订单号 ascii 32位小端
     private String orderNo;
 
+    //桩类型
+    private int pileType;
+
     /**
      * 解析报文并封装request体
      *
@@ -115,7 +118,7 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
 
     @Override
     public String toString() {
-        return "XunDaoUploadChargeMonitorRequest{" +
+        return "XunDaoChargeMonitorRequest{" +
                 "highestAllowVoltage=" + highestAllowVoltage +
                 ", highestAllowElectricity=" + highestAllowElectricity +
                 ", outputRelayStatus=" + outputRelayStatus +
@@ -127,8 +130,9 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
                 ", troubleStatus=" + troubleStatus +
                 ", chargeDuration=" + chargeDuration +
                 ", currentChargeQuantity=" + currentChargeQuantity +
-                ", serial=" + serial +
-                ", orderNo=" + orderNo +
+                ", serial='" + serial + '\'' +
+                ", orderNo='" + orderNo + '\'' +
+                ", pileType=" + pileType +
                 '}';
     }
 

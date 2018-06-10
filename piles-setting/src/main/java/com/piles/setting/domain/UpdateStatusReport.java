@@ -1,9 +1,5 @@
 package com.piles.setting.domain;
 
-import com.piles.common.entity.ChannelEntity;
-import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMapByEntity;
-import io.netty.channel.Channel;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -36,14 +32,20 @@ public class UpdateStatusReport implements Serializable {
      * 厂商编码
      */
     private int tradeTypeCode;
+    /**
+     * 桩类型
+     */
+    private int pileType;
 
     @Override
     public String toString() {
-        return "UpdateStatusRequest{" +
+        return "UpdateStatusReport{" +
                 "status=" + status +
                 ", softVersion='" + softVersion + '\'' +
                 ", protocolVersion='" + protocolVersion + '\'' +
                 ", pileNo='" + pileNo + '\'' +
+                ", tradeTypeCode=" + tradeTypeCode +
+                ", pileType=" + pileType +
                 '}';
     }
 }

@@ -3,9 +3,9 @@ package com.piles.setting.business.impl;
 import com.google.common.primitives.Bytes;
 import com.piles.common.business.IBusiness;
 import com.piles.common.entity.type.TradeType;
-import com.piles.common.entity.type.XunDaoTypeCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
 import com.piles.setting.domain.UpdateStatusReport;
 import com.piles.setting.entity.XunDaoUpdateStatusRequest;
 import com.piles.setting.service.IUpdateStatusService;
@@ -38,22 +38,24 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
         XunDaoUpdateStatusRequest updatePackageRequest = XunDaoUpdateStatusRequest.packEntity(dataBytes);
         log.info( "接收到循道充电桩升级结果汇报报文:{}", updatePackageRequest.toString() );
         UpdateStatusReport uploadRecord = buildServiceEntity(updatePackageRequest);
+        uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecord.getPileNo()));
 
         updateStatusService.updateStatus(uploadRecord);
         //组装返回报文体
-        byte[] response = buildReponse(msg);
+        byte[] response = buildReponse(uploadRecord.getPileNo(),msg);
         return response;
     }
 
     //封装返回报文
-    private byte[] buildReponse(byte[] msg) {
+    private byte[] buildReponse(String pileNo, byte[] msg) {
         byte[] data= BytesUtil.copyBytes( msg,13,8 );
         byte[] head = new byte[]{0x68};
         byte[] length = BytesUtil.intToBytesLittle(19,1);
         byte[] contrl = BytesUtil.copyBytes( msg,2,4 );
         byte[] type = BytesUtil.intToBytesLittle(133,1);
         byte[] beiyong = new byte[]{0x00};
-        byte[] reason = new byte[]{0x03, 0x00};
+        byte[] reason = ChannelMapByEntity.getPileTypeArr(pileNo);
+//        byte[] reason = new byte[]{0x03, 0x00};
         byte[] crc = CRC16Util.getXunDaoCRC(data);
         byte[] addr = BytesUtil.intToBytesLittle(53,1);;
 

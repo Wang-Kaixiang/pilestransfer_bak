@@ -25,10 +25,10 @@ public class UpdateStatusServiceImpl implements IUpdateStatusService {
     @Override
     public void updateStatus(UpdateStatusReport updateStatusReport) {
         log.info("进入升级状态汇报接口" + updateStatusReport.toString());
-        UpdateStatusRequest request = new UpdateStatusRequest();
-        BeanUtils.copyProperties(updateStatusReport, request);
+//        UpdateStatusRequest request = new UpdateStatusRequest();
+//        BeanUtils.copyProperties(updateStatusReport, request);
         Map<String, JSONObject> map = new HashedMap();
-        map.put("result", JSONObject.parseObject(JSON.toJSONString(request, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteMapNullValue)));
+        map.put("result", JSONObject.parseObject(JSON.toJSONString(updateStatusReport, SerializerFeature.WriteNullStringAsEmpty, SerializerFeature.WriteMapNullValue)));
 
         boolean flag = HttpRequest.httpPostWithJson(map, updateUrl);
     }
