@@ -8,10 +8,10 @@ public class MsgHelper {
 
     /**
      * 获取报文中的枪号
-     * @param msg
-     * @return
+     * @param msg 原始报文
+     * @return 枪号
      */
-    public int getGunNo(byte[] msg){
+    public static int getGunNo(byte[] msg){
 
         return BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1));
     }
