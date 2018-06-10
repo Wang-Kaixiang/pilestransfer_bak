@@ -29,6 +29,10 @@ public class UploadChangeIpRecordService implements IUploadChangeIpService {
         jsonObject.put("port",uploadRecord.getPort());
         jsonObject.put( "tradeTypeCode",uploadRecord.getTradeTypeCode() );
 
+
+        jsonObject.put("gunNo",uploadRecord.getGunNo());
+        jsonObject.put( "pileType",uploadRecord.getPileType() );
+
 //        http://tox.tunnel.qydev.com/order/powerEnd
         Map<String,JSONObject> map= new HashedMap();
         map.put("args",jsonObject);

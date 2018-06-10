@@ -19,6 +19,20 @@ public class UploadChageIpRecord {
      */
     private String pileNo;
 
+    /**
+     * ip地址
+     */
     private String addr;
+    /**
+     * 端口
+     */
     private int port;
+    /**
+     * 桩类型
+     */
+    private int pileType;
+    /**
+     * 枪号
+     */
+    private int gunNo;
 }

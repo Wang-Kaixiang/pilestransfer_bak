@@ -7,6 +7,8 @@ import com.piles.common.business.IBusiness;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
+import com.piles.common.util.MsgHelper;
 import com.piles.setting.domain.UploadChageIpRecord;
 import com.piles.setting.entity.XunDaoModifyIPReportRequest;
 import com.piles.setting.service.IUploadChangeIpService;
@@ -34,6 +36,8 @@ public class XunDaoModifyIPReportBusinessImpl implements IBusiness {
         XunDaoModifyIPReportRequest xunDaoModifyIPRequest = XunDaoModifyIPReportRequest.packEntity( dataBytes );
         UploadChageIpRecord uploadChageIpRecord = JSONObject.parseObject( JSON.toJSONString( xunDaoModifyIPRequest ), UploadChageIpRecord.class );
         uploadChageIpRecord.setTradeTypeCode( TradeType.XUN_DAO.getCode() );
+        uploadChageIpRecord.setPileType(ChannelMapByEntity.getPileType(uploadChageIpRecord.getPileNo()));
+        uploadChageIpRecord.setGunNo(MsgHelper.getGunNo(msg));
         boolean flag = ipService.uploadRecord( uploadChageIpRecord );
 
         if (flag) {
@@ -41,16 +45,18 @@ public class XunDaoModifyIPReportBusinessImpl implements IBusiness {
         } else {
             dataBytes = Bytes.concat( BytesUtil.copyBytes( msg, 13, 8 ), new byte[]{0x01} );
         }
-        byte[] head = buildHead( dataBytes, BytesUtil.copyBytes( msg, 2, 4 ) );
+        byte[] head = buildHead( uploadChageIpRecord.getPileNo(),dataBytes, BytesUtil.copyBytes( msg, 2, 4 ) );
         return head;
     }
 
     //添加报文头
-    private byte[] buildHead(byte[] dataMsg, byte[] serial) {
+    private byte[] buildHead(String pileNo, byte[] dataMsg, byte[] serial) {
         byte[] result = Bytes.concat( new byte[]{0x68, 0x14} );
         result = Bytes.concat( result, serial );
         //添加类型标识
-        result = Bytes.concat( result, new byte[]{(byte) 0x85, 0x00, 0x03, 0x00} );
+        result = Bytes.concat( result, new byte[]{(byte) 0x85, 0x00} );
+        //添加桩类型
+        result = Bytes.concat( result, ChannelMapByEntity.getPileTypeArr(pileNo) );
         //添加crc
         result = Bytes.concat( result, CRC16Util.getXunDaoCRC( dataMsg ) );
         //添加记录类型

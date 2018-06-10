@@ -7,9 +7,7 @@ import com.piles.common.business.IPushBusiness;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.ECommandCode;
 import com.piles.common.entity.type.EPushResponseCode;
-import com.piles.common.util.BytesUtil;
-import com.piles.common.util.CRC16Util;
-import com.piles.common.util.ChannelResponseCallBackMap;
+import com.piles.common.util.*;
 import com.piles.setting.entity.XunDaoFtpUpgradeIssuePushRequest;
 import com.piles.setting.entity.XunDaoFtpUpgradeIssueRequest;
 import com.piles.setting.entity.XunDaoModifyIPPushRequest;
@@ -118,8 +116,9 @@ public class XunDaoModifyIPServiceImpl implements IXunDaoModifyIPeService {
         result = Bytes.concat(result, BytesUtil.intToBytesLittle(typeCode, 1));
         //添加备用
         result = Bytes.concat(result, BytesUtil.intToBytesLittle(0, 1));
-        //添加传送原因
-        result = Bytes.concat(result, new byte[]{0x03, 0x00});
+        //添加桩类型
+        result = Bytes.concat(result, ChannelMapByEntity.getPileTypeArr(request.getPileNo()));
+//        result = Bytes.concat(result, new byte[]{0x03, 0x00});
         //添加crc
         result = Bytes.concat(result, CRC16Util.getXunDaoCRC(dataMsg));
         //添加记录类型
