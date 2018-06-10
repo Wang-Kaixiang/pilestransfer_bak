@@ -37,6 +37,7 @@ public class XunDaoLoginBusinessImpl implements IBusiness {
             ChannelMapByEntity.removeChannel(channelEntity);
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
+            ChannelMapByEntity.addPileType(loginRequest.getPileNo(), loginRequest.getPileType());
         }
         //组装返回报文体
 

@@ -87,4 +87,34 @@ public class ChannelMapByEntity {
 
         channelMap3.remove(channel);
     }
+
+    /**
+     * 充电桩类型
+     */
+    private static Map<String, Integer> pileTypeMap = new HashedMap();
+
+    /**
+     * 添加充电桩类型
+     *
+     * @param pileNo
+     * @param pileType
+     */
+    public static void addPileType(String pileNo, Integer pileType) {
+        if (!pileTypeMap.containsKey(pileNo)) {
+            pileTypeMap.put(pileNo, pileType);
+        }
+    }
+
+    /**
+     * 获取充电桩类型
+     *
+     * @param pileNo
+     * @return
+     */
+    public static Integer getPileType(String pileNo) {
+        if (pileTypeMap.containsKey(pileNo)) {
+            return pileTypeMap.get(pileNo);
+        }
+        return null;
+    }
 }
