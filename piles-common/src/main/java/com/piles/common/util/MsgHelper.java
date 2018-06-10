@@ -15,4 +15,14 @@ public class MsgHelper {
 
         return BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1));
     }
+
+    /**
+     * 获取报文中的桩类型
+     * @param msg 原始报文
+     * @return 枪号
+     */
+    public static int getPileType(byte[] msg){
+
+        return BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2));
+    }
 }
