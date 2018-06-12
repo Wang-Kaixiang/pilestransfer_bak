@@ -146,6 +146,7 @@ public class FunctionController {
     @ResponseBody
     public Map<String, Object> chargeStatus(PileChargeStatusRequest pileChargeStatusRequest) {
         log.info("查询充电桩充电进度:" + JSON.toJSONString(pileChargeStatusRequest));
+
         Map<String, Object> map = new HashedMap();
         map = checkParams(pileChargeStatusRequest.getTradeTypeCode(),pileChargeStatusRequest.getPileNo());
         if (MapUtils.isNotEmpty(map)) {
