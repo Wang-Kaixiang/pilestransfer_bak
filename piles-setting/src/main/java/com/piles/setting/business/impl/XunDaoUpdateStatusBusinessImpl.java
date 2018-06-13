@@ -38,7 +38,6 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
         XunDaoUpdateStatusRequest updatePackageRequest = XunDaoUpdateStatusRequest.packEntity(dataBytes);
         log.info( "接收到循道充电桩升级结果汇报报文:{}", updatePackageRequest.toString() );
         UpdateStatusReport uploadRecord = buildServiceEntity(updatePackageRequest);
-        uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecord.getPileNo()));
 
         updateStatusService.updateStatus(uploadRecord);
         //组装返回报文体
@@ -70,6 +69,9 @@ public class XunDaoUpdateStatusBusinessImpl implements IBusiness {
         updateStatusReport.setPileNo(updatePackageRequest.getPileNo());
         updateStatusReport.setSoftVersion(updatePackageRequest.getSoftVersion());
         updateStatusReport.setStatus(updatePackageRequest.getStatus());
+        //添加桩类型
+        updateStatusReport.setPileType(ChannelMapByEntity.getPileType(updatePackageRequest.getPileNo()));
+
 //        updateStatusReport.setProtocolVersion();
         return updateStatusReport;
     }
