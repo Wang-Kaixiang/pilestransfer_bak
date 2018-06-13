@@ -7,6 +7,8 @@ import com.piles.common.entity.type.TradeType;
 import com.piles.common.entity.type.XunDaoTypeCode;
 import com.piles.common.util.BytesUtil;
 import com.piles.common.util.CRC16Util;
+import com.piles.common.util.ChannelMapByEntity;
+import com.piles.common.util.MsgHelper;
 import com.piles.record.domain.UploadRecord;
 import com.piles.record.entity.XunDaoUploadRecordRequest;
 import com.piles.record.service.IUploadRecordService;
@@ -33,11 +35,12 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info( "接收到循道充电桩上传充电记录报文" );
+        int gunNo = MsgHelper.getGunNo(msg);
         //依照报文体规则解析报文
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
         XunDaoUploadRecordRequest uploadRecordRequest = XunDaoUploadRecordRequest.packEntity( dataBytes );
         log.info( "接收到循道充电桩上传充电记录报文:{}", uploadRecordRequest.toString() );
-        UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest);
+        UploadRecord uploadRecord = buildServiceEntity(uploadRecordRequest,gunNo);
         //添加serial
         //调用底层接口
         boolean flag = uploadRecordService.uploadRecord( uploadRecord );
@@ -84,7 +87,7 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
 
     }
 
-    private UploadRecord buildServiceEntity(XunDaoUploadRecordRequest uploadRecordRequest){
+    private UploadRecord buildServiceEntity(XunDaoUploadRecordRequest uploadRecordRequest, int gunNo){
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
@@ -92,6 +95,8 @@ public class XunDaoUploadRecordBusinessImpl implements IBusiness {
         uploadRecord.setEndReason(uploadRecordRequest.getStopChargeReason());
         uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getTotalAmmeterDegree());
         uploadRecord.setSerial( Integer.parseInt(  uploadRecordRequest.getSerial()));
+        uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecordRequest.getPileNo()));
+        uploadRecord.setGunNo(gunNo);
         return uploadRecord;
     }
 }

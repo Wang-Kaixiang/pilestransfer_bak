@@ -35,4 +35,12 @@ public class UploadRecord {
      * 充电总电量	BIN	4	单位: 度，精确度为0.001
      */
     private BigDecimal totalAmmeterDegree;
+    /**
+     * 桩类型
+     */
+    private int pileType;
+    /**
+     * 枪号
+     */
+    private int gunNo;
 }

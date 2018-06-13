@@ -34,6 +34,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到循道充电桩上传充电过程监测数据报文");
+        int gunNo = MsgHelper.getGunNo(msg);
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
 
         //依照报文体规则解析报文
@@ -70,7 +71,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
                 highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
                 highestAllowElectricity.compareTo(BigDecimal.ONE) <= 0)))) {
 
-            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
+            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest,gunNo);
             log.info("循道充电状态上传账单" + JSON.toJSONString(uploadRecord));
             //添加serial
             //调用底层接口
@@ -91,7 +92,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         return updateStatusReport;
     }
 
-    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest) {
+    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest, int gunNo) {
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
@@ -105,6 +106,8 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         } catch (NumberFormatException e) {
 
         }
+        uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecordRequest.getPileNo()));
+        uploadRecord.setGunNo(gunNo);
         return uploadRecord;
     }
 
