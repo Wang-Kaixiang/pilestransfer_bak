@@ -85,7 +85,9 @@ public class LoginRequest implements Serializable
         //         1字节  1字节 1字节  1字节   8字节BCD码   2字节
         LoginRequest request=new LoginRequest();
         request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg,4,8)));
-        request.setPileType(Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg,3,1),10)));
+        Integer pileType = Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 3, 1), 10));
+        pileType = pileType == 2 ? 3 : pileType;
+        request.setPileType(pileType);
 
 
         return request;

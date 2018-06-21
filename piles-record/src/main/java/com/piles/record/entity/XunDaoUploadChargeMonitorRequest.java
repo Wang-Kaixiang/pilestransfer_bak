@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class XunDaoUploadChargeMonitorRequest implements Serializable {
+    private int pileType;
 
 
     //充电输出电压(直 流最大输出电压)	BIN	2	精确到小数点后一位
