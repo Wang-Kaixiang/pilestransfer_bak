@@ -20,11 +20,17 @@ public class XunDaoChargeMonitorBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info( "接收到循道充电桩上传充电过程监测数据报文" );
+        int pileType = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2));
+        //3、4 交流   5、6直流
+        if(pileType == 3 || pileType == 4){
+
+        }
         String order = String.valueOf( BytesUtil.xundaoControlByte2Int( BytesUtil.copyBytes( msg, 2, 4 ) ) );
         byte[] dataBytes = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
         //依照报文体规则解析报文
         XunDaoChargeMonitorRequest uploadChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity( dataBytes );
         uploadChargeMonitorRequest.setPileType(ChannelMapByEntity.getPileType(uploadChargeMonitorRequest.getPileNo()));
+        uploadChargeMonitorRequest.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1)));
         log.info( "接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString() );
 
         ChannelResponseCallBackMap.callBack( incoming, order, uploadChargeMonitorRequest );

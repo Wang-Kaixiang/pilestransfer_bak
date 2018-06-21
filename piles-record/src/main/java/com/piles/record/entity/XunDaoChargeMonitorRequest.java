@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- * 循道上传充电过程监测数据接口请求实体
+ * 循道上传充电过程监测数据接口请求实体（交流）
  */
 @Data
 public class XunDaoChargeMonitorRequest extends BasePushResponse implements Serializable {
@@ -53,6 +53,8 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
 
     //桩类型
     private int pileType;
+    //枪号
+    private int gunNo;
 
     /**
      * 解析报文并封装request体
