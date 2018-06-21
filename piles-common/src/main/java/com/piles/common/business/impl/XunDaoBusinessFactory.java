@@ -60,6 +60,9 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==3) {
                     return SpringContextUtil.getBean("xunDaoUnploadTradeDataBusiness");
                 }
+                if (msg.length >= 8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 12, 1)) == 4) {
+                    return SpringContextUtil.getBean("xunDaoDCUnploadTradeDataBusiness");
+                }
                 //获取充电桩软件版本上行数据(充电桩后台 交直流共 用)
                 if(msg.length>=8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg,12,1))==31) {
                     return SpringContextUtil.getBean("xunDaoGetPileVersionBusiness");
