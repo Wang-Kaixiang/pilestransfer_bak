@@ -91,6 +91,9 @@ public class XunDaoBusinessFactory implements IBusinessFactory {
                 if (msg.length >= 8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 12, 1)) == 73) {
                     return SpringContextUtil.getBean("xunDaoGetQrCodeBusiness");
                 }
+                if (msg.length >= 8 && BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 12, 1)) == 80) {
+                    return SpringContextUtil.getBean("xunDaoDCUploadChargeMonitorBusiness");
+                }
 //            int typeCode = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 6,
             case SEND_DATA_CODE:
 
