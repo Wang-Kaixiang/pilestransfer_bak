@@ -101,6 +101,9 @@ public class ChannelMapByEntity {
      */
     public static void addPileType(String pileNo, Integer pileType) {
         if (!pileTypeMap.containsKey(pileNo)) {
+            if (pileType == 2) {
+                pileType = 3;
+            }
             pileTypeMap.put(pileNo, pileType);
         }
     }
@@ -131,6 +134,9 @@ public class ChannelMapByEntity {
      */
     public static void addPileType(String pileNo, byte[] pileType) {
         if (!pileTypeMap2.containsKey(pileNo)) {
+            if (pileType[0] == (byte) 0x02) {
+                pileType[0] = (byte) 0x03;
+            }
             pileTypeMap2.put(pileNo, pileType);
         }
     }
