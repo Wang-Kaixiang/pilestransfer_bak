@@ -20,8 +20,6 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
     private int pileType;
     //枪号
     private int gunNo;
-
-
     //桩编号 8位 BCD
     private String pileNo;
     private int soc;//bin 1位 1%;
@@ -71,7 +69,6 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
     private String serial;
     //订单号 ascii 32位小端
     private String orderNo;
-
     //充电桩最高允许充电电源	BIN	4
     private BigDecimal highestAllowVoltage;
     //充电桩最高功率	BIN	4	单位：A，

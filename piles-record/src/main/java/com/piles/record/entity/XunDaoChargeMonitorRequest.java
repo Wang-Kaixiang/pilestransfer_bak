@@ -15,8 +15,10 @@ import java.math.BigDecimal;
 @Data
 @ToString
 public class XunDaoChargeMonitorRequest extends BasePushResponse implements Serializable {
-
-
+    //桩类型
+    private int pileType;
+    //枪号
+    private int gunNo;
     //充电输出电压(直 流最大输出电压)	BIN	2	精确到小数点后一位
     private BigDecimal highestAllowVoltage;
     //充电输出电流(直 流最大输出电流)	BIN	2	单位：A，精确到小数点后二位
@@ -54,10 +56,7 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     //订单号 ascii 32位小端
     private String orderNo;
 
-    //桩类型
-    private int pileType;
-    //枪号
-    private int gunNo;
+
 
     /**
      * 解析报文并封装request体
