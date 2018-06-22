@@ -3,6 +3,7 @@ package com.piles.record.entity;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
  * 循道上传充电过程监测数据接口请求实体（直流）
  */
 @Data
+@ToString
 public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Serializable {
 
     //桩类型
@@ -74,7 +76,7 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
     //充电桩最高功率	BIN	4	单位：A，
     private BigDecimal highestAllowW;
 
-    private byte[] temp;//预留bin 4
+//    private byte[] temp;//预留bin 4
 
     /**
      * 解析报文并封装request体
@@ -84,6 +86,12 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
      */
     public static XunDaoDCChargeMonitorRequest packEntity(byte[] msg) {
         XunDaoDCChargeMonitorRequest request = new XunDaoDCChargeMonitorRequest();
+
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1)));
+        request.setPileType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2)));
+
+        msg = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
+
         int cursor = 0;
         request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
         cursor += 8;
@@ -95,22 +103,38 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
         cursor += 4;
         request.setDcAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setDcAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        request.setDcAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
         request.setBmsAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
-        request.setBmsAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        request.setBmsAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
         request.setChargeType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
         request.setBatteryType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-//        request.setNoyong(BytesUtil.copyBytes(msg, cursor, 22));
-        cursor += 22;
+
+        request.setSingleHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        cursor += 4;
+        request.setSingleHighestAllowElectricity(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        cursor += 4;
+        request.setACVoltageA(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+        request.setACVoltageB(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+        request.setACVoltageC(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+        request.setACElectricityA(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+        request.setACElectricityB(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+        request.setACElectricityC(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        cursor += 2;
+
         request.setWorkStatus(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
-        request.setTroubleStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
-        cursor += 1;
+        request.setTroubleStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
+        cursor += 4;
         request.setUnDochargeDuration(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
         cursor += 2;
         request.setChargeDuration(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
@@ -141,7 +165,7 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
         request.setHighestAllowW(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
 
-        request.setTemp(BytesUtil.copyBytes(msg, cursor, 4));
+//        request.setTemp(BytesUtil.copyBytes(msg, cursor, 4));
 
         return request;
     }

@@ -2,10 +2,11 @@ package com.piles.record.business.impl;
 
 
 import com.piles.common.business.IBusiness;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
-import com.piles.common.util.ChannelMapByEntity;
 import com.piles.common.util.ChannelResponseCallBackMap;
 import com.piles.record.entity.XunDaoChargeMonitorRequest;
+import com.piles.record.entity.XunDaoDCChargeMonitorRequest;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,18 @@ public class XunDaoChargeMonitorBusinessImpl implements IBusiness {
     public byte[] process(byte[] msg, Channel incoming) {
         log.info( "接收到循道充电桩上传充电过程监测数据报文" );
         int pileType = BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2));
-        //3、4 交流   5、6直流
-        if(pileType == 3 || pileType == 4){
-
-        }
         String order = String.valueOf( BytesUtil.xundaoControlByte2Int( BytesUtil.copyBytes( msg, 2, 4 ) ) );
-        byte[] dataBytes = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
-        //依照报文体规则解析报文
-        XunDaoChargeMonitorRequest uploadChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity( dataBytes );
-        uploadChargeMonitorRequest.setPileType(ChannelMapByEntity.getPileType(uploadChargeMonitorRequest.getPileNo()));
-        uploadChargeMonitorRequest.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1)));
-        log.info( "接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString() );
+        //3、4 交流   5、6直流
+        BasePushResponse xunDaoChargeMonitorRequest = null;
+        if(pileType == 3 || pileType == 4){
+            xunDaoChargeMonitorRequest = XunDaoChargeMonitorRequest.packEntity( msg );
+        }else{
+            //直流
+            xunDaoChargeMonitorRequest = XunDaoDCChargeMonitorRequest.packEntity( msg );
+        }
+        log.info( "接收到循道充电桩上传充电过程监测数据报文:{}", xunDaoChargeMonitorRequest.toString() );
 
-        ChannelResponseCallBackMap.callBack( incoming, order, uploadChargeMonitorRequest );
+        ChannelResponseCallBackMap.callBack( incoming, order, xunDaoChargeMonitorRequest );
         //组装返回报文体
         return null;
     }

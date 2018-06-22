@@ -3,6 +3,7 @@ package com.piles.record.entity;
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
  * 循道上传充电过程监测数据接口请求实体（交流）
  */
 @Data
+@ToString
 public class XunDaoChargeMonitorRequest extends BasePushResponse implements Serializable {
 
 
@@ -64,6 +66,11 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
      */
     public static XunDaoChargeMonitorRequest packEntity(byte[] msg) {
         XunDaoChargeMonitorRequest request = new XunDaoChargeMonitorRequest();
+
+        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1)));
+        request.setPileType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2)));
+
+        msg = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
         int cursor = 0;
         request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
@@ -118,25 +125,6 @@ public class XunDaoChargeMonitorRequest extends BasePushResponse implements Seri
     }
 
 
-    @Override
-    public String toString() {
-        return "XunDaoChargeMonitorRequest{" +
-                "highestAllowVoltage=" + highestAllowVoltage +
-                ", highestAllowElectricity=" + highestAllowElectricity +
-                ", outputRelayStatus=" + outputRelayStatus +
-                ", switchStatus=" + switchStatus +
-                ", activElectricalDegree=" + activElectricalDegree +
-                ", pileNo='" + pileNo + '\'' +
-                ", connectBattery=" + connectBattery +
-                ", workStatus='" + workStatus + '\'' +
-                ", troubleStatus=" + troubleStatus +
-                ", chargeDuration=" + chargeDuration +
-                ", currentChargeQuantity=" + currentChargeQuantity +
-                ", serial='" + serial + '\'' +
-                ", orderNo='" + orderNo + '\'' +
-                ", pileType=" + pileType +
-                '}';
-    }
 
     public static void main(String[] args) {
         byte[] b = new byte[]{0x01};
