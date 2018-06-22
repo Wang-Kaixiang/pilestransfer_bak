@@ -107,7 +107,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         } catch (NumberFormatException e) {
 
         }
-        uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecordRequest.getPileNo()));
+        uploadRecord.setPileType(uploadRecordRequest.getPileType());
         uploadRecord.setGunNo(uploadRecordRequest.getGunNo());
         return uploadRecord;
     }
