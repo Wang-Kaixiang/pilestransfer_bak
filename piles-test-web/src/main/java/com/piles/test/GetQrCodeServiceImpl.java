@@ -26,7 +26,7 @@ public class GetQrCodeServiceImpl implements IGetQrCodeService {
      * 默认1分钟超时
      */
     //TODO 修改这个url
-    @Value("${upload_record_ADDR}")
+    @Value("${get_qrcode.url}")
     private String url;
 
 
