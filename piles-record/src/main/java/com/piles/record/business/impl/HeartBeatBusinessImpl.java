@@ -54,7 +54,8 @@ public class HeartBeatBusinessImpl extends BaseBusiness {
             ChannelMapByEntity.addChannel( channelEntity1, incoming );
             ChannelMapByEntity.addChannel( incoming, channelEntity1);
         }
-        GunStatusMapUtil.put( heartBeatRequest.getPileNo(),TradeType.WEI_JING,heartBeatRequest.getStatus()[0] );
+        //蔚景的枪号暂时不需要，直接使用0
+        GunStatusMapUtil.put( heartBeatRequest.getPileNo(),TradeType.WEI_JING,0,heartBeatRequest.getStatus()[0] );
         // 不需要接调用底层接口
         Date date = heartBeatService.heartBeat( heartBeatRequest );
         byte[] responseBody = BytesUtil.str2Bcd( sdf.format( date ) );

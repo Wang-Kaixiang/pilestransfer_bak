@@ -96,10 +96,15 @@ public class FunctionController {
         Map<String, Object> map = new HashedMap();
         map = checkParams(pileStatusRequest.getTradeTypeCode(),pileStatusRequest.getPileNo());
         if (MapUtils.isNotEmpty(map)) {
-            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            log.info("return查询枪状态是否可用:" + JSON.toJSONString(map));
             return map;
         }
-        Integer status = GunStatusMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode());
+        map = checkPileTypeParams(pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getPileNo(),pileStatusRequest.getPileType(), pileStatusRequest.getGunNo());
+        if (MapUtils.isNotEmpty(map)) {
+            log.info("return查询枪状态是否可用:" + JSON.toJSONString(map));
+            return map;
+        }
+        Integer status = GunStatusMapUtil.get(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(),pileStatusRequest.getGunNo());
         if (null == status) {
             map.put("status", ResponseCode.NO_STATUS.getCode());
             map.put("msg", ResponseCode.NO_STATUS.getMsg());

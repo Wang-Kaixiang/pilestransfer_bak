@@ -12,8 +12,12 @@ import java.util.Map;
 public class GunStatusMapUtil {
     private static Map<String,Integer> map=new HashedMap(  );
 
-    public static void put(String pileNo, TradeType tradeType,int status){
+    public static void put(String pileNo, TradeType tradeType,int gunNo,int status){
         String key=pileNo+"_"+tradeType.getCode();
+        //循道的需要拼上枪号
+        if(TradeType.XUN_DAO.equals(tradeType)){
+            key = key+"_"+gunNo;
+        }
         if (map.containsKey( key )){
             Integer val=map.get( key );
             if (status!=val){
@@ -24,8 +28,13 @@ public class GunStatusMapUtil {
         }
     }
 
-    public static Integer get(String pileNo, int tradeType){
+    public static Integer get(String pileNo, int tradeType, int gunNo){
+
         String key=pileNo+"_"+tradeType;
-            return map.get( key );
+        //循道要加上枪号
+        if(TradeType.XUN_DAO.getCode() == tradeType){
+            key = key+"_"+gunNo;
+        }
+        return map.get( key );
     }
 }

@@ -59,7 +59,7 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
         int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
         BigDecimal dcAllowElectricity = uploadChargeMonitorRequest.getDcAllowElectricity();
         String workStatus = uploadChargeMonitorRequest.getWorkStatus();
-        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, switchStatus);
+        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO,uploadChargeMonitorRequest.getGunNo(), switchStatus);
         GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, dcAllowElectricity);
         GunWorkStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, workStatus);
 

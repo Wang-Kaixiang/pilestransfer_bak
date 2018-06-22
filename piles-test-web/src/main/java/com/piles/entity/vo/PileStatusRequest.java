@@ -18,4 +18,14 @@ public class PileStatusRequest {
      * 对应厂商类型  1:蔚景 2: 循道
      */
     private Integer tradeTypeCode;
+
+    /**
+     * 桩类型
+     */
+    private Integer pileType;
+
+    /**
+     * 枪号
+     */
+    private Integer gunNo;
 }
