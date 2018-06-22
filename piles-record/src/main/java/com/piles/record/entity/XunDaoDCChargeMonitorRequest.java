@@ -74,7 +74,7 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
     //充电桩最高允许充电电源	BIN	4
     private BigDecimal highestAllowVoltage;
     //充电桩最高功率	BIN	4	单位：A，
-    private BigDecimal highestAllowW;
+    private int highestAllowW;
 
 //    private byte[] temp;//预留bin 4
 
@@ -131,6 +131,9 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
         request.setACElectricityC(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
         cursor += 2;
 
+        //备用字段，直接错过去
+        cursor += 2;
+
         request.setWorkStatus(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 1)));
         cursor += 1;
         request.setTroubleStatus(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
@@ -162,7 +165,7 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
 
         request.setHighestAllowVoltage(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(10), 1, BigDecimal.ROUND_HALF_UP));
         cursor += 4;
-        request.setHighestAllowW(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setHighestAllowW(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
         cursor += 4;
 
 //        request.setTemp(BytesUtil.copyBytes(msg, cursor, 4));
