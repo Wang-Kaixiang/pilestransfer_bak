@@ -68,8 +68,8 @@ public class XundaoChargeStatusPushServiceImpl implements IChargeMonitorPushServ
         byte[] length = new byte[]{0x13};
         byte[] contrl = BytesUtil.xundaoControlInt2Byte( Integer.parseInt( request.getSerial() ) );
         byte[] type = new byte[]{(byte) 0x85};
-        byte[] beiyong = new byte[]{0x00};
-//        byte[] reason = new byte[]{0x03, 0x00};
+        int gunNo = request.getGunNo();
+        byte[] beiyong = BytesUtil.intToBytesLittle(gunNo,1);//枪号
         byte[] reason = ChannelMapByEntity.getPileTypeArr(request.getPileNo());
         byte[] crc = CRC16Util.getXunDaoCRC( data );
         byte[] addr = new byte[]{0x46};

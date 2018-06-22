@@ -23,4 +23,14 @@ public class PileChargeStatusRequest {
      * 流水号
      */
     private String serial;
+
+    /**
+     * 桩类型
+     */
+    private Integer pileType;
+
+    /**
+     * 枪号
+     */
+    private Integer gunNo;
 }

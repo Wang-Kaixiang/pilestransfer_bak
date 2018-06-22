@@ -153,6 +153,11 @@ public class FunctionController {
             log.info("return充电桩充电进度fan:" + JSON.toJSONString(map));
             return map;
         }
+        map = checkPileTypeParams(pileChargeStatusRequest.getTradeTypeCode(), pileChargeStatusRequest.getPileNo(),pileChargeStatusRequest.getPileType(), pileChargeStatusRequest.getGunNo());
+        if (MapUtils.isNotEmpty(map)) {
+            log.info("return充电桩充电进度fan:" + JSON.toJSONString(map));
+            return map;
+        }
         if (TradeType.WEI_JING.getCode()==pileChargeStatusRequest.getTradeTypeCode()){
             map.put("status", "-1");
             map.put("msg", "充电桩不支持查询充电进度");
@@ -169,16 +174,24 @@ public class FunctionController {
             basePushRequest.setPileNo(pileChargeStatusRequest.getPileNo()  );
             basePushRequest.setTradeTypeCode( pileChargeStatusRequest.getTradeTypeCode() );
             basePushRequest.setSerial( pileChargeStatusRequest.getSerial() );
+            basePushRequest.setPileType(pileChargeStatusRequest.getPileType());
+            basePushRequest.setGunNo(pileChargeStatusRequest.getGunNo());
             BasePushCallBackResponse<XunDaoChargeMonitorRequest> xunDaoChargeMonitorRequestBasePushCallBackResponse = iChargeMonitorPushService.doPush(basePushRequest);
 
             if (xunDaoChargeMonitorRequestBasePushCallBackResponse.getCode() != READ_OK) {
                 //重试1
                 xunDaoChargeMonitorRequestBasePushCallBackResponse = iChargeMonitorPushService.doPush(basePushRequest);
             }
+            //交流设置为1
+            int type = 1;
+            if(pileChargeStatusRequest.getPileType() != 3 && pileChargeStatusRequest.getPileType() != 4){
+                type = 2;//直流设置为2
+            }
             switch (xunDaoChargeMonitorRequestBasePushCallBackResponse.getCode()) {
                 case READ_OK:
                     map.put("status", READ_OK.getCode());
                     map.put("msg", "查询电量进度成功,详细结果见结果");
+                    map.put("type", type);
                     map.put("data", xunDaoChargeMonitorRequestBasePushCallBackResponse.getObj());
                     break;
                 case TIME_OUT:
@@ -207,7 +220,7 @@ public class FunctionController {
         Map<String, Object> map = new HashedMap();
         //check 参数
 
-        if (StringUtils.isEmpty(tradeTypeCode)) {
+        if (tradeTypeCode == null) {
             map.put("status", "-1");
             map.put("msg", "充电桩厂商类型为空");
             return map;
@@ -225,6 +238,34 @@ public class FunctionController {
             map.put("msg", "充电桩不在线");
             return map;
         }
+        return map;
+
+    }
+    private Map<String, Object> checkPileTypeParams(Integer tradeTypeCode,String pileNo,Integer pileType,Integer gunNo) {
+        Map<String, Object> map = new HashedMap();
+        //check 参数
+
+        //循道的桩类型和枪号不能为空
+        if(TradeType.XUN_DAO.getCode() == tradeTypeCode){
+            if (pileType == null) {
+                map.put("status", "-1");
+                map.put("msg", "充电桩类型不能为空");
+                return map;
+            }
+            if(pileType != ChannelMapByEntity.getPileType(pileNo)){
+                log.error("充电桩:{} 传入的充电桩类型:{},系统记录的充电桩桩类型:{}",pileNo,pileType,ChannelMapByEntity.getPileType(pileNo));
+                map.put("status", "-1");
+                map.put("msg", "传入的充电桩类型与系统记录的充电桩类型不一致");
+                return map;
+            }
+
+            if (gunNo == null) {
+                map.put("status", "-1");
+                map.put("msg", "枪号不能为空");
+                return map;
+            }
+        }
+
         return map;
 
     }
