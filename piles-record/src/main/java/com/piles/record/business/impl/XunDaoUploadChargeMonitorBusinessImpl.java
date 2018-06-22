@@ -34,11 +34,11 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
     @Override
     public byte[] process(byte[] msg, Channel incoming) {
         log.info("接收到循道充电桩上传充电过程监测数据报文");
-        int gunNo = MsgHelper.getGunNo(msg);
         byte[] dataBytes = BytesUtil.copyBytes(msg, 13, (msg.length - 13));
 
         //依照报文体规则解析报文
         XunDaoUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoUploadChargeMonitorRequest.packEntity(dataBytes);
+        uploadChargeMonitorRequest.setGunNo(MsgHelper.getGunNo(msg));
         uploadChargeMonitorRequest.setPileType(ChannelMapByEntity.getPileType(uploadChargeMonitorRequest.getPileNo()));
         log.info("接收到循道充电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         ChannelEntity channel = ChannelMapByEntity.getChannel(incoming);
@@ -72,7 +72,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
                 highestAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
                 highestAllowElectricity.compareTo(BigDecimal.ONE) <= 0)))) {
 
-            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest,gunNo);
+            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
             log.info("循道充电状态上传账单" + JSON.toJSONString(uploadRecord));
             //添加serial
             //调用底层接口
@@ -93,7 +93,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
         return updateStatusReport;
     }
 
-    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest, int gunNo) {
+    private UploadRecord buildUploadRecordServiceEntity(XunDaoUploadChargeMonitorRequest uploadRecordRequest) {
         UploadRecord uploadRecord = new UploadRecord();
         uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
         uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
@@ -108,7 +108,7 @@ public class XunDaoUploadChargeMonitorBusinessImpl implements IBusiness {
 
         }
         uploadRecord.setPileType(ChannelMapByEntity.getPileType(uploadRecordRequest.getPileNo()));
-        uploadRecord.setGunNo(gunNo);
+        uploadRecord.setGunNo(uploadRecordRequest.getGunNo());
         return uploadRecord;
     }
 

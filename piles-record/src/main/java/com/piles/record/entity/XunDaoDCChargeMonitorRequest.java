@@ -2,6 +2,7 @@ package com.piles.record.entity;
 
 import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.BytesUtil;
+import com.piles.common.util.MsgHelper;
 import lombok.Data;
 import lombok.ToString;
 
@@ -87,7 +88,7 @@ public class XunDaoDCChargeMonitorRequest extends BasePushResponse implements Se
     public static XunDaoDCChargeMonitorRequest packEntity(byte[] msg) {
         XunDaoDCChargeMonitorRequest request = new XunDaoDCChargeMonitorRequest();
 
-        request.setGunNo(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 7, 1)));
+        request.setGunNo(MsgHelper.getGunNo(msg));
         request.setPileType(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, 8, 2)));
 
         msg = BytesUtil.copyBytes( msg, 13, (msg.length - 13) );
