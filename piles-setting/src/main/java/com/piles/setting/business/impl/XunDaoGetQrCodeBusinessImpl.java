@@ -58,12 +58,12 @@ public class XunDaoGetQrCodeBusinessImpl implements IBusiness {
     }
 
     private byte[] buildSuccessData(byte[] msg, String qrCode) {
-        return Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), new byte[]{0x01}, BytesUtil.rightPadBytes(qrCode, 40, (byte) 0x01));
+        return Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), new byte[]{0x01}, BytesUtil.rightPadBytes(qrCode, 100, (byte) 0x00));
     }
 
     private byte[] buildFailData(byte[] msg) {
         byte[] bytes = {};
-        return Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), new byte[]{0x01}, BytesUtil.rightPadBytes(bytes, 40, (byte) 0x00));
+        return Bytes.concat(BytesUtil.copyBytes(msg, 13, 8), new byte[]{0x01}, BytesUtil.rightPadBytes(bytes, 100, (byte) 0x00));
     }
 
     //添加报文头
