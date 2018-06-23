@@ -40,7 +40,9 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
         //依照报文体规则解析报文
         XunDaoDCUploadChargeMonitorRequest uploadChargeMonitorRequest = XunDaoDCUploadChargeMonitorRequest.packEntity(dataBytes);
         uploadChargeMonitorRequest.setGunNo(MsgHelper.getGunNo(msg));
-        uploadChargeMonitorRequest.setPileType(ChannelMapByEntity.getPileType(uploadChargeMonitorRequest.getPileNo()));
+        Integer pileType = Integer.parseInt(BytesUtil.binary(BytesUtil.copyBytes(msg, 3, 1), 10));
+        pileType = pileType == 2 ? 3 : pileType;
+        uploadChargeMonitorRequest.setPileType(pileType);
         log.info("接收到循道充DC电桩上传充电过程监测数据报文:{}", uploadChargeMonitorRequest.toString());
         ChannelEntity channel = ChannelMapByEntity.getChannel(incoming);
         Channel channel1 = null;
@@ -55,6 +57,8 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.removeChannel(channelEntity);
             ChannelMapByEntity.addChannel(channelEntity, incoming);
             ChannelMapByEntity.addChannel(incoming, channelEntity);
+            ChannelMapByEntity.addPileType(uploadChargeMonitorRequest.getPileNo(), uploadChargeMonitorRequest.getPileType());
+            ChannelMapByEntity.addPileType(uploadChargeMonitorRequest.getPileNo(), BytesUtil.copyBytes(msg, 3, 1));
         }
         int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
         BigDecimal dcAllowElectricity = uploadChargeMonitorRequest.getDcAllowElectricity();
