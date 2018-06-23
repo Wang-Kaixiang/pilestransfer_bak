@@ -112,7 +112,7 @@ public class XunDaoDCUploadRecordRequest implements Serializable {
             i++;
         }
         String orderNo = new String(BytesUtil.copyBytes(orderNos, 0, i));
-        if ('\u0006' == orderNo.charAt(0)) {
+        if (orderNo.length() > 0 && '\u0006' == orderNo.charAt(0)) {
             orderNo = orderNo.substring(1);
         }
         request.setOrderNo(orderNo);
