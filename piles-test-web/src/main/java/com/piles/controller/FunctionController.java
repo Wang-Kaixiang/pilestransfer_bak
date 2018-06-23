@@ -143,7 +143,7 @@ public class FunctionController {
                         case 6:
                             String gunStatusStr = GunStatusMapUtil.getDC( pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getGunNo() );
                             String[] gunStatus = gunStatusStr.split( "," );
-                            if ("1".equals( gunStatus[0] ) && "00".equals( gunStatus[0] )) {
+                            if ("1".equals( gunStatus[0] ) && "00".equals( gunStatus[1] )) {
                                 canCharged = true;
                             }
                             break;
