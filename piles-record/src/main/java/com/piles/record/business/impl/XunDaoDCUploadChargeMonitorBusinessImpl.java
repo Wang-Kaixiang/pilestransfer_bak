@@ -61,11 +61,8 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
             ChannelMapByEntity.addPileType(uploadChargeMonitorRequest.getPileNo(), BytesUtil.copyBytes(msg, 8, 2));
         }
         int switchStatus = uploadChargeMonitorRequest.getSwitchStatus();
-        BigDecimal dcAllowElectricity = uploadChargeMonitorRequest.getDcAllowElectricity();
         String workStatus = uploadChargeMonitorRequest.getWorkStatus();
-        GunStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO,uploadChargeMonitorRequest.getGunNo(), switchStatus);
-        GunElecAmountMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, dcAllowElectricity);
-        GunWorkStatusMapUtil.put(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO, workStatus);
+        GunStatusMapUtil.putDC(uploadChargeMonitorRequest.getPileNo(), TradeType.XUN_DAO,uploadChargeMonitorRequest.getGunNo(), switchStatus+","+workStatus);
 
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口

@@ -37,4 +37,31 @@ public class GunStatusMapUtil {
         }
         return map.get( key );
     }
+    private static Map<String,String> map2=new HashedMap(  );
+
+    public static void putDC(String pileNo, TradeType tradeType,int gunNo,String status){
+        String key=pileNo+"_"+tradeType.getCode();
+        //循道的需要拼上枪号
+        if(TradeType.XUN_DAO.equals(tradeType)){
+            key = key+"_"+gunNo;
+        }
+        if (map2.containsKey( key )){
+            String val=map2.get( key );
+            if (status!=val){
+                map2.replace( key,val,status );
+            }
+        }else {
+            map2.put( key,status );
+        }
+    }
+
+    public static String getDC(String pileNo, int tradeType, int gunNo){
+
+        String key=pileNo+"_"+tradeType;
+        //循道要加上枪号
+        if(TradeType.XUN_DAO.getCode() == tradeType){
+            key = key+"_"+gunNo;
+        }
+        return map2.get( key );
+    }
 }
