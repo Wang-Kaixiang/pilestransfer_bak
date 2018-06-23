@@ -223,12 +223,6 @@ public class ChargeController {
             return map;
         }
 
-        if (StringUtils.isEmpty(remoteStartRequest.getGunNo()) || 1 != remoteStartRequest.getGunNo()) {
-            map.put("status", "-1");
-            map.put("msg", "充电桩枪号不可用");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
-            return map;
-        }
         if (StringUtils.isEmpty(remoteStartRequest.getOrderNo())) {
             map.put("status", "-1");
             map.put("msg", "订单号不可用");
