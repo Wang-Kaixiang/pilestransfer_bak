@@ -70,21 +70,6 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
         UploadChargeMonitor uploadChargeMonitor = buildServiceEntity(uploadChargeMonitorRequest);
         //调用底层接口
         uploadChargeMonitorService.uploadChargeMonitor(uploadChargeMonitor);
-
-        if (!"01".equals(workStatus) &&
-                uploadChargeMonitorRequest.getCurrentChargeQuantity().compareTo(new BigDecimal(0)) > 0 &&
-                (switchStatus == 1 || (switchStatus == 2 && (dcAllowElectricity != null &&
-                        dcAllowElectricity.compareTo(BigDecimal.ZERO) >= 0 &&
-                        dcAllowElectricity.compareTo(BigDecimal.ONE) <= 0)))) {
-
-            UploadRecord uploadRecord = buildUploadRecordServiceEntity(uploadChargeMonitorRequest);
-            log.info("循道DC充电状态上传账单" + JSON.toJSONString(uploadRecord));
-            //添加serial
-            //调用底层接口
-            boolean flag = uploadRecordService.uploadRecord(uploadRecord);
-        } else {
-            log.info("厂商{}DC桩{}未触发上传账单,状态:{},输出电流:{},本次充电量:{}", TradeType.XUN_DAO, uploadChargeMonitorRequest.getPileNo(), switchStatus, dcAllowElectricity, uploadChargeMonitorRequest.getCurrentChargeQuantity());
-        }
         //组装返回报文体
         return null;
     }
@@ -96,25 +81,5 @@ public class XunDaoDCUploadChargeMonitorBusinessImpl implements IBusiness {
         //TODO 封装实体
         return updateStatusReport;
     }
-
-    private UploadRecord buildUploadRecordServiceEntity(XunDaoDCUploadChargeMonitorRequest uploadRecordRequest) {
-        UploadRecord uploadRecord = new UploadRecord();
-        uploadRecord.setTradeTypeCode(TradeType.XUN_DAO.getCode());
-        uploadRecord.setOrderNo(uploadRecordRequest.getOrderNo());
-        uploadRecord.setPileNo(uploadRecordRequest.getPileNo());
-        //99 标志监控状态上传
-        uploadRecord.setEndReason(99);
-        uploadRecord.setTotalAmmeterDegree(uploadRecordRequest.getCurrentChargeQuantity());
-        try {
-
-            uploadRecord.setSerial(Integer.parseInt(uploadRecordRequest.getSerial()));
-        } catch (NumberFormatException e) {
-
-        }
-        uploadRecord.setPileType(uploadRecordRequest.getPileType());
-        uploadRecord.setGunNo(uploadRecordRequest.getGunNo());
-        return uploadRecord;
-    }
-
 
 }
