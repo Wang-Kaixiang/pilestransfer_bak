@@ -251,8 +251,8 @@ public class ChargeController {
      * @param remoteClosePushRequest
      * @return
      */
-    @RequestMapping(value = "/charge", method = RequestMethod.DELETE)
-    @ResponseBody
+//    @RequestMapping(value = "/stopCharge", method = RequestMethod.POST)
+//    @ResponseBody
     public Map<String, Object> stopCharge(RemoteClosePushRequest remoteClosePushRequest) {
         log.info("请求停止充电请求信息:" + JSON.toJSONString(remoteClosePushRequest));
         Map<String, Object> map = new HashedMap();
