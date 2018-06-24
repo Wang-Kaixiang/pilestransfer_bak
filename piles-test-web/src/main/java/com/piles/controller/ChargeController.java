@@ -2,7 +2,6 @@ package com.piles.controller;
 
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
@@ -17,7 +16,6 @@ import com.piles.util.ServiceFactoryUtil;
 import com.piles.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.MapUtils;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -26,10 +24,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.Map;
 
-import static com.piles.common.entity.type.EPushResponseCode.*;
+import static com.piles.common.entity.type.EPushResponseCode.CONNECT_ERROR;
+import static com.piles.common.entity.type.EPushResponseCode.READ_OK;
 
 @Slf4j
 @Controller
@@ -48,10 +46,10 @@ public class ChargeController {
     @RequestMapping(value = "/charge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> charge(ChargeRemoteStartRequest remoteStartRequest) {
-        log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
+        log.info("请求充电请求信息:" + JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
-        map=checkParams(remoteStartRequest);
-        if (null!=map){
+        map = checkParams(remoteStartRequest);
+        if (null != map) {
             return map;
         }
         map = new HashedMap();
@@ -62,11 +60,11 @@ public class ChargeController {
                 ) {
             map.put("status", "-1");
             map.put("msg", "充电模式不可用");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
 
-        IRemoteStartPushService iRemoteStartPushService=serviceFactoryUtil.getStartPushService(remoteStartRequest.getTradeTypeCode());
+        IRemoteStartPushService iRemoteStartPushService = serviceFactoryUtil.getStartPushService(remoteStartRequest.getTradeTypeCode());
         RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
         remoteStartPushRequest.setTradeTypeCode(remoteStartRequest.getTradeTypeCode());
         remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
@@ -107,7 +105,7 @@ public class ChargeController {
 
         }
 
-        log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+        log.info("return请求充电请求fan:" + JSON.toJSONString(map));
         return map;
 
     }
@@ -121,18 +119,18 @@ public class ChargeController {
     @RequestMapping(value = "/appendCharge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> appendharge(ChargeRemoteStartRequest remoteStartRequest) {
-        log.info("请求充电请求信息:"+JSON.toJSONString(remoteStartRequest));
+        log.info("请求充电请求信息:" + JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
 
-        map=checkParams(remoteStartRequest);
-        if (null!=map){
+        map = checkParams(remoteStartRequest);
+        if (null != map) {
             return map;
         }
         map = new HashedMap();
-        if (TradeType.XUN_DAO.getCode()==remoteStartRequest.getTradeTypeCode()){
+        if (TradeType.XUN_DAO.getCode() == remoteStartRequest.getTradeTypeCode()) {
             map.put("status", "-1");
             map.put("msg", "充电桩不支持追加电量");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
 
@@ -145,7 +143,7 @@ public class ChargeController {
         remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
         remoteStartPushRequest.setChargeModel(5);
         remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
-        IRemoteStartPushService iRemoteStartPushService=serviceFactoryUtil.getStartPushService(remoteStartRequest.getTradeTypeCode());
+        IRemoteStartPushService iRemoteStartPushService = serviceFactoryUtil.getStartPushService(remoteStartRequest.getTradeTypeCode());
         BasePushCallBackResponse<RemoteStartRequest> remoteStartRequestBasePushCallBackResponse = iRemoteStartPushService.doPush(remoteStartPushRequest);
         int i = 0;
         while (remoteStartRequestBasePushCallBackResponse.getCode() != READ_OK) {
@@ -183,65 +181,65 @@ public class ChargeController {
 
         }
 
-        log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+        log.info("return请求充电请求fan:" + JSON.toJSONString(map));
         return map;
 
     }
 
-    private Map<String, Object> checkParams(ChargeRemoteStartRequest remoteStartRequest){
+    private Map<String, Object> checkParams(ChargeRemoteStartRequest remoteStartRequest) {
         Map<String, Object> map = new HashedMap();
         //check 参数
-        int serial=0;
+        int serial = 0;
 
 
         if (StringUtils.isEmpty(remoteStartRequest.getTradeTypeCode())) {
             map.put("status", "-1");
             map.put("msg", "充电桩厂商类型为空");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getPileNo())) {
             map.put("status", "-1");
             map.put("msg", "充电桩编号为空");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
         if (StringUtils.isEmpty(remoteStartRequest.getSerial())) {
             map.put("status", "-1");
             map.put("msg", "流水号为空");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
         try {
-            serial=Integer.parseInt( remoteStartRequest.getSerial() );
-            if (serial>65535){
+            serial = Integer.parseInt(remoteStartRequest.getSerial());
+            if (serial > 65535) {
                 map.put("status", "-1");
                 map.put("msg", "流水号不能大于65535");
-                log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+                log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             map.put("status", "-1");
             map.put("msg", "流水号需要是数字");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
 
         if (StringUtils.isEmpty(remoteStartRequest.getOrderNo())) {
             map.put("status", "-1");
             map.put("msg", "订单号不可用");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
 
         //获取连接channel 获取不到无法推送
-        Channel channel = ChannelMapByEntity.getChannel(remoteStartRequest.getTradeTypeCode(),remoteStartRequest.getPileNo());
+        Channel channel = ChannelMapByEntity.getChannel(remoteStartRequest.getTradeTypeCode(), remoteStartRequest.getPileNo());
         if (null == channel) {
             map.put("status", "400");
             map.put("msg", "充电桩链接不可用");
-            log.info("return请求充电请求fan:"+JSON.toJSONString(map));
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
             return map;
         }
-            return null;
+        return null;
 
     }
 
@@ -251,8 +249,8 @@ public class ChargeController {
      * @param remoteClosePushRequest
      * @return
      */
-//    @RequestMapping(value = "/stopCharge", method = RequestMethod.POST)
-//    @ResponseBody
+    @RequestMapping(value = "/stopCharge", method = RequestMethod.POST)
+    @ResponseBody
     public Map<String, Object> stopCharge(RemoteClosePushRequest remoteClosePushRequest) {
         log.info("请求停止充电请求信息:" + JSON.toJSONString(remoteClosePushRequest));
         Map<String, Object> map = new HashedMap();
