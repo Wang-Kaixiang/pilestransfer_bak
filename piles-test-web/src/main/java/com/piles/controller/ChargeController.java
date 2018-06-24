@@ -6,8 +6,11 @@ import com.google.common.collect.Maps;
 import com.piles.common.entity.BasePushCallBackResponse;
 import com.piles.common.entity.type.TradeType;
 import com.piles.common.util.ChannelMapByEntity;
+import com.piles.control.entity.RemoteClosePushRequest;
+import com.piles.control.entity.RemoteCloseRequest;
 import com.piles.control.entity.RemoteStartPushRequest;
 import com.piles.control.entity.RemoteStartRequest;
+import com.piles.control.service.IRemoteClosePushService;
 import com.piles.control.service.IRemoteStartPushService;
 import com.piles.entity.vo.ChargeRemoteStartRequest;
 import com.piles.util.ServiceFactoryUtil;
@@ -239,6 +242,116 @@ public class ChargeController {
             return map;
         }
             return null;
+
+    }
+
+    /**
+     * 停止充电
+     *
+     * @param remoteClosePushRequest
+     * @return
+     */
+    @RequestMapping(value = "/charge", method = RequestMethod.DELETE)
+    @ResponseBody
+    public Map<String, Object> stopCharge(RemoteClosePushRequest remoteClosePushRequest) {
+        log.info("请求停止充电请求信息:" + JSON.toJSONString(remoteClosePushRequest));
+        Map<String, Object> map = new HashedMap();
+        map = checkParamsStopCharge(remoteClosePushRequest);
+        if (null != map) {
+            return map;
+        }
+        map = new HashedMap();
+
+
+        IRemoteClosePushService iRemoteClosePushService = serviceFactoryUtil.getService(remoteClosePushRequest.getTradeTypeCode(), IRemoteClosePushService.class);
+        BasePushCallBackResponse<RemoteCloseRequest> remoteStartRequestBasePushCallBackResponse = iRemoteClosePushService.doPush(remoteClosePushRequest);
+
+        if (remoteStartRequestBasePushCallBackResponse.getCode() != READ_OK) {
+            //重试1
+            remoteStartRequestBasePushCallBackResponse = iRemoteClosePushService.doPush(remoteClosePushRequest);
+        }
+        log.info("远程停止充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
+
+
+        switch (remoteStartRequestBasePushCallBackResponse.getCode()) {
+            case READ_OK:
+                map.put("status", READ_OK.getCode());
+                map.put("msg", "停止充电发送命令成功,详细结果见结果");
+                map.put("data", remoteStartRequestBasePushCallBackResponse.getObj());
+                break;
+            case TIME_OUT:
+            case WRITE_OK:
+                map.put("status", 300);
+                map.put("msg", "请求超时");
+                break;
+            case CONNECT_ERROR:
+                map.put("status", CONNECT_ERROR.getCode());
+                map.put("msg", "充电桩链接不可用");
+                break;
+            default:
+                break;
+
+        }
+
+        log.info("return请求停止充电请求fan:" + JSON.toJSONString(map));
+        return map;
+
+    }
+
+    private Map<String, Object> checkParamsStopCharge(RemoteClosePushRequest remoteClosePushRequest) {
+        Map<String, Object> map = new HashedMap();
+        //check 参数
+        int serial = 0;
+
+
+        if (StringUtils.isEmpty(remoteClosePushRequest.getTradeTypeCode())) {
+            map.put("status", "-1");
+            map.put("msg", "充电桩厂商类型为空");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        if (StringUtils.isEmpty(remoteClosePushRequest.getPileNo())) {
+            map.put("status", "-1");
+            map.put("msg", "充电桩编号为空");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        if (StringUtils.isEmpty(remoteClosePushRequest.getSerial())) {
+            map.put("status", "-1");
+            map.put("msg", "流水号为空");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        try {
+            serial = Integer.parseInt(remoteClosePushRequest.getSerial());
+            if (serial > 65535) {
+                map.put("status", "-1");
+                map.put("msg", "流水号不能大于65535");
+                log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            }
+        } catch (Exception e) {
+            map.put("status", "-1");
+            map.put("msg", "流水号需要是数字");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+
+        if (StringUtils.isEmpty(remoteClosePushRequest.getOrderNo())) {
+            map.put("status", "-1");
+            map.put("msg", "订单号不可用");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+
+        //获取连接channel 获取不到无法推送
+        Channel channel = ChannelMapByEntity.getChannel(remoteClosePushRequest.getTradeTypeCode(), remoteClosePushRequest.getPileNo());
+        if (null == channel) {
+            map.put("status", "400");
+            map.put("msg", "充电桩链接不可用");
+            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
+            return map;
+        }
+        return null;
 
     }
 
