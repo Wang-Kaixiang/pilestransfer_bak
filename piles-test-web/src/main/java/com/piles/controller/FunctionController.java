@@ -107,7 +107,9 @@ public class FunctionController {
             return map;
         }
         Integer status = GunStatusMapUtil.get( pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getGunNo() );
-        if (null == status) {
+        String gunStatusStr = GunStatusMapUtil.getDC(pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getGunNo());
+
+        if (null == status && StringUtils.isEmpty(gunStatusStr)) {
             map.put( "status", ResponseCode.NO_STATUS.getCode() );
             map.put( "msg", ResponseCode.NO_STATUS.getMsg() );
         } else {
@@ -141,7 +143,7 @@ public class FunctionController {
                             break;
                         case 5:
                         case 6:
-                            String gunStatusStr = GunStatusMapUtil.getDC( pileStatusRequest.getPileNo(), pileStatusRequest.getTradeTypeCode(), pileStatusRequest.getGunNo() );
+
                             String[] gunStatus = gunStatusStr.split( "," );
                             if ("1".equals( gunStatus[0] ) && "00".equals( gunStatus[1] )) {
                                 canCharged = true;
