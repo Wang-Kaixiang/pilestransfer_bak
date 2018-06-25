@@ -4,6 +4,7 @@ package com.piles.controller;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.piles.common.entity.BasePushResponse;
 import com.piles.common.util.ChannelMapByEntity;
 import com.piles.entity.vo.UpdateRemoteRequest;
 import com.piles.entity.vo.XunDaoUpdateRemoteRequest;
@@ -212,7 +213,15 @@ public class RemoteUpdateController {
             remoteUpdate.setUserName(serverUserName);
             remoteUpdate.setPassword(serverPassword);
             remoteUpdate.setPileNo(pileNo);
-            remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
+
+            //3、4 交流   5、6直流
+            Integer pileType = ChannelMapByEntity.getPileType(pileNo);
+            if(pileType == 3 || pileType == 4){
+                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
+            }else{
+                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion());
+            }
+//            remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
             remoteUpdate.setSoftVersion(updateRemoteRequest.getSoftVersion());
             remoteUpdateList.add(remoteUpdate);
         }
