@@ -215,13 +215,13 @@ public class RemoteUpdateController {
             remoteUpdate.setPileNo(pileNo);
 
             //3、4 交流   5、6直流
-            Integer pileType = ChannelMapByEntity.getPileType(pileNo);
-            if(pileType == 3 || pileType == 4){
-                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
-            }else{
-                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion());
-            }
-//            remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
+//            Integer pileType = ChannelMapByEntity.getPileType(pileNo);
+//            if(pileType == 3 || pileType == 4){
+//                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion() + ".bin");
+//            }else{
+//                remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion());
+//            }
+            remoteUpdate.setDownloadUrl("/piletransfer/soft/" + updateRemoteRequest.getSoftVersion());
             remoteUpdate.setSoftVersion(updateRemoteRequest.getSoftVersion());
             remoteUpdateList.add(remoteUpdate);
         }
