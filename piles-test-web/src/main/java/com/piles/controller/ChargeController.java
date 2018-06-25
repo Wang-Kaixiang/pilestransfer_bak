@@ -12,11 +12,13 @@ import com.piles.control.entity.RemoteStartRequest;
 import com.piles.control.service.IRemoteClosePushService;
 import com.piles.control.service.IRemoteStartPushService;
 import com.piles.entity.vo.ChargeRemoteStartRequest;
+import com.piles.entity.vo.ChargeRemoteStopRequest;
 import com.piles.util.ServiceFactoryUtil;
 import com.piles.util.Util;
 import io.netty.channel.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.map.HashedMap;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -246,13 +248,15 @@ public class ChargeController {
     /**
      * 停止充电
      *
-     * @param remoteClosePushRequest
+     * @param chargeRemoteStopRequest
      * @return
      */
     @RequestMapping(value = "/stopCharge", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String, Object> stopCharge(RemoteClosePushRequest remoteClosePushRequest) {
-        log.info("请求停止充电请求信息:" + JSON.toJSONString(remoteClosePushRequest));
+    public Map<String, Object> stopCharge(ChargeRemoteStopRequest chargeRemoteStopRequest) {
+        log.info("请求停止充电请求信息:" + JSON.toJSONString(chargeRemoteStopRequest));
+        RemoteClosePushRequest remoteClosePushRequest = new RemoteClosePushRequest();
+        BeanUtils.copyProperties(chargeRemoteStopRequest,remoteClosePushRequest);
         Map<String, Object> map = new HashedMap();
         map = checkParamsStopCharge(remoteClosePushRequest);
         if (null != map) {
