@@ -48,66 +48,70 @@ public class ChargeController {
     @RequestMapping(value = "/charge", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> charge(ChargeRemoteStartRequest remoteStartRequest) {
-        log.info("请求充电请求信息:" + JSON.toJSONString(remoteStartRequest));
         Map<String, Object> map = new HashedMap();
-        map = checkParams(remoteStartRequest);
-        if (null != map) {
-            return map;
-        }
-        map = new HashedMap();
-        if (!(1 == remoteStartRequest.getChargeModel()
-                || 2 == remoteStartRequest.getChargeModel()
-                || 3 == remoteStartRequest.getChargeModel()
-                || 4 == remoteStartRequest.getChargeModel())
-                ) {
-            map.put("status", "-1");
-            map.put("msg", "充电模式不可用");
-            log.info("return请求充电请求fan:" + JSON.toJSONString(map));
-            return map;
-        }
+        try {
+            log.info("请求充电请求信息:" + JSON.toJSONString(remoteStartRequest));
+            map = checkParams( remoteStartRequest );
+            if (null != map) {
+                return map;
+            }
+            map = new HashedMap();
+            if (!(1 == remoteStartRequest.getChargeModel()
+                    || 2 == remoteStartRequest.getChargeModel()
+                    || 3 == remoteStartRequest.getChargeModel()
+                    || 4 == remoteStartRequest.getChargeModel())
+                    ) {
+                map.put( "status", "-1" );
+                map.put( "msg", "充电模式不可用" );
+                log.info( "return请求充电请求fan:" + JSON.toJSONString( map ) );
+                return map;
+            }
 
-        IRemoteStartPushService iRemoteStartPushService = serviceFactoryUtil.getStartPushService(remoteStartRequest.getTradeTypeCode());
-        RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
-        remoteStartPushRequest.setTradeTypeCode(remoteStartRequest.getTradeTypeCode());
-        remoteStartPushRequest.setGunNo(remoteStartRequest.getGunNo());
-        remoteStartPushRequest.setOrderNo(remoteStartRequest.getOrderNo());
-        remoteStartPushRequest.setPileNo(remoteStartRequest.getPileNo());
+            IRemoteStartPushService iRemoteStartPushService = serviceFactoryUtil.getStartPushService( remoteStartRequest.getTradeTypeCode() );
+            RemoteStartPushRequest remoteStartPushRequest = new RemoteStartPushRequest();
+            remoteStartPushRequest.setTradeTypeCode( remoteStartRequest.getTradeTypeCode() );
+            remoteStartPushRequest.setGunNo( remoteStartRequest.getGunNo() );
+            remoteStartPushRequest.setOrderNo( remoteStartRequest.getOrderNo() );
+            remoteStartPushRequest.setPileNo( remoteStartRequest.getPileNo() );
 //        remoteStartPushRequest.setPileNo("0000000080000004");
-        remoteStartPushRequest.setSerial(remoteStartRequest.getSerial());
-        remoteStartPushRequest.setChargeData(remoteStartRequest.getChargeData());
-        remoteStartPushRequest.setChargeModel(remoteStartRequest.getChargeModel());
-        remoteStartPushRequest.setChargeStopCode(StringUtils.isEmpty(remoteStartRequest.getChargeStopCode()) ? "6464" : remoteStartRequest.getChargeStopCode());
-        BasePushCallBackResponse<RemoteStartRequest> remoteStartRequestBasePushCallBackResponse = iRemoteStartPushService.doPush(remoteStartPushRequest);
+            remoteStartPushRequest.setSerial( remoteStartRequest.getSerial() );
+            remoteStartPushRequest.setChargeData( remoteStartRequest.getChargeData() );
+            remoteStartPushRequest.setChargeModel( remoteStartRequest.getChargeModel() );
+            remoteStartPushRequest.setChargeStopCode( StringUtils.isEmpty( remoteStartRequest.getChargeStopCode() ) ? "6464" : remoteStartRequest.getChargeStopCode() );
+            BasePushCallBackResponse<RemoteStartRequest> remoteStartRequestBasePushCallBackResponse = iRemoteStartPushService.doPush( remoteStartPushRequest );
 
-        if (remoteStartRequestBasePushCallBackResponse.getCode() != READ_OK) {
-            //重试1
-            remoteStartRequestBasePushCallBackResponse = iRemoteStartPushService.doPush(remoteStartPushRequest);
+            if (remoteStartRequestBasePushCallBackResponse.getCode() != READ_OK) {
+                //重试1
+                remoteStartRequestBasePushCallBackResponse = iRemoteStartPushService.doPush( remoteStartPushRequest );
+            }
+            log.info( "远程启动充电请求返回报文:{}", JSON.toJSONString( remoteStartRequestBasePushCallBackResponse ) );
+
+
+            switch (remoteStartRequestBasePushCallBackResponse.getCode()) {
+                case READ_OK:
+                    map.put( "status", READ_OK.getCode() );
+                    map.put( "msg", "启动充电发送命令成功,详细结果见结果" );
+                    map.put( "data", remoteStartRequestBasePushCallBackResponse.getObj() );
+                    Util.chargePushOrderOk.put( String.valueOf( remoteStartPushRequest.getSerial() ), remoteStartRequestBasePushCallBackResponse.getObj() );
+                    break;
+                case TIME_OUT:
+                case WRITE_OK:
+                    map.put( "status", 300 );
+                    map.put( "msg", "请求超时" );
+                    break;
+                case CONNECT_ERROR:
+                    map.put( "status", CONNECT_ERROR.getCode() );
+                    map.put( "msg", "充电桩链接不可用" );
+                    break;
+                default:
+                    break;
+
+            }
+
+            log.info( "return请求充电请求fan:" + JSON.toJSONString( map ) );
+        }catch (Exception e){
+            log.error( "-----------error"+e );
         }
-        log.info("远程启动充电请求返回报文:{}", JSON.toJSONString(remoteStartRequestBasePushCallBackResponse));
-
-
-        switch (remoteStartRequestBasePushCallBackResponse.getCode()) {
-            case READ_OK:
-                map.put("status", READ_OK.getCode());
-                map.put("msg", "启动充电发送命令成功,详细结果见结果");
-                map.put("data", remoteStartRequestBasePushCallBackResponse.getObj());
-                Util.chargePushOrderOk.put(String.valueOf(remoteStartPushRequest.getSerial()), remoteStartRequestBasePushCallBackResponse.getObj());
-                break;
-            case TIME_OUT:
-            case WRITE_OK:
-                map.put("status", 300);
-                map.put("msg", "请求超时");
-                break;
-            case CONNECT_ERROR:
-                map.put("status", CONNECT_ERROR.getCode());
-                map.put("msg", "充电桩链接不可用");
-                break;
-            default:
-                break;
-
-        }
-
-        log.info("return请求充电请求fan:" + JSON.toJSONString(map));
         return map;
 
     }
