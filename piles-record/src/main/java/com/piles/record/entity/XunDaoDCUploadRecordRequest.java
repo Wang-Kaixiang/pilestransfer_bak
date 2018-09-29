@@ -68,68 +68,82 @@ public class XunDaoDCUploadRecordRequest implements Serializable {
     public static XunDaoDCUploadRecordRequest packEntity(byte[] msg) {
         XunDaoDCUploadRecordRequest request = new XunDaoDCUploadRecordRequest();
         int cursor = 0;
-        request.setPileNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
+        request.setPileNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setChargeIndex(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2)));
+        request.setChargeIndex( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) );
         cursor += 2;
-        byte[] serials = BytesUtil.copyBytes(msg, cursor, 16);
+        byte[] serials = BytesUtil.copyBytes( msg, cursor, 16 );
         int i = 0;
         while (serials[i] != 0x00) {
             i++;
         }
-        request.setSerial(new String(BytesUtil.copyBytes(serials, 0, i)));
+        request.setSerial( new String( BytesUtil.copyBytes( serials, 0, i ) ) );
         cursor += 16;
-        request.setPhysicCardNo(BytesUtil.byte2LongLittle(BytesUtil.copyBytes(msg, cursor, 8)));
+        request.setPhysicCardNo( BytesUtil.byte2LongLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setUserCardNo(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 8)));
+        request.setUserCardNo( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 8 ) ) );
         cursor += 8;
-        request.setStartTime(BytesUtil.byteCp2Date(BytesUtil.copyBytes(msg, cursor, 7)));
+        request.setStartTime( BytesUtil.byteCp2Date( BytesUtil.copyBytes( msg, cursor, 7 ) ) );
         cursor += 7;
-        request.setEndTime(BytesUtil.byteCp2Date(BytesUtil.copyBytes(msg, cursor, 7)));
+        request.setEndTime( BytesUtil.byteCp2Date( BytesUtil.copyBytes( msg, cursor, 7 ) ) );
         cursor += 7;
         //处理每半个小时 共24小时 48个
         List<BigDecimal> list = Lists.newArrayList();
         for (i = 0; i < 48; i++) {
-            list.add(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 2))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+            list.add( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 2 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
             cursor += 2;
         }
-        request.setEveryHalfHourDegress(list);
-        request.setTotalAmmeterDegree(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setEveryHalfHourDegress( list );
+        request.setTotalAmmeterDegree( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
-        request.setVin(BytesUtil.bcd2StrLittle(BytesUtil.copyBytes(msg, cursor, 17)));
+        request.setVin( BytesUtil.bcd2StrLittle( BytesUtil.copyBytes( msg, cursor, 17 ) ) );
         cursor += 17;
-        request.setUnUseAmount(BigDecimal.valueOf(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4))).divide(new BigDecimal(100), 2, BigDecimal.ROUND_HALF_UP));
+        request.setUnUseAmount( BigDecimal.valueOf( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) ).divide( new BigDecimal( 100 ), 2, BigDecimal.ROUND_HALF_UP ) );
         cursor += 4;
-        request.setBeginSoc(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setBeginSoc( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
-        request.setEndSoc(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setEndSoc( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
-        request.setStopChargeReason(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 1)));
+        request.setStopChargeReason( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 1 ) ) );
         cursor += 1;
-        byte[] orderNos = BytesUtil.copyBytes(msg, cursor, 32);
+        byte[] orderNos = BytesUtil.copyBytes( msg, cursor, 32 );
         i = 0;
         while (orderNos[i] != 0x00) {
             i++;
         }
-        String orderNo = new String(BytesUtil.copyBytes(orderNos, 0, i));
-        if (orderNo.length() > 0 && '\u0006' == orderNo.charAt(0)) {
-            orderNo = orderNo.substring(1);
+        String orderNo = new String( BytesUtil.copyBytes( orderNos, 0, i ) );
+        if (orderNo.length() > 0 && '\u0006' == orderNo.charAt( 0 )) {
+            orderNo = orderNo.substring( 1 );
         }
-        request.setOrderNo(orderNo);
+        request.setOrderNo( orderNo );
         cursor += 32;
-        request.setReserved1(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
+        request.setReserved1( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         cursor += 4;
-        request.setReserved2(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
+        request.setReserved2( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         cursor += 4;
-        request.setReserved3(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
+        request.setReserved3( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         cursor += 4;
-        request.setReserved4(BytesUtil.bytesToIntLittle(BytesUtil.copyBytes(msg, cursor, 4)));
+        request.setReserved4( BytesUtil.bytesToIntLittle( BytesUtil.copyBytes( msg, cursor, 4 ) ) );
         return request;
     }
 
+    public static void main(String[] args) {
+        byte[] bytes = new byte[]{0x68, (byte) 0xef, 0x0, 0x0, 0x0, 0x0,(byte) 0x82, 0x0, 0x6, 0x0, 0x27, 0x0, 0x4, 0x4, 0x0, 0x0, 0x60, 0x20, 0x1, (byte)0x86,
+                0x0, 0x0, 0x0, 0x32, 0x39, 0x37, 0x31, 0x34, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,(byte) 0xe8, (byte)0x80, 0xb, 0xa, 0x1d, 0x9, 0x12, (byte)0xf8, 0x2a, 0x8, 0xb, 0x1d, 0x9,
+                0x12, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, (byte)0xc7, 0x3, 0x42, 0x3, 0x7f, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,(byte) 0x89, 0x7, 0x0, 0x0, 0x4c,
+                0x53, 0x35, 0x41, 0x33, 0x41, 0x4a, 0x43, 0x58, 0x4a, 0x42, 0x30, 0x30, 0x35, 0x34, 0x39, 0x33, 0x0, 0x0, 0x0, 0x0, 0x1a, 0x5c,
+                0x20, 0x35, 0x37, 0x38, 0x39, 0x33, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+                0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+        byte[] dataBytes = BytesUtil.copyBytes(bytes, 13, (bytes.length - 13));
+        System.out.println(JSON.toJSONString( packEntity( dataBytes ) ));
+    }
 
     @Override
     public String toString() {
-        return JSON.toJSONString(this);
+        return JSON.toJSONString( this );
     }
 }
